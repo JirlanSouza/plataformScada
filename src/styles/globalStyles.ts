@@ -7,8 +7,9 @@ export const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
   }
 
-  html, body {
+  body, #root {
     height: 100vh;
     width: 100vw;
+    font-family: Roboto;
   }
 `

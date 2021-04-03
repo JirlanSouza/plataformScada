@@ -10,7 +10,7 @@ const ToolBar: React.FC = () => {
     {name: 'Salvar', icon: FiSave },
     {name: 'Imprimir', icon: FiPrinter },
     {name: 'rotacionar', icon: FiRotateCcw },
-    {name: 'rotacionar', icon: FiRotateCw },
+    {name: 'rotacionarCw', icon: FiRotateCw },
   ]
   return (
     <Container>

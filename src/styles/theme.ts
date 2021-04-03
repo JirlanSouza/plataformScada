@@ -307,10 +307,10 @@ export const theme = {
     },
     onPrimary: colors.blue[50],
     onSecondary: colors.grey[700],
-    background: colors.grey[100],
+    background: colors.bluegrey[50],
     surface: colors.grey[200],
     error: colors.red.a400,
-    onBackground: colors.grey[100],
+    onBackground: colors.grey[500],
     onSurface: colors.grey[200],
     onError: colors.red.a400
   }

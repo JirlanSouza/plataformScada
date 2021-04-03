@@ -16,7 +16,7 @@ const MenuBar: React.FC = () => {
       <ul>
         {menuItems.map((item) => {
           return (
-            <li>{item}</li>
+            <li key={item}>{item}</li>
           )
         })}
       </ul>
