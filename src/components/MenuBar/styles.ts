@@ -12,6 +12,8 @@ export const Container = styled.nav`
     list-style: none;
     cursor: pointer;
     border-bottom: 1px solid transparent;
+    transition: all .2s ease-out;
+    
     :hover {
       border-bottom: 1px solid ${props => props.theme.pallete.onPrimary};
     }
