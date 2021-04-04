@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { ProjectTreeContextProvider } from '../../contexts/projectTreeContext';
+import { ProjectTreeContextProvider, EditorContextProvider } from '../../contexts';
 
 import { Container } from './styles';
 
@@ -10,7 +10,7 @@ import Editor from '../../components/Editor';
 
 const Main: React.FC = () => {
   return (
-    <>
+    <EditorContextProvider>
       <Header />
       <Container>
         <ProjectTreeContextProvider>
@@ -18,7 +18,7 @@ const Main: React.FC = () => {
           <Editor />
         </ProjectTreeContextProvider>
       </Container>
-    </>
+    </EditorContextProvider>
 
   );
 }

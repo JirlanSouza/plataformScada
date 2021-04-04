@@ -27,6 +27,8 @@ const ProjectTree: React.FC = () => {
     },
     { name: 'scripts', filds: [], opening: false, iconFilds: FiImage },
     { name: 'objects', filds: [], opening: false, iconFilds: FiImage },
+    { name: 'tags', filds: [], opening: false, iconFilds: FiImage },
+    { name: 'alarmes an events', filds: [], opening: false, iconFilds: FiImage },
     { name: 'users', filds: [], opening: false, iconFilds: FiImage },
   ]);
 
@@ -38,7 +40,6 @@ const ProjectTree: React.FC = () => {
   } = useProjectTreeContext();
 
   function handleResize(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
-    console.log('MOVE start X ==>>', event.clientX);
     setIsClickedBorderContainer(true);
   }
 

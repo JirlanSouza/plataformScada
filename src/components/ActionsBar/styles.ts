@@ -10,7 +10,6 @@ export const Container = styled.ul`
     align-items: center;
     justify-content: center;
     padding: .13rem;
-    padding: .1rem;
     list-style: none;
     border-radius: .2rem;
     cursor: pointer;

@@ -56,7 +56,7 @@ export const ProjectFolders = styled.ul`
       display: flex;
         flex-wrap: nowrap;
         align-items: baseline;
-        overflow-x: inherit;
+        overflow: hidden;
     }
 
     div + div {
@@ -68,7 +68,7 @@ export const ProjectFolders = styled.ul`
         display: flex;
         flex-wrap: nowrap;
         align-items: baseline;
-        overflow-x: inherit;
+        overflow: inherit;
       }
     }
   }

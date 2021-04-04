@@ -294,7 +294,7 @@ const colors = {
 }
 
 export const theme = {
-  headerHeight: '60px',
+  headerHeight: '90px',
   headerBackgound: colors.deeppurple.a200,
   pallete: {
     primary: {

@@ -2,6 +2,7 @@ import React from 'react';
 
 import { useProjectTreeContext } from '../../contexts/projectTreeContext';
 import { resizeContainer } from '../../utils/resizezeContainers';
+import Screen from '../Screen';
 
 import { Container } from './styles';
 
@@ -28,7 +29,8 @@ const Editor: React.FC = () => {
       resizing={isClickedBorderContainer}
       onMouseUp={handleResizeFinal}
       onMouseMove={event => handleResizeMove(event)
-    }>      
+    }>
+      <Screen />   
     </Container>
   );
 }

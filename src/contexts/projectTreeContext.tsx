@@ -6,15 +6,12 @@ interface ProjectTreeResize {
   positionBorderContainer: number;
   setPositionBorderContainer: (value: number) => void;
   isClickedBorderContainer: boolean;
-  setIsClickedBorderContainer: (state: boolean) => void
+  setIsClickedBorderContainer: (state: boolean) => void;
 }
 
 const ProjectTreeContext = createContext({} as ProjectTreeResize);
 
 export const ProjectTreeContextProvider: React.FC = ({ children }) => {
-  useEffect(() => {
-    console.log('Renderer context ===>>');
-  }, []);
 
   const [containerWidth, setContainerWidth] = useState(250);
   const [positionBorderContainer, setPositionBorderContainer] = useState(250);
@@ -28,7 +25,7 @@ export const ProjectTreeContextProvider: React.FC = ({ children }) => {
       positionBorderContainer,
       setPositionBorderContainer,
       isClickedBorderContainer,
-      setIsClickedBorderContainer
+      setIsClickedBorderContainer,
       }}
     >
       { children}
