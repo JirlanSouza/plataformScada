@@ -9,8 +9,6 @@ const Editor: React.FC = () => {
   const { 
     containerWidth,
     setContainerWidth,
-    positionBorderContainer,
-    setPositionBorderContainer,
     isClickedBorderContainer,
     setIsClickedBorderContainer
     } = useProjectTreeContext();
@@ -19,7 +17,6 @@ const Editor: React.FC = () => {
     if (!isClickedBorderContainer) return;
     const width = resizeContainer(containerWidth, event.clientX)
     setContainerWidth(width);
-    setPositionBorderContainer(width);
   }
 
   function handleResizeFinal (event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
@@ -27,8 +24,11 @@ const Editor: React.FC = () => {
   }
 
   return (
-    <Container onMouseUp={handleResizeFinal} onMouseMove={event => handleResizeMove(event)}>
-      
+    <Container
+      resizing={isClickedBorderContainer}
+      onMouseUp={handleResizeFinal}
+      onMouseMove={event => handleResizeMove(event)
+    }>      
     </Container>
   );
 }
