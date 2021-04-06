@@ -3,14 +3,19 @@ import { theme } from '../../styles/theme';
 import { useEditorContext, useProjectTreeContext } from '../../contexts';
 
 import { Container, Rectcss, Wrapper } from './styles';
-import Rect from '../../projectObjects/Rect';
+import Rect from '../../projectObjects/Rect/Rectcss';
 import ManipulationBorder from '../ManipulationBorder';
+import { manipulations } from '../../manipulations/moveAndResizeManipulations';
 
 const Screen: React.FC = () => {
   const [screenWidth, setScreenWdth] = useState(1366);
   const [screenHeight, setScreenHeight] = useState(768);
   const [isManipulating, setIsManipulating] = useState(false);
-  const [stateManipulation, setStateManipulation] = useState({ cursorPositionX: 0, cursorPositionY: 0 });
+  const [stateManipulation, setStateManipulation] = useState({
+    manipulation: '',
+    cursorPositionX: 0,
+    cursorPositionY: 0
+  });
 
   const { lineGridWeight, toolSelected } = useEditorContext();
   const { containerWidth } = useProjectTreeContext();
@@ -44,8 +49,9 @@ const Screen: React.FC = () => {
     }
   }, [screenWidth, screenHeight, lineGridWeight]);
 
-  function handleStartManipulation(event: React.MouseEvent) {
+  function handleStartManipulation(event: React.MouseEvent, manipulation: string) {
     setStateManipulation({
+      manipulation,
       cursorPositionX: event.pageX - containerWidth,
       cursorPositionY: event.pageY - parseInt(theme.headerHeight)
     });
@@ -55,19 +61,14 @@ const Screen: React.FC = () => {
   function handleManipulation(event: React.MouseEvent) {
     if (!isManipulating) return;
 
-    const width = (event.pageX - containerWidth);
-    const height = (event.pageY - parseInt(theme.headerHeight));
-
-    const x = width - (stateObject.width / 2) <= 0 ? 0 : width - (stateObject.width / 2);
-    const y = height - (stateObject.height / 2) <= 0 ? 0 : height - (stateObject.height / 2);
-
-    const updateObjectState = {
-      x,
-      y,
-      width: stateObject.width,
-      height: stateObject.height
+    const cursorPosition = {
+      X: event.pageX - containerWidth,
+      Y: event.pageY - parseInt(theme.headerHeight)
     }
+    const index = stateManipulation.manipulation
 
+    const updateObjectState = manipulations[index]({stateObject, cursorPosition});
+    console.log('State object ===>>> ', updateObjectState, 'cursor position   ===>>>', cursorPosition);
     setStateObject(updateObjectState);
 
     // if (toolSelected === 'Square' && screenRef.current) {
@@ -75,7 +76,6 @@ const Screen: React.FC = () => {
     //   const context = screen.getContext('2d');
 
     //   if (!context) return;
-    //   console.log('x INICIAL ===>> ', stateManipulation.cursorPositionX, 'FINAL ====>> ', width)
     //   Rect(
     //     context,
     //     { x: stateManipulation.cursorPositionX, y: stateManipulation.cursorPositionY },
@@ -91,8 +91,8 @@ const Screen: React.FC = () => {
 
   const [startManipulation, setStartManipulation] = useState(false);
   const [stateObject, setStateObject] = useState({
-    x: 300,
-    y: 200,
+    positionX: 300,
+    positionY: 200,
     width: 200,
     height: 200
   });
@@ -105,16 +105,16 @@ const Screen: React.FC = () => {
     >
       <ManipulationBorder
         show={startManipulation}
-        positionAndWeight={stateObject}
-        startManipulation={handleStartManipulation}
+        objectStylePropties={stateObject}
+        startMoveManipulation={event => handleStartManipulation(event, 'move')}
+        startResizeUpManipulation={event => handleStartManipulation(event, 'resizeUp')}
+        startResizeDownManipulation={event => handleStartManipulation(event, 'resizeDown')}
+        startResizeLeftManipulation={event => handleStartManipulation(event, 'resizeLeft')}
+        startResizeRightManipulation={event => handleStartManipulation(event, 'resizeRight')}
+        setShowManipulation={() => setStartManipulation(true)}
       >
-        <Rectcss
-          x={stateObject.x}
-          y={stateObject.y}
-          width={stateObject.width}
-          height={stateObject.height}
-          onClick={() => setStartManipulation(true)}
-        />
+        {Rect}
+        
       </ManipulationBorder>
       {/* <Container
       ref={screenRef}

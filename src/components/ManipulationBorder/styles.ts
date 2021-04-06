@@ -1,14 +1,19 @@
 import styled from 'styled-components';
 
-interface ContainerPropties {x: number, y: number, width: number, height: number}
+interface ObjectStylePropties {
+  positionX: number,
+  positionY: number,
+  width: number,
+  height: number
+}
 
-export const Container = styled.div<ContainerPropties>`
+export const Container = styled.div<ObjectStylePropties>`
   position: absolute;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  top: ${props => props.y + 'px'};
-  left: ${props => props.x + 'px'};
+  top: ${props => props.positionY + 'px'};
+  left: ${props => props.positionX + 'px'};
   width: ${props => props.width + 'px'};
   height: ${props => props.height + 'px'};
   border: solid 2px #09B6CD;
