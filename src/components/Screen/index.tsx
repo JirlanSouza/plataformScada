@@ -17,6 +17,8 @@ const Screen: React.FC = () => {
     cursorPositionY: 0
   });
 
+  const [timeCicleManipulation, setTimeCicleManipulation] = useState(Date.now());
+
   const { lineGridWeight, toolSelected } = useEditorContext();
   const { containerWidth } = useProjectTreeContext();
 
@@ -59,16 +61,14 @@ const Screen: React.FC = () => {
   }
 
   function handleManipulation(event: React.MouseEvent) {
-    if (!isManipulating) return;
+    if (!isManipulating || typeof manipulations[stateManipulation.manipulation] != 'function') return;
 
     const cursorPosition = {
       X: event.pageX - containerWidth,
       Y: event.pageY - parseInt(theme.headerHeight)
     }
-    const index = stateManipulation.manipulation
 
-    const updateObjectState = manipulations[index]({stateObject, cursorPosition});
-    console.log('State object ===>>> ', updateObjectState, 'cursor position   ===>>>', cursorPosition);
+    const updateObjectState = manipulations[stateManipulation.manipulation]({stateObject, cursorPosition});
     setStateObject(updateObjectState);
 
     // if (toolSelected === 'Square' && screenRef.current) {
@@ -111,6 +111,10 @@ const Screen: React.FC = () => {
         startResizeDownManipulation={event => handleStartManipulation(event, 'resizeDown')}
         startResizeLeftManipulation={event => handleStartManipulation(event, 'resizeLeft')}
         startResizeRightManipulation={event => handleStartManipulation(event, 'resizeRight')}
+        startResizeLeftUpManipulation={event => handleStartManipulation(event, 'resizeLeftUp')}
+        startResizeRightUpManipulation={event => handleStartManipulation(event, 'resizeRightUp')}
+        startResizeRightDownManipulation={event => handleStartManipulation(event, 'resizeRightDown')}
+        startResizeLeftDownManipulation={event => handleStartManipulation(event, 'resizeLeftDown')}
         setShowManipulation={() => setStartManipulation(true)}
       >
         {Rect}

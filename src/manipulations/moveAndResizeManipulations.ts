@@ -75,10 +75,58 @@ function resizeRight (props: ManipulationPropties): ManipulationReturn {
 
 }
 
+function resizeLeftUp (props: ManipulationPropties): ManipulationReturn {
+
+  const positionX = props.cursorPosition.X;
+  const positionY = props.cursorPosition.Y;
+  const width = props.stateObject.width  + (props.stateObject.positionX - props.cursorPosition.X);
+  const height = props.stateObject.height + (props.stateObject.positionY - props.cursorPosition.Y);
+
+  return { positionX, positionY, width, height };
+
+}
+
+function resizeRightUp (props: ManipulationPropties): ManipulationReturn {
+
+  const positionX = props.stateObject.positionX;
+  const positionY = props.cursorPosition.Y;
+  const width = props.cursorPosition.X - props.stateObject.positionX;
+  const height = props.stateObject.height + (props.stateObject.positionY - props.cursorPosition.Y);
+
+  return { positionX, positionY, width, height };
+
+}
+
+function resizeRightDown (props: ManipulationPropties): ManipulationReturn {
+
+  const positionX = props.stateObject.positionX;
+  const positionY = props.stateObject.positionY;
+  const width = props.cursorPosition.X - props.stateObject.positionX;
+  const height = props.cursorPosition.Y - props.stateObject.positionY;
+
+  return { positionX, positionY, width, height };
+
+}
+
+function resizeLeftDown (props: ManipulationPropties): ManipulationReturn {
+
+  const positionX = props.cursorPosition.X;
+  const positionY = props.stateObject.positionY;
+  const width = props.stateObject.width  + (props.stateObject.positionX - props.cursorPosition.X);
+  const height = props.cursorPosition.Y - props.stateObject.positionY;
+
+  return { positionX, positionY, width, height };
+
+}
+
 export const manipulations: {[key: string]: (props: ManipulationPropties) => ManipulationReturn} = {
   'move': move,
   'resizeUp': resizeUp,
   'resizeDown': resizeDown,
   'resizeLeft': resizeLeft,
-  'resizeRight': resizeRight
+  'resizeRight': resizeRight,
+  'resizeLeftUp': resizeLeftUp,
+  'resizeRightUp': resizeRightUp,
+  'resizeRightDown': resizeRightDown,
+  'resizeLeftDown': resizeLeftDown
 }

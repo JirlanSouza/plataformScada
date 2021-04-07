@@ -32,6 +32,10 @@ interface ManipulationBorderPropties {
   startResizeDownManipulation: (event: React.MouseEvent) => void,
   startResizeLeftManipulation: (event: React.MouseEvent) => void,
   startResizeRightManipulation: (event: React.MouseEvent) => void,
+  startResizeLeftUpManipulation: (event: React.MouseEvent) => void,
+  startResizeRightUpManipulation: (event: React.MouseEvent) => void,
+  startResizeRightDownManipulation: (event: React.MouseEvent) => void,
+  startResizeLeftDownManipulation: (event: React.MouseEvent) => void,
   setShowManipulation: () => void
 }
 
@@ -44,6 +48,10 @@ const ManipulationBorder: React.FC<ManipulationBorderPropties> = ({
   startResizeDownManipulation,
   startResizeLeftManipulation,
   startResizeRightManipulation,
+  startResizeLeftUpManipulation,
+  startResizeRightUpManipulation,
+  startResizeRightDownManipulation,
+  startResizeLeftDownManipulation,
   setShowManipulation
 }) => {
   return (
@@ -57,9 +65,9 @@ const ManipulationBorder: React.FC<ManipulationBorderPropties> = ({
         >
 
           <Top>
-            <LeftUp />
+            <LeftUp onMouseDown={startResizeLeftUpManipulation} />
             <Up onMouseDown={startResizeUpManipulation}/>
-            <RightUp />
+            <RightUp onMouseDown={startResizeRightUpManipulation} />
           </Top>
 
           <Center>
@@ -69,9 +77,9 @@ const ManipulationBorder: React.FC<ManipulationBorderPropties> = ({
           </Center>
 
           <Base>
-            <LeftDown />
+            <LeftDown onMouseDown={startResizeLeftDownManipulation} />
             <Down onMouseDown={startResizeDownManipulation} />
-            <RightDown />
+            <RightDown onMouseDown={startResizeRightDownManipulation} />
           </Base>
 
         </Container>
