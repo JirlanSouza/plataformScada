@@ -13,7 +13,7 @@ ${props => props.resizing && css`
 
 export const Resizer = styled.div`
   height: 100%;
-  width: 8px;
+  width: 3px;
   background: linear-gradient(
     90deg,
     ${props => props.theme.pallete.onPrimary} 5%,

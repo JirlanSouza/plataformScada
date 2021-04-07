@@ -1,5 +1,8 @@
 import styled from 'styled-components';
 
+const cornerRecoil = '-8px';
+const cornerBorderRadius = '2px';
+
 interface ObjectStylePropties {
   positionX: number,
   positionY: number,
@@ -54,30 +57,36 @@ const Corners = styled.div`
   width:10px;
   height: 10px;
   background: ${props => props.theme.pallete.primary.main};
+  z-index: 1;
 `;
 
 export const RightUp = styled(Corners)`
-  top: -8px;
-  right: -8px;
+  top: ${cornerRecoil};
+  right: ${cornerRecoil};
   left: inherit;
+  border-radius: 0 0 0 ${cornerBorderRadius}; 
   cursor: nesw-resize;
 `;
 
 export const LeftUp = styled(Corners)`
-  top: -8px;
-  left: -8px;
+  top: ${cornerRecoil};
+  left: ${cornerRecoil};
+  border-radius: 0 0 ${cornerBorderRadius} 0;
   cursor: nwse-resize;
 `;
 
 export const RightDown = styled(Corners)`
-  right: -8px;
+  right: ${cornerRecoil};
+  bottom: ${cornerRecoil};
   left: inherit;
+  border-radius: ${cornerBorderRadius} 0 0 0;
   cursor: nwse-resize;
 `;
 
 export const LeftDown = styled(Corners)`
-  bottom: -8px;
-  left: -8px;
+  bottom: ${cornerRecoil};
+  left: ${cornerRecoil};
+  border-radius: 0 ${cornerBorderRadius} 0 0;
   cursor: nesw-resize;
 `;
 
@@ -86,7 +95,7 @@ export const Edge = styled.div`
 `;
 
 export const Left = styled(Edge)`
-  left: -8px;
+  left: ${cornerRecoil};
   height: inherit;
   width: 10px;
   cursor: col-resize;
@@ -94,14 +103,14 @@ export const Left = styled(Edge)`
 
 export const Right = styled(Edge)`
   left: inherit;
-  right: -8px;
+  right: ${cornerRecoil};
   height: inherit;
   width: 10px;
   cursor: col-resize;
 `;
 
 export const Up = styled(Edge)`
-  top: -8px;
+  top: ${cornerRecoil};
   left: 0;
   width: 100%;
   height: 8px;
@@ -109,7 +118,7 @@ export const Up = styled(Edge)`
 `;
 
 export const Down = styled(Edge)`
-  bottom: -8px;
+  bottom: ${cornerRecoil};
   left: 0;
   width: 100%;
   height: 8px;

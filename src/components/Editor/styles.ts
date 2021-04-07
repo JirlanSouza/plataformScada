@@ -6,7 +6,7 @@ position: relative;
   width: 100px;
   height: 100%;
   background: ${props => props.theme.pallete.background};
-  overflow: scroll;
+  overflow: auto;
 
   ${props => props.resizing && css`
   cursor: col-resize;
