@@ -75,7 +75,7 @@ const ProjectTree: React.FC = () => {
                   <FiChevronDown size={18} /> :
                   <FiChevronRight size={18} />
                 }
-                <FiFolder size={18} />
+                <FiFolder className='folder' size={18} />
                 {folder.name}
               </div>
               {folder.opening &&
@@ -83,7 +83,7 @@ const ProjectTree: React.FC = () => {
                   {folder.filds.map((fild, index) => {
                     return (
                       <li key={index}>
-                        <folder.iconFilds size={18} />
+                        <folder.iconFilds className='file' size={18} />
                         {fild.name}
                       </li>
                     )

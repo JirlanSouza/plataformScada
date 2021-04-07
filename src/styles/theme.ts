@@ -293,26 +293,77 @@ const colors = {
   }
 }
 
+const omniColors = {
+  base: {
+    BG: '#191622',
+    FG: '#E1E1E6',
+    SELECTION: '#41414D',
+    COMMENT: '#5A4B81',
+    CYAN: '#988bc7',
+    GREEN: '#67e480',
+    ORANGE: '#E89E64',
+    PINK: '#FF79C6',
+    PURPLE:'#78D1E1',
+    RED: '#E96379',
+    YELLOW: '#e7de79',
+  },
+
+  ansi: {
+    COLOR0 : '#201B2D',
+    COLOR1 : '#FF79C6',
+    COLOR3 : '#e7de79',
+    COLOR2 : '#67e480',
+    COLOR4 : '#78D1E1',
+    COLOR5 : '#988bc7',
+    COLOR6 : '#A1EFE4',
+    COLOR7 : '#E1E1E6',
+    COLOR8 : '#626483',
+    COLOR9 : '#ed4556',
+    COLOR11: '#e7de79',
+    COLOR10: '#00F769',
+    COLOR12: '#78D1E1',
+    COLOR13: '#988bc7',
+    COLOR14: '#A4FFFF',
+    COLOR15: '#F7F7FB',
+  },
+
+  brightOther: {
+    TEMP_QUOTES: '#e7de79',
+    TEMP_PROPERTY_QUOTES: '#7159C1',
+  },
+  other: {
+    LineHighlight: '#44475A75',
+    NonText: '#FFFFFF1A',
+    WHITE: '#E1E1E6',
+    TAB_DROP_BG: '#44475A70',
+    BGLighter: '#252131',
+    BGLight: '#201B2D', // HSV (230   , 25.71, 27.45),
+    BGDark: '#13111B', // HSV (234.55, 25   , 17.25),
+    BGDarker: '#15121E', // HSV (234.55, 25   , 13   ),
+  }
+
+}
+
 export const theme = {
   headerHeight: '90px',
-  headerBackgound: colors.deeppurple.a200,
+  headerBackgound: omniColors.other.BGDarker,
   pallete: {
     primary: {
-      main: colors.bluegrey[100],
-      variant: colors.bluegrey[200]
+      main: omniColors.brightOther.TEMP_PROPERTY_QUOTES,
+      variant: omniColors.base.PURPLE
     },
     secondary: {
-      main: colors.cyan[100],
-      variant: colors.cyan[200]
+      main: omniColors.base.PURPLE,
+      variant: omniColors.base.PURPLE
     },
-    onPrimary: colors.blue[50],
-    onSecondary: colors.grey[700],
-    background: colors.bluegrey[50],
-    surface: colors.grey[200],
-    error: colors.red.a400,
-    onBackground: colors.grey[500],
-    onSurface: colors.grey[200],
-    onError: colors.red.a400
+    onPrimary: omniColors.base.COMMENT,
+    onSecondary: omniColors.base.FG,
+    background: omniColors.base.BG,
+    surface: omniColors.other.BGDarker,
+    error: omniColors.base.RED,
+    onBackground: omniColors.base.FG,
+    onSurface: omniColors.base.FG,
+    onError: omniColors.base.FG
   }
 }
 

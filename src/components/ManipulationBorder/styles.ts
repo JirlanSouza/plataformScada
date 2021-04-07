@@ -16,7 +16,7 @@ export const Container = styled.div<ObjectStylePropties>`
   left: ${props => props.positionX + 'px'};
   width: ${props => props.width + 'px'};
   height: ${props => props.height + 'px'};
-  border: solid 2px #09B6CD;
+  border: solid 2px ${props => props.theme.pallete.onPrimary};
   z-index: 1;
 
 `;
@@ -43,7 +43,7 @@ export const Center = styled.div`
 
   svg {
     cursor: move;
-    stroke: #E5FF46;
+    stroke: ${props => props.theme.pallete.primary.main};
   }
 `;
 
@@ -53,7 +53,7 @@ const Corners = styled.div`
   position: absolute;
   width:10px;
   height: 10px;
-  background: #E5FF46;
+  background: ${props => props.theme.pallete.primary.main};
 `;
 
 export const RightUp = styled(Corners)`

@@ -15,10 +15,10 @@ export const Resizer = styled.div`
   height: 100%;
   width: 8px;
   background: linear-gradient(
-    to right,
-    ${props => props.theme.pallete.onPrimary},
-    ${props => props.theme.pallete.onBackground},
-    ${props => props.theme.pallete.onPrimary}
+    90deg,
+    ${props => props.theme.pallete.onPrimary} 5%,
+    ${props => props.theme.headerBackgound} 10%,
+    ${props => props.theme.pallete.onPrimary} 5%
   );
   cursor: col-resize;
   transition: all .2s ease-out;
@@ -28,7 +28,7 @@ export const Resizer = styled.div`
     to right,
     ${props => props.theme.pallete.onPrimary},
     ${props => props.theme.headerBackgound},
-    ${props => props.theme.pallete.onPrimary}
+    ${props => props.theme.pallete.primary.main} 15%
   );
   }
 `;
@@ -45,10 +45,21 @@ export const ProjectFolders = styled.ul`
     list-style: none;
     padding: .1rem;
     cursor: pointer;
+    color: ${props => props.theme.pallete.onSurface};
 
     svg {
       margin-right: .4rem;
       flex-shrink: 0;
+    }
+
+    svg.folder {
+      fill: ${props => props.theme.pallete.primary.main};
+      stroke: ${props => props.theme.pallete.primary.main}
+    }
+
+    svg.file {
+      stroke: ${props => props.theme.pallete.primary.main};
+      fill: ${props => props.theme.pallete.onSurface}
     }
 
     div {
