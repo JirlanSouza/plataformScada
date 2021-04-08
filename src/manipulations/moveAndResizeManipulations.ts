@@ -77,10 +77,26 @@ function resizeRight (props: ManipulationPropties): ManipulationReturn {
 
 function resizeLeftUp (props: ManipulationPropties): ManipulationReturn {
 
-  const positionX = props.cursorPosition.X;
-  const positionY = props.cursorPosition.Y;
-  const width = props.stateObject.width  + (props.stateObject.positionX - props.cursorPosition.X);
-  const height = props.stateObject.height + (props.stateObject.positionY - props.cursorPosition.Y);
+  const advanceX = props.cursorPosition.X - props.stateObject.positionX;
+  const advanceY = props.stateObject.height + (props.stateObject.positionY - props.cursorPosition.Y);
+
+  const percentageIncreaseX = calcPercentageFromValue(props.stateObject.width, advanceX);
+  const percentageIncreaseY = calcPercentageFromValue(props.stateObject.height, advanceY);
+
+  const positionX =
+    props.stateObject.positionX - diferenceByPorcentage(
+      hiValue(percentageIncreaseX, percentageIncreaseY),
+      props.stateObject.height
+    );
+
+  const positionY =
+    props.stateObject.positionY - diferenceByPorcentage(
+      hiValue(percentageIncreaseX, percentageIncreaseY),
+      props.stateObject.height
+    );
+
+  const width = increaseByHighestPorcentage(percentageIncreaseX, percentageIncreaseY, props.stateObject.width);
+  const height = increaseByHighestPorcentage(percentageIncreaseX, percentageIncreaseY, props.stateObject.height);
 
   return { positionX, positionY, width, height };
 
@@ -95,7 +111,12 @@ function resizeRightUp (props: ManipulationPropties): ManipulationReturn {
   const percentageIncreaseY = calcPercentageFromValue(props.stateObject.height, advanceY);
 
   const positionX = props.stateObject.positionX;
-  const positionY = props.stateObject.positionY - diferenceByPorcentage(hiValue(percentageIncreaseX, percentageIncreaseY), props.stateObject.height);
+  const positionY =
+    props.stateObject.positionY - diferenceByPorcentage(
+      hiValue(percentageIncreaseX, percentageIncreaseY),
+      props.stateObject.height
+    );
+
   const width = increaseByHighestPorcentage(percentageIncreaseX, percentageIncreaseY, props.stateObject.width);
   const height = increaseByHighestPorcentage(percentageIncreaseX, percentageIncreaseY, props.stateObject.height);
 
@@ -123,10 +144,21 @@ function resizeRightDown (props: ManipulationPropties): ManipulationReturn {
 
 function resizeLeftDown (props: ManipulationPropties): ManipulationReturn {
 
-  const positionX = props.cursorPosition.X;
+  const advanceX = props.cursorPosition.X - props.stateObject.positionX;
+  const advanceY = props.cursorPosition.Y - props.stateObject.positionY;
+
+  const percentageIncreaseX = calcPercentageFromValue(props.stateObject.width, advanceX);
+  const percentageIncreaseY = calcPercentageFromValue(props.stateObject.height, advanceY);
+
+  const positionX =
+    props.stateObject.positionX - diferenceByPorcentage(
+      hiValue(percentageIncreaseX, percentageIncreaseY),
+      props.stateObject.width
+    );
+
   const positionY = props.stateObject.positionY;
-  const width = props.stateObject.width  + (props.stateObject.positionX - props.cursorPosition.X);
-  const height = props.cursorPosition.Y - props.stateObject.positionY;
+  const width = increaseByHighestPorcentage(percentageIncreaseX, percentageIncreaseY, props.stateObject.width);
+  const height = increaseByHighestPorcentage(percentageIncreaseX, percentageIncreaseY, props.stateObject.height);
 
   return { positionX, positionY, width, height };
 
@@ -151,10 +183,6 @@ function increaseByHighestPorcentage (percentage1: number, percentage2: number, 
 function calcPercentageFromValue (valueBase: number, value: number) {
   return (value - valueBase) / (valueBase / 100);
 }
-
-// function calcValueFromPercentage (percentage: number, value: number) {
-//   return (value - valueBase) / (valueBase / 100);
-// }
 
 export const manipulations: {[key: string]: (props: ManipulationPropties) => ManipulationReturn} = {
   'move': move,
