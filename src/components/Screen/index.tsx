@@ -91,8 +91,8 @@ const Screen: React.FC = () => {
 
   const [startManipulation, setStartManipulation] = useState(false);
   const [stateObject, setStateObject] = useState({
-    positionX: 300,
-    positionY: 200,
+    positionX: 100,
+    positionY: 100,
     width: 200,
     height: 200
   });

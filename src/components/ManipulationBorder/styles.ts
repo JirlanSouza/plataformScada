@@ -15,10 +15,10 @@ export const Container = styled.div<ObjectStylePropties>`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  top: ${props => props.positionY + 'px'};
-  left: ${props => props.positionX + 'px'};
-  width: ${props => props.width + 'px'};
-  height: ${props => props.height + 'px'};
+  top: ${props => (props.positionY - 2) + 'px'};
+  left: ${props => (props.positionX - 2) + 'px'};
+  width: ${props => (props.width + 4) + 'px'};
+  height: ${props => (props.height + 4) + 'px'};
   border: solid 2px ${props => props.theme.pallete.onPrimary};
   z-index: 1;
 

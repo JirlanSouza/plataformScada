@@ -13,5 +13,6 @@ export const Container = styled.div<{objectStylePropties: ObjectStylePropties}>`
   left: ${props => props.objectStylePropties.positionX + 'px'};
   width: ${props => props.objectStylePropties.width + 'px'};
   height: ${props => props.objectStylePropties.height + 'px'};
+  border-radius: 50%;
   background: #C4C4C4;
 `;
