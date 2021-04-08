@@ -1,5 +1,6 @@
 import React from 'react';
 import { FiMove } from 'react-icons/fi';
+import { ObjectStylePropties } from '../../projectObjects/ObjectPorpties';
 
 import {
   Base,
@@ -16,15 +17,8 @@ import {
   Up
 } from './styles';
 
-interface ObjectStylePropties {
-  positionX: number,
-  positionY: number,
-  width: number,
-  height: number
-}
-
 interface ManipulationBorderPropties {
-  children: React.FC<{objectStylePropties: ObjectStylePropties, onClick: () => void}>;
+  children: React.FC<{objectStylePropties: ObjectStylePropties, onClick: (event: React.MouseEvent) => void}>;
   show: boolean,
   objectStylePropties: ObjectStylePropties,
   startMoveManipulation: (event: React.MouseEvent) => void,
@@ -36,7 +30,7 @@ interface ManipulationBorderPropties {
   startResizeRightUpManipulation: (event: React.MouseEvent) => void,
   startResizeRightDownManipulation: (event: React.MouseEvent) => void,
   startResizeLeftDownManipulation: (event: React.MouseEvent) => void,
-  setShowManipulation: () => void
+  setShowManipulation: (event: React.MouseEvent) => void
 }
 
 const ManipulationBorder: React.FC<ManipulationBorderPropties> = ({

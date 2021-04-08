@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 
 export const Wrapper = styled.div`
   position: relative;
@@ -6,23 +6,11 @@ export const Wrapper = styled.div`
   height: 100%;
 `;
 
-export const Container = styled.canvas<{ width: number, height: number, isManipulating: boolean }>`
-  width: ${props => props.width};
-  height: ${props => props.height};
-  border: 2px solid ${props => props.theme.headerBackgound};
-  
-  ${props => props.isManipulating && css`
-  cursor: cell;
-  `};
-`;
-
-interface RectPropties {x: number, y: number, width: number, height: number}
-
-export const Rectcss = styled.div<RectPropties>`
+export const Container = styled.div<{screen: { width: number, height: number }}>`
   position: absolute;
-  top: ${props => props.y + 'px'};
-  left: ${props => props.x + 'px'};
-  width: ${props => props.width + 'px'};
-  height: ${props => props.height + 'px'};
-  background: #C4C4C4;
+  top: 0;
+  left: 0;
+  width: ${props => props.screen.width + 'px'};
+  height: ${props => props.screen.height + 'px'};
+  border: 2px solid ${props => props.theme.headerBackgound};
 `;

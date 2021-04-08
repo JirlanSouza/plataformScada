@@ -2,10 +2,31 @@ import React, { useEffect, useRef, useState } from 'react';
 import { theme } from '../../styles/theme';
 import { useEditorContext, useProjectTreeContext } from '../../contexts';
 
-import { Container, Rectcss, Wrapper } from './styles';
-import Rect from '../../projectObjects/Rect/Rectcss';
+import { Container, Wrapper } from './styles';
+import { Triangle, Rectangle, Circle } from '../../projectObjects/index';
+
 import ManipulationBorder from '../ManipulationBorder';
 import { manipulations } from '../../manipulations/moveAndResizeManipulations';
+import { ObjectStylePropties } from '../../projectObjects/ObjectPorpties';
+
+type ObjectComponentToRender = React.FC<{ objectStylePropties: ObjectStylePropties, onClick: (event: React.MouseEvent) => void }>
+
+interface Object {
+  componentToRender: ObjectComponentToRender
+  state: {
+    positionX: number,
+    positionY: number,
+    width: number,
+    height: number,
+  }
+}
+
+const objectsComponentsRender: { [key: string]: ObjectComponentToRender } = {
+  'Rectangle': Rectangle,
+  'Circle': Circle,
+  'Triangle': Triangle,
+}
+
 
 const Screen: React.FC = () => {
   const [screenWidth, setScreenWdth] = useState(1366);
@@ -17,7 +38,15 @@ const Screen: React.FC = () => {
     cursorPositionY: 0
   });
 
-  const [timeCicleManipulation, setTimeCicleManipulation] = useState(Date.now());
+  const [startManipulation, setStartManipulation] = useState(false);
+  const [stateObject, setStateObject] = useState({
+    positionX: 100,
+    positionY: 100,
+    width: 200,
+    height: 136.4
+  });
+
+  const [objects, setObjects] = useState([] as Object[]);
 
   const { lineGridWeight, toolSelected } = useEditorContext();
   const { containerWidth } = useProjectTreeContext();
@@ -49,13 +78,75 @@ const Screen: React.FC = () => {
         context.closePath();
       };
     }
-  }, [screenWidth, screenHeight, lineGridWeight]);
+  }, [screenWidth, screenHeight, lineGridWeight, objects]);
+
+  function calcCursorPositionOnScreen(event: React.MouseEvent) {
+    const cursorPositionX = event.pageX - containerWidth
+    const cursorPositionY = event.pageY - parseInt(theme.headerHeight)
+
+    return { cursorPositionX, cursorPositionY };
+  }
+
+  function cursorOnInObject(objects: Object[], mouseEvent: React.MouseEvent) {
+    const { cursorPositionX, cursorPositionY } = calcCursorPositionOnScreen(mouseEvent);
+    let cursorIsOnInObject = false;
+
+    objects.forEach(object => {
+      const regionXStartObject = object.state.positionX;
+      const regionXEndObject = object.state.positionX + object.state.width;
+      const regionYStartObject = object.state.positionY;
+      const regionYEndObject = object.state.positionY + object.state.height;
+
+      const cursorIsInsideRegigionX = (cursorPositionX >= regionXStartObject && cursorPositionX <= regionXEndObject)
+      const cursorIsInsideRegionY = (cursorPositionY >= regionYStartObject && cursorPositionY <= regionYEndObject)
+
+      if (cursorIsInsideRegigionX && cursorIsInsideRegionY) cursorIsOnInObject = true;
+    })
+
+    return cursorIsOnInObject;
+
+  }
+
+  function handleScreenClick(event: React.MouseEvent) {
+    if (startManipulation && !isManipulating && !cursorOnInObject(objects, event)) {
+      setStartManipulation(false);
+    }
+    
+    console.log('Screen Click')
+    if (!startManipulation && !isManipulating) {
+      handleIsertObject(event);
+    }
+  }
+
+  function handleSelectObject() {
+    if (!startManipulation && !isManipulating) setStartManipulation(true);
+  }
+
+  function handleIsertObject(event: React.MouseEvent) {
+    if (toolSelected === 'Cursor' || typeof objectsComponentsRender[toolSelected] !== 'function') return
+
+    const objectsWithUpdate = objects.slice();
+    objectsWithUpdate.push({
+      componentToRender: objectsComponentsRender[toolSelected],
+      state: {
+        positionX: calcCursorPositionOnScreen(event).cursorPositionX,
+        positionY: calcCursorPositionOnScreen(event).cursorPositionY,
+        width: 200,
+        height: 200
+      }
+    });
+
+    setObjects(objectsWithUpdate);
+    console.log(objects);
+  }
 
   function handleStartManipulation(event: React.MouseEvent, manipulation: string) {
+    if (toolSelected !== 'Cursor') return
+    alert('Selected')
     setStateManipulation({
       manipulation,
-      cursorPositionX: event.pageX - containerWidth,
-      cursorPositionY: event.pageY - parseInt(theme.headerHeight)
+      cursorPositionX: calcCursorPositionOnScreen(event).cursorPositionX,
+      cursorPositionY: calcCursorPositionOnScreen(event).cursorPositionY,
     });
     setIsManipulating(true);
   }
@@ -64,11 +155,11 @@ const Screen: React.FC = () => {
     if (!isManipulating || typeof manipulations[stateManipulation.manipulation] != 'function') return;
 
     const cursorPosition = {
-      X: event.pageX - containerWidth,
-      Y: event.pageY - parseInt(theme.headerHeight)
+      X: calcCursorPositionOnScreen(event).cursorPositionX,
+      Y: calcCursorPositionOnScreen(event).cursorPositionY,
     }
 
-    const updateObjectState = manipulations[stateManipulation.manipulation]({stateObject, cursorPosition});
+    const updateObjectState = manipulations[stateManipulation.manipulation]({ stateObject, cursorPosition });
     setStateObject(updateObjectState);
 
     // if (toolSelected === 'Square' && screenRef.current) {
@@ -89,50 +180,39 @@ const Screen: React.FC = () => {
     setIsManipulating(false);
   }
 
-  const [startManipulation, setStartManipulation] = useState(false);
-  const [stateObject, setStateObject] = useState({
-    positionX: 100,
-    positionY: 100,
-    width: 200,
-    height: 200
-  });
-
   return (
-    <Wrapper
-      onClick={() => startManipulation && !isManipulating && setStartManipulation(false)}
-      onMouseMove={handleManipulation}
-      onMouseUp={handleFinishManipulation}  
-    >
-      <ManipulationBorder
-        show={startManipulation}
-        objectStylePropties={stateObject}
-        startMoveManipulation={event => handleStartManipulation(event, 'move')}
-        startResizeUpManipulation={event => handleStartManipulation(event, 'resizeUp')}
-        startResizeDownManipulation={event => handleStartManipulation(event, 'resizeDown')}
-        startResizeLeftManipulation={event => handleStartManipulation(event, 'resizeLeft')}
-        startResizeRightManipulation={event => handleStartManipulation(event, 'resizeRight')}
-        startResizeLeftUpManipulation={event => handleStartManipulation(event, 'resizeLeftUp')}
-        startResizeRightUpManipulation={event => handleStartManipulation(event, 'resizeRightUp')}
-        startResizeRightDownManipulation={event => handleStartManipulation(event, 'resizeRightDown')}
-        startResizeLeftDownManipulation={event => handleStartManipulation(event, 'resizeLeftDown')}
-        setShowManipulation={() => setStartManipulation(true)}
+    <Wrapper>
+      <Container
+        onClick={handleScreenClick}
+        onMouseMove={handleManipulation}
+        onMouseUp={handleFinishManipulation}
+        screen={{ width: screenWidth, height: screenHeight }}
       >
-        {Rect}
-        
-      </ManipulationBorder>
-      {/* <Container
-      ref={screenRef}
-      width={screenWidth}
-      height={screenHeight}
-      isManipulating={isManipulating}
-      onMouseDown={handleStartManipulation}
-      onMouseMove={handleManipulation}
-      onMouseUp={handleFinishManipulation}
-    >
-      
+        {objects.map((object, index) => {
+          return (
+            <ManipulationBorder
+              key={index}
+              show={startManipulation}
+              objectStylePropties={object.state}
+              startMoveManipulation={event => handleStartManipulation(event, 'move')}
+              startResizeUpManipulation={event => handleStartManipulation(event, 'resizeUp')}
+              startResizeDownManipulation={event => handleStartManipulation(event, 'resizeDown')}
+              startResizeLeftManipulation={event => handleStartManipulation(event, 'resizeLeft')}
+              startResizeRightManipulation={event => handleStartManipulation(event, 'resizeRight')}
+              startResizeLeftUpManipulation={event => handleStartManipulation(event, 'resizeLeftUp')}
+              startResizeRightUpManipulation={event => handleStartManipulation(event, 'resizeRightUp')}
+              startResizeRightDownManipulation={event => handleStartManipulation(event, 'resizeRightDown')}
+              startResizeLeftDownManipulation={event => handleStartManipulation(event, 'resizeLeftDown')}
+              setShowManipulation={handleSelectObject}
+            >
+              {object.componentToRender}
 
-    </Container> */}
-    </Wrapper>
+            </ManipulationBorder>
+          )
+        }
+        )}
+      </Container>
+    </Wrapper >
   );
 }
 

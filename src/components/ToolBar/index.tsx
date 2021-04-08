@@ -17,7 +17,7 @@ const ToolBar: React.FC = () => {
     {name: 'Cursor', icon: FiMousePointer },
     {name: 'Text', icon: FiType },
     {name: 'Circle', icon: FiCircle },
-    {name: 'Square', icon: FiSquare },
+    {name: 'Rectangle', icon: FiSquare },
     {name: 'Triangle', icon: FiTriangle},
     {name: 'BarGraf', icon: FiBarChart },
     {name: 'Trending', icon: FiTrendingUp },

@@ -1,11 +1,6 @@
 import styled from 'styled-components';
 
-interface ObjectStylePropties {
-  positionX: number,
-  positionY: number,
-  width: number,
-  height: number
-}
+import { ObjectStylePropties } from '../ObjectPorpties';
 
 export const Container = styled.div<{objectStylePropties: ObjectStylePropties}>`
   position: absolute;
@@ -13,6 +8,5 @@ export const Container = styled.div<{objectStylePropties: ObjectStylePropties}>`
   left: ${props => props.objectStylePropties.positionX + 'px'};
   width: ${props => props.objectStylePropties.width + 'px'};
   height: ${props => props.objectStylePropties.height + 'px'};
-  border-radius: 50%;
   background: #C4C4C4;
 `;

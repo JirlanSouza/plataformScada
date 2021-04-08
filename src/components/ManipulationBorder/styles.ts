@@ -20,7 +20,6 @@ export const Container = styled.div<ObjectStylePropties>`
   width: ${props => (props.width + 4) + 'px'};
   height: ${props => (props.height + 4) + 'px'};
   border: solid 2px ${props => props.theme.pallete.onPrimary};
-  z-index: 1;
 
 `;
 
@@ -47,6 +46,7 @@ export const Center = styled.div`
   svg {
     cursor: move;
     stroke: ${props => props.theme.pallete.primary.main};
+    z-index: 1;
   }
 `;
 
