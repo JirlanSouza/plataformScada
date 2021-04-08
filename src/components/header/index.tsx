@@ -8,7 +8,10 @@ import { Container } from './styles';
 
 const Header: React.FC = () => {
   return (
-    <Container>
+    <Container
+      // onKeyDown={(event) => setKeyPressed(event.key)}
+      tabIndex={0}
+      >
       <MenuBar />
       <ActionsBar />
       <ToolBar />

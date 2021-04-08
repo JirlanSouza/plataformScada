@@ -19,7 +19,6 @@ const Main: React.FC = () => {
         </ProjectTreeContextProvider>
       </Container>
     </EditorContextProvider>
-
   );
 }
 

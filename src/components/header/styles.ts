@@ -7,4 +7,5 @@ export const Container = styled.header`
   padding: .5rem;
   padding-bottom: .5rem;
   color: ${props => props.theme.pallete.onPrimary};
+  outline: none;
 `;

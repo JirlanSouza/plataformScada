@@ -1,12 +1,14 @@
 import React from 'react';
 
 import { Container } from './styles';
-import { ObjectStylePropties } from '../ObjectPorpties';
+import { ObjectComponent } from '../ObjectPorpties';
 
-export const Circle: React.FC<{ objectStylePropties: ObjectStylePropties, onClick: (event: React.MouseEvent) => void}> = (props) => {
+export const Circle: ObjectComponent = (props) => {
   return (
-    <Container objectStylePropties={props.objectStylePropties} onClick={props.onClick}>
-
+    <Container
+      objectStylePropties={props.objectStylePropties}
+      onClick={() => props.onClick(props.objectIdentify)}
+    >
     </Container>
   );
 }

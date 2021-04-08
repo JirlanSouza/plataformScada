@@ -1,17 +1,20 @@
 import React from 'react';
 
 import { Container } from './styles';
-import { ObjectStylePropties } from '../ObjectPorpties';
+import { ObjectComponent } from '../ObjectPorpties';
 
 function diferenceByPorcentage (percentage: number, value: number) {
   return ((value / 100) * percentage);
 }
 
-export const Triangle: React.FC<{ objectStylePropties: ObjectStylePropties, onClick: (event: React.MouseEvent) => void }> = (props) => {
+export const Triangle: ObjectComponent = (props) => {
   const height = props.objectStylePropties.height - diferenceByPorcentage(31.799, props.objectStylePropties.height)
 
   return (
-    <Container objectStylePropties={props.objectStylePropties} onClick={props.onClick}>
+    <Container
+      objectStylePropties={props.objectStylePropties}
+      onClick={() => props.onClick(props.objectIdentify)}
+    >
         <polygon
           points={`
             ${props.objectStylePropties.width / 2},0

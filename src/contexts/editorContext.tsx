@@ -1,17 +1,20 @@
 import React, { createContext, useContext,  useState } from 'react';
 
-interface EditorContext {
+interface IEditorContext {
   lineGridWeight: number;
   setLineGridWeight: (value: number) => void;
   toolSelected: string;
   setToolSelected: (tool: string) => void
+  keyPressed: string;
+  setKeyPressed: (key: string) => void
 }
 
-const EditorContext = createContext({} as EditorContext);
+const EditorContext = createContext({} as IEditorContext);
 
 export const EditorContextProvider: React.FC = ({ children }) => {
   const [lineGridWeight, setLineGridWeight] = useState(20);
   const [toolSelected, setToolSelected] = useState('cursor');
+  const [keyPressed, setKeyPressed] = useState('');
 
   return (
     <EditorContext.Provider
@@ -19,7 +22,9 @@ export const EditorContextProvider: React.FC = ({ children }) => {
       lineGridWeight,
       setLineGridWeight,
       toolSelected,
-      setToolSelected
+      setToolSelected,
+      keyPressed,
+      setKeyPressed
       }}
     >
       { children}
@@ -27,6 +32,6 @@ export const EditorContextProvider: React.FC = ({ children }) => {
   );
 }
 
-export function useEditorContext (): EditorContext {
+export function useEditorContext (): IEditorContext {
   return useContext(EditorContext);
 }
