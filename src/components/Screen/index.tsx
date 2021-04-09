@@ -2,8 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { theme } from '../../styles/theme';
 import { useEditorContext, useProjectTreeContext, useAppContext } from '../../contexts';
 
-import { Container, CursorObject, Wrapper } from './styles';
-import { Triangle, Rectangle, Circle } from '../../projectObjects/index';
+import { Container,  Wrapper } from './styles';
+import { Triangle, Rectangle, Circle, Button } from '../../projectObjects/index';
 
 import ManipulationBorder from '../ManipulationBorder';
 import { manipulations } from '../../manipulations/moveAndResizeManipulations';
@@ -28,6 +28,7 @@ const objectsComponentsRender: { [key: string]: ObjectComponentToRender } = {
   'Rectangle': Rectangle,
   'Circle': Circle,
   'Triangle': Triangle,
+  'Button': Button
 }
 
 

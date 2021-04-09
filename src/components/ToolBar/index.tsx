@@ -4,6 +4,7 @@ import {
   FiType,
   FiCircle,
   FiSquare,
+  FiBluetooth,
   FiBarChart,
   FiTriangle,
   FiTrendingUp
@@ -19,6 +20,7 @@ const ToolBar: React.FC = () => {
     {name: 'Circle', icon: FiCircle },
     {name: 'Rectangle', icon: FiSquare },
     {name: 'Triangle', icon: FiTriangle},
+    {name: 'Button', icon: FiBluetooth},
     {name: 'BarGraf', icon: FiBarChart },
     {name: 'Trending', icon: FiTrendingUp },
   ];
