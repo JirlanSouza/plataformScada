@@ -2,12 +2,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import { theme } from '../../styles/theme';
 import { useEditorContext, useProjectTreeContext, useAppContext } from '../../contexts';
 
-import { Container, Wrapper } from './styles';
+import { Container, CursorObject, Wrapper } from './styles';
 import { Triangle, Rectangle, Circle } from '../../projectObjects/index';
 
 import ManipulationBorder from '../ManipulationBorder';
 import { manipulations } from '../../manipulations/moveAndResizeManipulations';
 import { ObjectComponent } from '../../projectObjects/ObjectPorpties';
+import { FiTriangle } from 'react-icons/fi';
+import InsertingObjectArea from '../InsertingObjectArea';
 
 type ObjectComponentToRender = ObjectComponent;
 
@@ -40,23 +42,27 @@ const Screen: React.FC = () => {
     cursorPositionY: 0
   });
 
+  const [stateInsertObject, setStateInsertObject] = useState({
+    cursorPositionX: 0,
+    cursorPositionY: 0
+  });
+
   const [startManipulations, setStartManipulations] = useState([] as boolean[]);
   const [objectIdentify, setObjectIdentify] = useState(-1);
-  const [stateObject, setStateObject] = useState({
-    selected: false,
-    positionX: 100,
-    positionY: 100,
-    width: 200,
-    height: 136.4
+  const [insertingtObjectAreaState, setinsertingtObjectAreaState] = useState({
+    isInserting: false,
+    positionX: 0,
+    positionY: 0,
+    width: 0,
+    height: 0
   });
 
   const [objects, setObjects] = useState([] as Object[]);
+  const [showCursorObject, setShowCursorObject] = useState(false);
 
   const { keysPressed, setKeysPressed } = useAppContext()
-  const { lineGridWeight, toolSelected } = useEditorContext();
+  const { toolSelected } = useEditorContext();
   const { containerWidth } = useProjectTreeContext();
-
-  const screenRef = useRef<HTMLCanvasElement>(null);
 
   // useEffect(() => {
   //   const canvas = screenRef?.current;
@@ -85,6 +91,30 @@ const Screen: React.FC = () => {
   //   }
   // }, [screenWidth, screenHeight, lineGridWeight, objects]);
 
+  useEffect(() => {
+    if (objectIdentify !== -1) return;
+    const objectsUpdate = objects.slice();
+
+
+    objectsUpdate.forEach((object, index) => {
+      objectsUpdate[index].selected = false;
+    });
+    setObjects(objectsUpdate);
+
+  }, [objectIdentify]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (keysPressed.keyPressed === 'delete') return;
+    const objectsUpdate = objects.slice();
+
+
+
+    delete objectsUpdate[objectIdentify];
+
+    setObjects(objectsUpdate);
+
+  }, [keysPressed]); // eslint-disable-line react-hooks/exhaustive-deps
+
   function calcCursorPositionOnScreen(event: React.MouseEvent) {
     const cursorPositionX = event.pageX - containerWidth
     const cursorPositionY = event.pageY - parseInt(theme.headerHeight)
@@ -112,6 +142,31 @@ const Screen: React.FC = () => {
 
   }
 
+  function handleStartInsertObject(event: React.MouseEvent) {
+    if (toolSelected === 'Cursor') return;
+    const cursorPosition = calcCursorPositionOnScreen(event)
+
+    setStateInsertObject(cursorPosition);
+    setinsertingtObjectAreaState ({
+      isInserting: true,
+      positionX: cursorPosition.cursorPositionX,
+      positionY: cursorPosition.cursorPositionY,
+      width: 0,
+      height: 0
+    });
+
+    
+  }
+
+  function handleFinishInsertObject(event: React.MouseEvent) {
+    if (toolSelected === 'Cursor') return;
+    handleIsertObject(event);
+    setinsertingtObjectAreaState ({
+      ...insertingtObjectAreaState,
+      isInserting: false,
+    });
+  }
+
   function handleScreenClick(event: React.MouseEvent) {
     if (startManipulations && !isManipulating && !cursorOnInObject(objects, event)) {
       const objectsUpdate = objects.slice();
@@ -122,14 +177,10 @@ const Screen: React.FC = () => {
       setObjects(objectsUpdate);
       setObjectIdentify(-1);
     }
-
-    if (!isManipulating && toolSelected !== 'Cursor') {
-      handleIsertObject(event);
-    }
   }
 
   function handleSelectObject(identify: number) {
-    if (!startManipulations[identify] && !isManipulating) {
+    if (!startManipulations[identify] && !isManipulating && toolSelected === 'Cursor') {
       const objectsUpdate = objects.slice();
 
       if (!isCtrlAndShiftKeysPressed()) {
@@ -149,18 +200,16 @@ const Screen: React.FC = () => {
 
     const objectsWithUpdate = objects.slice();
     objectsWithUpdate.push({
-      selected: true,
+      selected: false,
       componentToRender: objectsComponentsRender[toolSelected],
       state: {
-        positionX: calcCursorPositionOnScreen(event).cursorPositionX,
-        positionY: calcCursorPositionOnScreen(event).cursorPositionY,
-        width: 200,
-        height: 200
+        positionX: stateInsertObject.cursorPositionX,
+        positionY: stateInsertObject.cursorPositionY,
+        width: calcCursorPositionOnScreen(event).cursorPositionX - stateInsertObject.cursorPositionX,
+        height: calcCursorPositionOnScreen(event).cursorPositionY - stateInsertObject.cursorPositionY
       }
     });
-
     setObjects(objectsWithUpdate);
-    console.log('Objetos ', objectsWithUpdate);
   }
 
   function handleStartManipulation(event: React.MouseEvent, manipulation: string) {
@@ -174,14 +223,33 @@ const Screen: React.FC = () => {
   }
 
   function handleManipulation(event: React.MouseEvent) {
-    if (!isManipulating || typeof manipulations[stateManipulation.manipulation] != 'function') return;
+    if (toolSelected !== 'Cursor') {
+      if (!showCursorObject) setShowCursorObject(true);
+    } else {
+      setShowCursorObject(false);
+    }
 
     const cursorPosition = {
       X: calcCursorPositionOnScreen(event).cursorPositionX,
       Y: calcCursorPositionOnScreen(event).cursorPositionY,
     }
 
-    const updateObjectState = manipulations[stateManipulation.manipulation]({ stateObject, cursorPosition });
+    if (insertingtObjectAreaState.isInserting) {
+      setinsertingtObjectAreaState ({
+        ...insertingtObjectAreaState,
+        width: cursorPosition.X - insertingtObjectAreaState.positionX,
+        height: cursorPosition.Y - insertingtObjectAreaState.positionY
+      });
+    }
+
+    if (
+      !isManipulating ||
+      typeof manipulations[stateManipulation.manipulation] != 'function' ||
+      objectIdentify === -1
+    ) return;
+
+    const state = objects[objectIdentify].state
+    const updateObjectState = manipulations[stateManipulation.manipulation]({ stateObject: state, cursorPosition });
 
     const objectsUpdate = objects.slice();
     objectsUpdate[objectIdentify].state = updateObjectState;
@@ -201,7 +269,11 @@ const Screen: React.FC = () => {
     // }
   }
 
-  function handleFinishManipulation() {
+  function handleOnMouseUpScreen(event: React.MouseEvent) {
+    if (toolSelected !== 'Curssor') {
+      handleFinishInsertObject(event)
+    }
+
     setIsManipulating(false);
   }
 
@@ -235,11 +307,13 @@ const Screen: React.FC = () => {
       <Container
         onClick={handleScreenClick}
         onMouseMove={handleManipulation}
-        onMouseUp={handleFinishManipulation}
+        onMouseDown={handleStartInsertObject}
+        onMouseUp={handleOnMouseUpScreen}
         onKeyDown={handleKeyPressed}
         onKeyUp={handleKeyDespressed}
         tabIndex={0}
         screen={{ width: screenWidth, height: screenHeight }}
+        showCursorObject={showCursorObject}
       >
         {objects.map((object, index) => {
           return (
@@ -265,6 +339,9 @@ const Screen: React.FC = () => {
           )
         }
         )}
+        {insertingtObjectAreaState.isInserting &&
+          <InsertingObjectArea InsertingObjectAreaState={insertingtObjectAreaState} />
+        }
       </Container>
     </Wrapper >
   );

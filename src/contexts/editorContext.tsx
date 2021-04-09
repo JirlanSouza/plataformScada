@@ -13,7 +13,7 @@ const EditorContext = createContext({} as IEditorContext);
 
 export const EditorContextProvider: React.FC = ({ children }) => {
   const [lineGridWeight, setLineGridWeight] = useState(20);
-  const [toolSelected, setToolSelected] = useState('cursor');
+  const [toolSelected, setToolSelected] = useState('Cursor');
   const [keyPressed, setKeyPressed] = useState('');
 
   return (
