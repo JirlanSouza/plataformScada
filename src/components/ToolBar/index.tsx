@@ -21,7 +21,7 @@ const ToolBar: React.FC = () => {
     {name: 'Rectangle', icon: FiSquare },
     {name: 'Triangle', icon: FiTriangle},
     {name: 'Button', icon: FiBluetooth},
-    {name: 'BarGraf', icon: FiBarChart },
+    {name: 'BarGraph', icon: FiBarChart },
     {name: 'Trending', icon: FiTrendingUp },
   ];
 

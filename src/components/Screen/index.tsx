@@ -3,7 +3,7 @@ import { theme } from '../../styles/theme';
 import { useEditorContext, useProjectTreeContext, useAppContext } from '../../contexts';
 
 import { Container,  Wrapper } from './styles';
-import { Triangle, Rectangle, Circle, Button } from '../../projectObjects/index';
+import { Triangle, Rectangle, Circle, Button, BarGraph } from '../../projectObjects/index';
 
 import ManipulationBorder from '../ManipulationBorder';
 import { manipulations } from '../../manipulations/moveAndResizeManipulations';
@@ -28,7 +28,8 @@ const objectsComponentsRender: { [key: string]: ObjectComponentToRender } = {
   'Rectangle': Rectangle,
   'Circle': Circle,
   'Triangle': Triangle,
-  'Button': Button
+  'Button': Button,
+  'BarGraph': BarGraph
 }
 
 
