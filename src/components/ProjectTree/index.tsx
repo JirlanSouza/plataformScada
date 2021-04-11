@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 import { FiChevronRight, FiChevronDown, FiFolder, FiMonitor, FiImage } from 'react-icons/fi';
+import { useAppContext } from '../../contexts';
 import { useProjectTreeContext } from '../../contexts/projectTreeContext';
 import { resizeContainer } from '../../utils/resizezeContainers';
 
@@ -31,6 +32,8 @@ const ProjectTree: React.FC = () => {
     { name: 'alarmes an events', filds: [], opening: false, iconFilds: FiImage },
     { name: 'users', filds: [], opening: false, iconFilds: FiImage },
   ]);
+
+  const { appClickEvent } = useAppContext();
 
   const {
     containerWidth,
@@ -63,6 +66,7 @@ const ProjectTree: React.FC = () => {
     <Container
       resizing={isClickedBorderContainer}
       resize={containerWidth}
+      onClick={appClickEvent}
       onMouseUp={handleResizeFinal}
       onMouseMove={event => handleResizeMove(event)}
     >

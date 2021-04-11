@@ -9,6 +9,7 @@ import ManipulationBorder from '../ManipulationBorder';
 import { manipulations } from '../../manipulations/moveAndResizeManipulations';
 import { ObjectComponent } from '../../projectObjects/ObjectPorpties';
 import InsertingObjectArea from '../InsertingObjectArea';
+import ModalProptiesObject from '../ModalProptiesObject';
 
 type ObjectComponentToRender = ObjectComponent;
 
@@ -73,7 +74,7 @@ const Screen: React.FC = () => {
   const [objects, setObjects] = useState([] as Object[]);
   const [showCursorObject, setShowCursorObject] = useState(false);
 
-  const { keysPressed, setKeysPressed } = useAppContext()
+  const { appClickEvent, keysPressed, setKeysPressed } = useAppContext()
   const { toolSelected } = useEditorContext();
   const { containerWidth } = useProjectTreeContext();
 
@@ -181,6 +182,8 @@ const Screen: React.FC = () => {
   }
 
   function handleScreenClick(event: React.MouseEvent) {
+    appClickEvent(event);
+
     if (startManipulations && !isManipulating && !cursorOnInObject(objects, event)) {
       const objectsUpdate = objects.slice();
       objectsUpdate.forEach((object, index) => {
@@ -369,6 +372,7 @@ const Screen: React.FC = () => {
           <InsertingObjectArea InsertingObjectAreaState={insertingtObjectAreaState} />
         }
       </Container>
+      <ModalProptiesObject />
     </Wrapper >
   );
 }

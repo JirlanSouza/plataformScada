@@ -7,9 +7,13 @@ interface KeyEventProps {
   isKeyAlt: boolean
 }
 
+type FunctionMouseEvent = (event: React.MouseEvent) => void
+
 interface IAppContext {
   keysPressed: KeyEventProps;
   setKeysPressed: (keyEventProps: KeyEventProps) => void
+  appClickEvent: FunctionMouseEvent;
+  appClickEventSubScribe: (fn: FunctionMouseEvent) => void;
   
 }
 
@@ -23,11 +27,26 @@ export const AppContextProvider: React.FC = ({ children }) => {
     isKeyAlt: false
   });
 
+  const [subScribers, setSubScribers] = useState([] as FunctionMouseEvent[]);
+
+  function appClickEvent (event: React.MouseEvent) {
+    subScribers.forEach(subScriber => {
+      subScriber(event);
+    })
+  }
+
+  function appClickEventSubScribe (fn: (event: React.MouseEvent) => void) {
+    setSubScribers([...subScribers, fn]);
+    console.log(subScribers, fn);
+  }
+
   return (
     <AppContext.Provider
       value = {{
       keysPressed,
-      setKeysPressed
+      setKeysPressed,
+      appClickEvent,
+      appClickEventSubScribe
       }}
     >
       { children}
