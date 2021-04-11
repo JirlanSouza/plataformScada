@@ -16,31 +16,31 @@ export const BarGraph: ObjectComponent = (props) => {
   const [valuePercentage, setValuePercentage] = useState(27);
 
   useEffect(() => {
-    if (props.objectStylePropties.width > 120) {
+    if (props.positionAndSize.width > 120) {
       setFullContainer(false)
     } else {
       setFullContainer(true);
     }
 
-  }, [props.objectStylePropties]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [props.positionAndSize]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (fullContainer) {
-      setBarWidth(props.objectStylePropties.width);
-      setBarHeight(calcHeightBar(props.objectStylePropties.height, valuePercentage));
+      setBarWidth(props.positionAndSize.width);
+      setBarHeight(calcHeightBar(props.positionAndSize.height, valuePercentage));
       setBarPositionX(0);
-      setBarPositionY(props.objectStylePropties.height - barHeight);
+      setBarPositionY(props.positionAndSize.height - barHeight);
       return;
     }
     
-    const barHeightUpdate = calcHeightBar(props.objectStylePropties.height - 40, valuePercentage)
+    const barHeightUpdate = calcHeightBar(props.positionAndSize.height - 40, valuePercentage)
     
-    setBarWidth(props.objectStylePropties.width - 60);
+    setBarWidth(props.positionAndSize.width - 60);
     setBarHeight(barHeightUpdate);
     setBarPositionX(10);
-    setBarPositionY(props.objectStylePropties.height - (barHeightUpdate + 40));
+    setBarPositionY(props.positionAndSize.height - (barHeightUpdate + 40));
 
-  }, [fullContainer, props.objectStylePropties]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [fullContainer, props.positionAndSize]) // eslint-disable-line react-hooks/exhaustive-deps
 
   function calcHeightBar(objectHeight: number, percentage: number) {
     return (objectHeight / 100) * percentage;
@@ -48,17 +48,18 @@ export const BarGraph: ObjectComponent = (props) => {
 
   return (
     <Container
-      objectStylePropties={props.objectStylePropties}
+      positionAndSize={props.positionAndSize}
+      objectStyle={props.style}
       onClick={() => props.onClick(props.objectIdentify)}
     >
-      <svg width={props.objectStylePropties.width} height={props.objectStylePropties.height}>
+      <svg width={props.positionAndSize.width} height={props.positionAndSize.height}>
         <g transform={fullContainer ? '' : `translate(40,20)`}>
           {!fullContainer &&
             <g className="y axis">
 
               {array.map((item, index) => {
                 return (
-                  <g className="tick" transform={`translate(0,${index * ((props.objectStylePropties.height - 40) / 10)})`}><line x2="-6" y2="0"></line>
+                  <g className="tick" transform={`translate(0,${index * ((props.positionAndSize.height - 40) / 10)})`}><line x2="-6" y2="0"></line>
                     <text dy=".32em" x="-9" y="0" >{(item + 1) * 10}%</text>
                   </g>
                 )
@@ -66,7 +67,7 @@ export const BarGraph: ObjectComponent = (props) => {
 
               }
 
-              <path className="domain" d={`M-6,0H0V${props.objectStylePropties.height - 40}H-6`}></path>
+              <path className="domain" d={`M-6,0H0V${props.positionAndSize.height - 40}H-6`}></path>
             </g>
           }
           <rect

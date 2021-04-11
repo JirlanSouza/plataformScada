@@ -6,7 +6,8 @@ import { ObjectComponent } from '../ObjectPorpties';
 export const Circle: ObjectComponent = (props) => {
   return (
     <Container
-      objectStylePropties={props.objectStylePropties}
+      positionAndSize={props.positionAndSize}
+      objectStyle={props.style}
       onClick={() => props.onClick(props.objectIdentify)}
     >
     </Container>

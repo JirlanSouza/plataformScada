@@ -2,13 +2,12 @@ import React, { useEffect, useRef, useState } from 'react';
 import { theme } from '../../styles/theme';
 import { useEditorContext, useProjectTreeContext, useAppContext } from '../../contexts';
 
-import { Container,  Wrapper } from './styles';
+import { Container, Wrapper } from './styles';
 import { Triangle, Rectangle, Circle, Button, BarGraph } from '../../projectObjects/index';
 
 import ManipulationBorder from '../ManipulationBorder';
 import { manipulations } from '../../manipulations/moveAndResizeManipulations';
 import { ObjectComponent } from '../../projectObjects/ObjectPorpties';
-import { FiTriangle } from 'react-icons/fi';
 import InsertingObjectArea from '../InsertingObjectArea';
 
 type ObjectComponentToRender = ObjectComponent;
@@ -21,6 +20,18 @@ interface Object {
     positionY: number,
     width: number,
     height: number,
+  }
+  style: {
+    background: string,
+    borderColor: string,
+    border: number,
+    borderRadius: number,
+    font: {
+      size: number,
+      color: string,
+      bold: boolean,
+      italic: boolean
+    }
   }
 }
 
@@ -149,7 +160,7 @@ const Screen: React.FC = () => {
     const cursorPosition = calcCursorPositionOnScreen(event)
 
     setStateInsertObject(cursorPosition);
-    setinsertingtObjectAreaState ({
+    setinsertingtObjectAreaState({
       isInserting: true,
       positionX: cursorPosition.cursorPositionX,
       positionY: cursorPosition.cursorPositionY,
@@ -157,13 +168,13 @@ const Screen: React.FC = () => {
       height: 0
     });
 
-    
+
   }
 
   function handleFinishInsertObject(event: React.MouseEvent) {
     if (toolSelected === 'Cursor') return;
     handleIsertObject(event);
-    setinsertingtObjectAreaState ({
+    setinsertingtObjectAreaState({
       ...insertingtObjectAreaState,
       isInserting: false,
     });
@@ -209,6 +220,18 @@ const Screen: React.FC = () => {
         positionY: stateInsertObject.cursorPositionY,
         width: calcCursorPositionOnScreen(event).cursorPositionX - stateInsertObject.cursorPositionX,
         height: calcCursorPositionOnScreen(event).cursorPositionY - stateInsertObject.cursorPositionY
+      },
+      style: {
+        background: '#C4C4C4',
+        borderColor: '',
+        border: 0,
+        borderRadius: 0,
+        font: {
+          size: 14,
+          color: '',
+          bold: false,
+          italic: false
+        }
       }
     });
     setObjects(objectsWithUpdate);
@@ -237,7 +260,7 @@ const Screen: React.FC = () => {
     }
 
     if (insertingtObjectAreaState.isInserting) {
-      setinsertingtObjectAreaState ({
+      setinsertingtObjectAreaState({
         ...insertingtObjectAreaState,
         width: cursorPosition.X - insertingtObjectAreaState.positionX,
         height: cursorPosition.Y - insertingtObjectAreaState.positionY
@@ -323,7 +346,8 @@ const Screen: React.FC = () => {
               key={index}
               objectIdentify={index}
               show={object.selected}
-              objectStylePropties={object.state}
+              objectPositionAndSize={object.state}
+              objectStyle={object.style}
               startMoveManipulation={event => handleStartManipulation(event, 'move')}
               startResizeUpManipulation={event => handleStartManipulation(event, 'resizeUp')}
               startResizeDownManipulation={event => handleStartManipulation(event, 'resizeDown')}

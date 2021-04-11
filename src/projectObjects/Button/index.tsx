@@ -7,7 +7,8 @@ import { Container } from './styles';
 export const Button: ObjectComponent = (props) => {
   return (
     <Container
-    objectStylePropties={props.objectStylePropties}
+    positionAndSize={props.positionAndSize}
+    objectStyle={props.style}
     onClick={() => props.onClick(props.objectIdentify)}
     >
 
