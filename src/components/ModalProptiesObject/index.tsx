@@ -1,191 +1,144 @@
-import React from 'react';
+import React, { useState } from 'react';
+
+import { firstCharToUpCase } from '../../utils/firstCharToUperCase';
+
 import ColorSelection from '../ColorSelection';
+import { BackgroundProptiesEdit } from './BackgroundProptiesEdit';
+import { BorderProptiesEdit } from './BorderProptiesEdit ';
+import { FontProptiesEdit } from './FontProptiesEdit';
 
 import { Container, Content, InputWrapper, Menu, Secssion, Title, TopBar } from './styles';
 
-interface ObjectProptiesToEdit {
+export interface ObjectProptiesToEdit {
   style: {
-    name: string,
-    propties: {
-      name: string,
-      inputType: number,
-      inputPropties: {}
-    }[],
-  }[],
-  comon: [],
-  conection: []
+    font?: FontPropties,
+    background?: BackgroundPropties,
+    border?: BorderPropties
+  },
+  comon: {
+    positionAndSize: PositionAndSizePropties
+  },
+  conection: {
+    tag: string
+  },
 }
 
-const rectPropties: ObjectProptiesToEdit = {
-  style: [
-    {
-      name: 'font',
-      propties: [
-        {
-          name: 'size',
-          inputType: 0,
-          inputPropties: {
-            minValue: 7,
-            maxValue: 64,
+export interface FontPropties {
+  size: number,
+  color: string,
+  bold: boolean,
+  italic: boolean
+}
 
-          }
+export interface BackgroundPropties {
+  color: string,
+}
 
-        },
-        {
-          name: 'color',
-          inputType: 1,
-          inputPropties: {
-            getColor: (color: string) => { }
-          }
-        },
-        {
-          name: 'bold',
-          inputType: 2,
-          inputPropties: {}
-        },
-        {
-          name: 'italic',
-          inputType: 2,
-          inputPropties: {}
-        },
-      ],
-    },
-    {
-      name: 'background',
-      propties: [
-        {
-          name: 'color',
-          inputType: 1,
-          inputPropties: {
-            getColor: (color: string) => { }
-          }
-        }
+export interface BorderPropties {
+  color: string,
+  style: string,
+  width: number
+}
 
-      ]
-    },
-    {
-      name: 'border',
-      propties: [
-        {
-          name: 'color',
-          inputType: 1,
-          inputPropties: {
-            getColor: (color: string) => { }
-          }
-        },
-        {
-          name: 'width',
-          inputType: 0,
-          inputPropties: {
-            minValue: 0,
-            maxValue: 100,
-          }
-        },
-        {
-          name: 'style',
-          inputType: 3,
-          inputPropties: {
-            options: [
-              'Solid',
-              'Dotted',
-              'Dashad',
-              'Double',
-            ]
-          }
-        }
+export interface PositionAndSizePropties {
+  positionX: number,
+  positionY: number,
+  width: number,
+  height: number
+}
 
-      ]
+
+
+const InputNumber: React.FC<{ name: string, propties: any }> = (props) => {
+  const [value, setValue] = useState(0);
+
+  function handleValue(event: React.ChangeEvent<HTMLInputElement>) {
+    const newValue = parseInt(event.target.value);
+    if (newValue < props.propties.minValue) {
+      setValue(props.propties.minValue);
+      return;
     }
-  ],
-  comon: [],
-  conection: [],
-}
 
-const InputNumber: React.FC = () => {
+    if (newValue > props.propties.maxValue) {
+      setValue(props.propties.maxValue);
+      return;
+    }
+
+    setValue(newValue);
+  }
+
   return (
     <InputWrapper>
-      <label>Width</label>
-      <input type='number' />
+      <label>{firstCharToUpCase(props.name)}</label>
+      <input type='number' value={value} onChange={handleValue} />
     </InputWrapper>
   )
 }
 
-const InputColor: React.FC = () => {
+const InputRadio: React.FC<{ name: string, propties: any }> = (props) => {
   return (
     <InputWrapper>
-      <label>Color</label>
-      <ColorSelection getColor={(color: string) => { }} />
-    </InputWrapper>
-  )
-}
-
-const InputRadio: React.FC = () => {
-  return (
-    <InputWrapper>
-      <label>Negrito</label>
+      <label>{firstCharToUpCase(props.name)}</label>
       <input type='radio' />
     </InputWrapper>
   )
 }
 
-const InputSelect: React.FC = () => {
+const InputSelect: React.FC<{ name: string, propties: any }> = (props) => {
+  const [propties, setPropyies] = useState(props.propties as InputSelectPropties);
+
+  interface InputSelectPropties {
+    options: string[]
+  }
+
+  props.propties as InputSelectPropties;
   return (
     <InputWrapper>
-      <label>Style</label>
+      <label>{firstCharToUpCase(props.name)}</label>
       <select>
-        {/* {options.map((option, index) => {
+        {propties.options.map((option, index) => {
           return (
-            <option>{option}</option>
+            <option>{firstCharToUpCase(option)}</option>
           )
-        }
-        }) */}
+        })}
       </select>
     </InputWrapper>
   )
 }
 
-const Inputs = [
-  InputNumber,
-  InputColor,
-  InputRadio,
-  InputSelect
-]
-
-const ModalProptiesObject: React.FC = () => {
+const ModalProptiesObject: React.FC<{ objectPropties: ObjectProptiesToEdit }> = (props) => {
+  const [menuItemSelected, setMenuItemSelected] = useState('style');
 
   return (
     <Container>
       <TopBar>
         <Menu >
           <ul>
-            <li>Style</li>
-            <li>Comon</li>
-            <li>Conection</li>
+            <li onClick={() => setMenuItemSelected('style')} >Style</li>
+            <li onClick={() => setMenuItemSelected('comon')} >Comon</li>
+            <li onClick={() => setMenuItemSelected('conection')} >Conection</li>
           </ul>
         </Menu>
       </TopBar>
 
-      {rectPropties.style.map((proptie, index) => {
-        return (
-          <Secssion>
-            <Title>{proptie.name}</Title>
+      {menuItemSelected === 'style' && (
+        props.objectPropties.style.font &&
+        <FontProptiesEdit propties={props.objectPropties.style.font} />
+      )
+      }
 
-            <Content>
-              {proptie.propties.map((proptieFild, index) => {
-                return (
-                  <>
-                  {proptieFild.inputType === 0 && <InputNumber/>}
-                  {proptieFild.inputType === 1 && <InputColor />}
-                  {proptieFild.inputType === 2 && <InputRadio />}
-                  {proptieFild.inputType === 3 && <InputSelect />}
-                </>
-                )
-              })}
-            </Content>
-          </Secssion>
+      {menuItemSelected === 'style' && (
+        props.objectPropties.style.background &&
+        <BackgroundProptiesEdit propties={props.objectPropties.style.background} />
+      )
+      }
 
-        )
-      })}
+      {menuItemSelected === 'style' && (
+        props.objectPropties.style.border &&
+        <BorderProptiesEdit propties={props.objectPropties.style.border} />
+      )
+      }
+
     </Container>
   );
 }

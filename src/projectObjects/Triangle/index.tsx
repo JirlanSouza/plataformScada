@@ -15,6 +15,7 @@ export const Triangle: ObjectComponent = (props) => {
       positionAndSize={props.positionAndSize}
       objectStyle={props.style}
       onClick={() => props.onClick(props.objectIdentify)}
+      onDoubleClick={() => props.onDoubleClick(props.objectIdentify)}
     >
         <polygon
           points={`

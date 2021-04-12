@@ -51,6 +51,7 @@ export const BarGraph: ObjectComponent = (props) => {
       positionAndSize={props.positionAndSize}
       objectStyle={props.style}
       onClick={() => props.onClick(props.objectIdentify)}
+      onDoubleClick={() => props.onDoubleClick(props.objectIdentify)}
     >
       <svg width={props.positionAndSize.width} height={props.positionAndSize.height}>
         <g transform={fullContainer ? '' : `translate(40,20)`}>

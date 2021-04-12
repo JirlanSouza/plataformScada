@@ -33,5 +33,6 @@ export type ObjectComponent = React.FC<{
   positionAndSize: ObjectPositionAndSizePropties,
   style: ObjectStylePropties,
   especificPropties?: ObjectEspecificPropties
-  onClick: (identify: number) => void
+  onClick: (identify: number) => void,
+  onDoubleClick: (identify: number) => void
 }>

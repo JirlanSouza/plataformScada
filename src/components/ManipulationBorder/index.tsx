@@ -39,7 +39,8 @@ interface ManipulationBorderPropties {
   startResizeRightUpManipulation: (event: React.MouseEvent) => void,
   startResizeRightDownManipulation: (event: React.MouseEvent) => void,
   startResizeLeftDownManipulation: (event: React.MouseEvent) => void,
-  setShowManipulation: (identify: number) => void
+  setShowManipulation: (identify: number) => void,
+  setShowProptiesEdit: (identify: number) => void
 }
 
 const ManipulationBorder: React.FC<ManipulationBorderPropties> = ({
@@ -57,7 +58,8 @@ const ManipulationBorder: React.FC<ManipulationBorderPropties> = ({
   startResizeRightUpManipulation,
   startResizeRightDownManipulation,
   startResizeLeftDownManipulation,
-  setShowManipulation
+  setShowManipulation,
+  setShowProptiesEdit
 }) => {
   return (
     <>
@@ -93,7 +95,8 @@ const ManipulationBorder: React.FC<ManipulationBorderPropties> = ({
         objectIdentify,
         positionAndSize: objectPositionAndSize,
         style: objectStyle,
-        onClick: setShowManipulation
+        onClick: setShowManipulation,
+        onDoubleClick: setShowProptiesEdit
       })}
     </>
   );

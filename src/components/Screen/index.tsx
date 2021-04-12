@@ -9,12 +9,13 @@ import ManipulationBorder from '../ManipulationBorder';
 import { manipulations } from '../../manipulations/moveAndResizeManipulations';
 import { ObjectComponent } from '../../projectObjects/ObjectPorpties';
 import InsertingObjectArea from '../InsertingObjectArea';
-import ModalProptiesObject from '../ModalProptiesObject';
+import ModalProptiesObject, { ObjectProptiesToEdit } from '../ModalProptiesObject';
 
 type ObjectComponentToRender = ObjectComponent;
 
 interface Object {
   selected: boolean,
+  editingPropties: boolean,
   componentToRender: ObjectComponentToRender
   state: {
     positionX: number,
@@ -73,6 +74,13 @@ const Screen: React.FC = () => {
 
   const [objects, setObjects] = useState([] as Object[]);
   const [showCursorObject, setShowCursorObject] = useState(false);
+
+  const [objectProptiesToEdit, setObjectProptiesToEdit] = useState([] as ObjectProptiesToEdit[]);
+  const [isDoubleClick, setIsDoubleClick] = useState(false);;
+
+  useEffect(() => {
+    
+  }, [isDoubleClick])
 
   const { appClickEvent, keysPressed, setKeysPressed } = useAppContext()
   const { toolSelected } = useEditorContext();
@@ -188,6 +196,7 @@ const Screen: React.FC = () => {
       const objectsUpdate = objects.slice();
       objectsUpdate.forEach((object, index) => {
         objectsUpdate[index].selected = false;
+        objectsUpdate[index].editingPropties = false;
       })
 
       setObjects(objectsUpdate);
@@ -211,12 +220,18 @@ const Screen: React.FC = () => {
     }
   }
 
+  function handleObjectDoubleClick (identfy: number) {
+    objects[identfy].editingPropties = true;
+    setObjects([...objects])
+  }
+
   function handleIsertObject(event: React.MouseEvent) {
     if (typeof objectsComponentsRender[toolSelected] !== 'function') return
 
     const objectsWithUpdate = objects.slice();
     objectsWithUpdate.push({
       selected: false,
+      editingPropties: false,
       componentToRender: objectsComponentsRender[toolSelected],
       state: {
         positionX: stateInsertObject.cursorPositionX,
@@ -225,7 +240,7 @@ const Screen: React.FC = () => {
         height: calcCursorPositionOnScreen(event).cursorPositionY - stateInsertObject.cursorPositionY
       },
       style: {
-        background: '#C4C4C4',
+        background: '#BDBDBD',
         borderColor: '',
         border: 0,
         borderRadius: 0,
@@ -237,6 +252,39 @@ const Screen: React.FC = () => {
         }
       }
     });
+
+    const objectPropties = {
+      style: {
+        font: {
+          size: 0,
+          color: '',
+          bold: false,
+          italic: false
+        },
+        background: {
+          color: ''
+        },
+        border: {
+          color: '',
+          style: '',
+          width: 0
+        }
+      },
+      comon: {
+        positionAndSize: {
+          positionX: 0,
+          positionY: 0,
+          width: 0,
+          height: 0
+        }
+      },
+      conection: {
+        tag: ''
+      },
+    }
+
+
+    setObjectProptiesToEdit([...objectProptiesToEdit, objectPropties]);
     setObjects(objectsWithUpdate);
   }
 
@@ -345,26 +393,32 @@ const Screen: React.FC = () => {
       >
         {objects.map((object, index) => {
           return (
-            <ManipulationBorder
-              key={index}
-              objectIdentify={index}
-              show={object.selected}
-              objectPositionAndSize={object.state}
-              objectStyle={object.style}
-              startMoveManipulation={event => handleStartManipulation(event, 'move')}
-              startResizeUpManipulation={event => handleStartManipulation(event, 'resizeUp')}
-              startResizeDownManipulation={event => handleStartManipulation(event, 'resizeDown')}
-              startResizeLeftManipulation={event => handleStartManipulation(event, 'resizeLeft')}
-              startResizeRightManipulation={event => handleStartManipulation(event, 'resizeRight')}
-              startResizeLeftUpManipulation={event => handleStartManipulation(event, 'resizeLeftUp')}
-              startResizeRightUpManipulation={event => handleStartManipulation(event, 'resizeRightUp')}
-              startResizeRightDownManipulation={event => handleStartManipulation(event, 'resizeRightDown')}
-              startResizeLeftDownManipulation={event => handleStartManipulation(event, 'resizeLeftDown')}
-              setShowManipulation={() => handleSelectObject(index)}
-            >
-              {object.componentToRender}
+            <>
+              <ManipulationBorder
+                key={index}
+                objectIdentify={index}
+                show={object.selected}
+                objectPositionAndSize={object.state}
+                objectStyle={object.style}
+                startMoveManipulation={event => handleStartManipulation(event, 'move')}
+                startResizeUpManipulation={event => handleStartManipulation(event, 'resizeUp')}
+                startResizeDownManipulation={event => handleStartManipulation(event, 'resizeDown')}
+                startResizeLeftManipulation={event => handleStartManipulation(event, 'resizeLeft')}
+                startResizeRightManipulation={event => handleStartManipulation(event, 'resizeRight')}
+                startResizeLeftUpManipulation={event => handleStartManipulation(event, 'resizeLeftUp')}
+                startResizeRightUpManipulation={event => handleStartManipulation(event, 'resizeRightUp')}
+                startResizeRightDownManipulation={event => handleStartManipulation(event, 'resizeRightDown')}
+                startResizeLeftDownManipulation={event => handleStartManipulation(event, 'resizeLeftDown')}
+                setShowManipulation={() => handleSelectObject(index)}
+                setShowProptiesEdit={() => handleObjectDoubleClick(index)}
+              >
+                {object.componentToRender}
 
-            </ManipulationBorder>
+              </ManipulationBorder>
+              {objects[index].editingPropties &&
+                <ModalProptiesObject objectPropties={objectProptiesToEdit[index]} />
+              }
+            </>
           )
         }
         )}
@@ -372,7 +426,6 @@ const Screen: React.FC = () => {
           <InsertingObjectArea InsertingObjectAreaState={insertingtObjectAreaState} />
         }
       </Container>
-      <ModalProptiesObject />
     </Wrapper >
   );
 }

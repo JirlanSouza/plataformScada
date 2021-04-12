@@ -35,6 +35,7 @@ export const BoxSelection = styled.div`
   outline: none;
   background: white;
   box-shadow: inherit;
+  z-index: 1;
 `;
 
 export const BoxTypeColor = styled.div`

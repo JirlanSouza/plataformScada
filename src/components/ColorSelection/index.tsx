@@ -14,10 +14,10 @@ import {
   TitleTypeColor
 } from './styles';
 
-const ColorSelection: React.FC<{getColor: (color: string) => void}> = ({getColor}) => {
+const ColorSelection: React.FC<{ setColor: string, getColor: (color: string) => void}> = ({ setColor, getColor}) => {
   const [showBoxSelection, setShowBoxSelection] = useState(false);
-  const [colorSelected, setColorSelected] = useState('#78D1E1');
-  const [customColor, setCustomColor] = useState('');
+  const [colorSelected, setColorSelected] = useState(setColor);
+  const [customColor, setCustomColor] = useState('#050508');
 
   const { appClickEventSubScribe } = useAppContext();
   const { basicsColors, favoriteColors, setFavoriteColors } = useEditorContext();
@@ -25,6 +25,10 @@ const ColorSelection: React.FC<{getColor: (color: string) => void}> = ({getColor
   useEffect(() => {
     appClickEventSubScribe(hanndleAppScrennClick);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    setColorSelected(setColor);
+  }, [setColor]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     getColor(colorSelected);
@@ -45,6 +49,7 @@ const ColorSelection: React.FC<{getColor: (color: string) => void}> = ({getColor
 
   function handleAddFavoriteColor () {
     setFavoriteColors([...favoriteColors, customColor])
+    alert(customColor)
     setCustomColor('');
   }
 

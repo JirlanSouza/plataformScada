@@ -46,6 +46,7 @@ export const Menu = styled.nav`
       max-width: max-content;
       font-weight: 500;
       color: ${props => props.theme.pallete.onSurface};
+      cursor: pointer;
 
       :hover {
         opacity: .7;
