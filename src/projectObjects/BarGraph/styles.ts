@@ -11,7 +11,7 @@ export const Container = styled.div<{ positionAndSize: ObjectPositionAndSizeProp
   border-radius: ${props => ((props.positionAndSize.width /100) * 10) + 'px'};
   border: none;
   box-shadow: 0 0 6px ${props => props.theme.pallete.onPrimary};
-  background: #64C4F4;
+  background: ${props => props.objectStyle.background.color};
   overflow: hidden;
 
   text-anchor: end;
@@ -22,7 +22,7 @@ export const Container = styled.div<{ positionAndSize: ObjectPositionAndSizeProp
 
   .axis {
     font-size: 12px;
-    color: #FCFCFC;
+    color: ${props => props.objectStyle.font.color};
   }
 
   .axis path,

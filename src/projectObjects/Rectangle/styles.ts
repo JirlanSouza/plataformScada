@@ -8,5 +8,8 @@ export const Container = styled.div<{ positionAndSize: ObjectPositionAndSizeProp
   left: ${props => props.positionAndSize.positionX + 'px'};
   width: ${props => props.positionAndSize.width + 'px'};
   height: ${props => props.positionAndSize.height + 'px'};
-  background: #C4C4C4;
+  background: ${props => props.objectStyle.background.color};
+  border: ${props => props.objectStyle.border.width}
+  ${props => props.objectStyle.border.style}
+  ${props => props.objectStyle.border.color}
 `;

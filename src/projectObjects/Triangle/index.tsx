@@ -23,9 +23,9 @@ export const Triangle: ObjectComponent = (props) => {
             ${props.positionAndSize.width},${height}
             0,${height}
           `}
-          fill="#0562DC"
-          stroke="#000"
-          stroke-width="4"
+          fill={props.style.background.color}
+          stroke={props.style.border.color}
+          stroke-width={props.style.border.width}
         />
     </Container>
   );

@@ -8,8 +8,9 @@ export const Container = styled.button<{ positionAndSize: ObjectPositionAndSizeP
   left: ${props => props.positionAndSize.positionX + 'px'};
   width: ${props => props.positionAndSize.width + 'px'};
   height: ${props => props.positionAndSize.height + 'px'};
-  border-radius: 10%;
-  border: none;
   box-shadow: 0 0 6px ${props => props.theme.pallete.onPrimary};
-  background: #64C4F4;
+  background: ${props => props.objectStyle.background.color};
+  border: ${props => props.objectStyle.border.width}
+  ${props => props.objectStyle.border.style}
+  ${props => props.objectStyle.border.color}
 `;

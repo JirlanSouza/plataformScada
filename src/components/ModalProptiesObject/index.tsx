@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 
 import { firstCharToUpCase } from '../../utils/firstCharToUperCase';
 
-import ColorSelection from '../ColorSelection';
 import { BackgroundProptiesEdit } from './BackgroundProptiesEdit';
 import { BorderProptiesEdit } from './BorderProptiesEdit ';
 import { FontProptiesEdit } from './FontProptiesEdit';
+import { PositionAndSizeProptieEdit } from './PositionAndSizeProptieEdit';
 
-import { Container, Content, InputWrapper, Menu, Secssion, Title, TopBar } from './styles';
+import { Container, InputWrapper, Menu, TopBar } from './styles';
 
 export interface ObjectProptiesToEdit {
   style: {
@@ -47,67 +47,52 @@ export interface PositionAndSizePropties {
   height: number
 }
 
-
-
-const InputNumber: React.FC<{ name: string, propties: any }> = (props) => {
-  const [value, setValue] = useState(0);
-
-  function handleValue(event: React.ChangeEvent<HTMLInputElement>) {
-    const newValue = parseInt(event.target.value);
-    if (newValue < props.propties.minValue) {
-      setValue(props.propties.minValue);
-      return;
-    }
-
-    if (newValue > props.propties.maxValue) {
-      setValue(props.propties.maxValue);
-      return;
-    }
-
-    setValue(newValue);
-  }
-
-  return (
-    <InputWrapper>
-      <label>{firstCharToUpCase(props.name)}</label>
-      <input type='number' value={value} onChange={handleValue} />
-    </InputWrapper>
-  )
+interface ObjectEdit {
+  setPropties: ObjectProptiesToEdit,
+  getPropties: (propties: ObjectProptiesToEdit) => void
 }
 
-const InputRadio: React.FC<{ name: string, propties: any }> = (props) => {
-  return (
-    <InputWrapper>
-      <label>{firstCharToUpCase(props.name)}</label>
-      <input type='radio' />
-    </InputWrapper>
-  )
-}
-
-const InputSelect: React.FC<{ name: string, propties: any }> = (props) => {
-  const [propties, setPropyies] = useState(props.propties as InputSelectPropties);
-
-  interface InputSelectPropties {
-    options: string[]
-  }
-
-  props.propties as InputSelectPropties;
-  return (
-    <InputWrapper>
-      <label>{firstCharToUpCase(props.name)}</label>
-      <select>
-        {propties.options.map((option, index) => {
-          return (
-            <option>{firstCharToUpCase(option)}</option>
-          )
-        })}
-      </select>
-    </InputWrapper>
-  )
-}
-
-const ModalProptiesObject: React.FC<{ objectPropties: ObjectProptiesToEdit }> = (props) => {
+const ModalProptiesObject: React.FC<ObjectEdit> = (props) => {
   const [menuItemSelected, setMenuItemSelected] = useState('style');
+
+  function getFontPropties(propties: FontPropties) {
+    props.getPropties({
+      ...props.setPropties,
+      style: {
+        ...props.setPropties.style,
+        font: propties
+      }
+    })
+  }
+
+  function getBackgroundPropties(propties: BackgroundPropties) {
+    props.getPropties({
+      ...props.setPropties,
+      style: {
+        ...props.setPropties.style,
+        background: propties
+      }
+    })
+  }
+
+  function getBorderPropties(propties: BorderPropties) {
+    props.getPropties({
+      ...props.setPropties,
+      style: {
+        ...props.setPropties.style,
+        border: propties
+      }
+    })
+  }
+
+  function getPositionAnSizaPropties(propties: PositionAndSizePropties) {
+    props.getPropties({
+      ...props.setPropties,
+      comon: {
+        positionAndSize: propties
+      }
+    })
+  }
 
   return (
     <Container>
@@ -122,20 +107,26 @@ const ModalProptiesObject: React.FC<{ objectPropties: ObjectProptiesToEdit }> = 
       </TopBar>
 
       {menuItemSelected === 'style' && (
-        props.objectPropties.style.font &&
-        <FontProptiesEdit propties={props.objectPropties.style.font} />
+        props.setPropties.style.font &&
+        <FontProptiesEdit propties={props.setPropties.style.font} getPropties={getFontPropties} />
       )
       }
 
       {menuItemSelected === 'style' && (
-        props.objectPropties.style.background &&
-        <BackgroundProptiesEdit propties={props.objectPropties.style.background} />
+        props.setPropties.style.background &&
+        <BackgroundProptiesEdit propties={props.setPropties.style.background} getPropties={getBackgroundPropties} />
       )
       }
 
       {menuItemSelected === 'style' && (
-        props.objectPropties.style.border &&
-        <BorderProptiesEdit propties={props.objectPropties.style.border} />
+        props.setPropties.style.border &&
+        <BorderProptiesEdit propties={props.setPropties.style.border} getPropties={getBorderPropties} />
+      )
+      }
+
+      {menuItemSelected === 'comon' && (
+        props.setPropties.style.border &&
+        <PositionAndSizeProptieEdit propties={props.setPropties.comon.positionAndSize} getPropties={getPositionAnSizaPropties} />
       )
       }
 

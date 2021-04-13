@@ -7,7 +7,7 @@ import { Triangle, Rectangle, Circle, Button, BarGraph } from '../../projectObje
 
 import ManipulationBorder from '../ManipulationBorder';
 import { manipulations } from '../../manipulations/moveAndResizeManipulations';
-import { ObjectComponent } from '../../projectObjects/ObjectPorpties';
+import { ObjectComponent, ObjectStylePropties } from '../../projectObjects/ObjectPorpties';
 import InsertingObjectArea from '../InsertingObjectArea';
 import ModalProptiesObject, { ObjectProptiesToEdit } from '../ModalProptiesObject';
 
@@ -23,18 +23,7 @@ interface Object {
     width: number,
     height: number,
   }
-  style: {
-    background: string,
-    borderColor: string,
-    border: number,
-    borderRadius: number,
-    font: {
-      size: number,
-      color: string,
-      bold: boolean,
-      italic: boolean
-    }
-  }
+  style: ObjectStylePropties
 }
 
 const objectsComponentsRender: { [key: string]: ObjectComponentToRender } = {
@@ -79,7 +68,7 @@ const Screen: React.FC = () => {
   const [isDoubleClick, setIsDoubleClick] = useState(false);;
 
   useEffect(() => {
-    
+
   }, [isDoubleClick])
 
   const { appClickEvent, keysPressed, setKeysPressed } = useAppContext()
@@ -144,20 +133,36 @@ const Screen: React.FC = () => {
     return { cursorPositionX, cursorPositionY };
   }
 
+  interface RegionPropties { X: number, Y: number, width: number, height: number }
+
+  function cursorInScreenRegion(regionPropties: RegionPropties, cursorPositionX: number, cursorPositionY: number) {
+    const regionXStartObject = regionPropties.X;
+    const regionXEndObject = regionPropties.X + regionPropties.width;
+    const regionYStartObject = regionPropties.Y;
+    const regionYEndObject = regionPropties.Y + regionPropties.height;
+
+    const cursorIsInsideRegigionX = (cursorPositionX >= regionXStartObject && cursorPositionX <= regionXEndObject)
+    const cursorIsInsideRegionY = (cursorPositionY >= regionYStartObject && cursorPositionY <= regionYEndObject)
+
+    return (cursorIsInsideRegigionX && cursorIsInsideRegionY);
+  }
+
   function cursorOnInObject(objects: Object[], mouseEvent: React.MouseEvent) {
     const { cursorPositionX, cursorPositionY } = calcCursorPositionOnScreen(mouseEvent);
     let cursorIsOnInObject = false;
 
     objects.forEach(object => {
-      const regionXStartObject = object.state.positionX;
-      const regionXEndObject = object.state.positionX + object.state.width;
-      const regionYStartObject = object.state.positionY;
-      const regionYEndObject = object.state.positionY + object.state.height;
 
-      const cursorIsInsideRegigionX = (cursorPositionX >= regionXStartObject && cursorPositionX <= regionXEndObject)
-      const cursorIsInsideRegionY = (cursorPositionY >= regionYStartObject && cursorPositionY <= regionYEndObject)
+      const regionPropties = {
+        X: object.state.positionX,
+        Y: object.state.positionY,
+        width: object.state.width,
+        height: object.state.height
+      }
 
-      if (cursorIsInsideRegigionX && cursorIsInsideRegionY) cursorIsOnInObject = true;
+      const cursorInObjectRegion = cursorInScreenRegion(regionPropties, cursorPositionX, cursorPositionY);
+
+      cursorIsOnInObject = cursorInObjectRegion;
     })
 
     return cursorIsOnInObject;
@@ -190,13 +195,26 @@ const Screen: React.FC = () => {
   }
 
   function handleScreenClick(event: React.MouseEvent) {
-    appClickEvent(event);
+
+    const regionPropties = {
+      X: 300,
+      Y: 80,
+      width: 400,
+      height: 500
+    }
+
+    const cursorInEditProptiesObject = cursorInScreenRegion(regionPropties, event.pageX, event.pageY)
+    if (!cursorInEditProptiesObject) {
+      appClickEvent(event);
+    }
 
     if (startManipulations && !isManipulating && !cursorOnInObject(objects, event)) {
       const objectsUpdate = objects.slice();
       objectsUpdate.forEach((object, index) => {
         objectsUpdate[index].selected = false;
-        objectsUpdate[index].editingPropties = false;
+        if (!cursorInEditProptiesObject) {
+          objectsUpdate[index].editingPropties = false;
+        }
       })
 
       setObjects(objectsUpdate);
@@ -220,7 +238,7 @@ const Screen: React.FC = () => {
     }
   }
 
-  function handleObjectDoubleClick (identfy: number) {
+  function handleObjectDoubleClick(identfy: number) {
     objects[identfy].editingPropties = true;
     setObjects([...objects])
   }
@@ -240,21 +258,6 @@ const Screen: React.FC = () => {
         height: calcCursorPositionOnScreen(event).cursorPositionY - stateInsertObject.cursorPositionY
       },
       style: {
-        background: '#BDBDBD',
-        borderColor: '',
-        border: 0,
-        borderRadius: 0,
-        font: {
-          size: 14,
-          color: '',
-          bold: false,
-          italic: false
-        }
-      }
-    });
-
-    const objectPropties = {
-      style: {
         font: {
           size: 0,
           color: '',
@@ -262,30 +265,55 @@ const Screen: React.FC = () => {
           italic: false
         },
         background: {
-          color: ''
+          color: '#DD55EE'
         },
         border: {
           color: '',
           style: '',
           width: 0
         }
-      },
+      }
+    });
+
+    setObjects(objectsWithUpdate);
+  }
+
+  function mapObjectStateToObjectProptiesEdit(object: Object): ObjectProptiesToEdit {
+
+    const objectProptiesToEdit = {
+      style: object.style,
       comon: {
-        positionAndSize: {
-          positionX: 0,
-          positionY: 0,
-          width: 0,
-          height: 0
-        }
+        positionAndSize: object.state
       },
       conection: {
         tag: ''
       },
     }
 
+    return objectProptiesToEdit;
+  }
 
-    setObjectProptiesToEdit([...objectProptiesToEdit, objectPropties]);
-    setObjects(objectsWithUpdate);
+  function mapSetSetObjectStateFromObjectProptiesEdit(objectProptiesEdit: ObjectProptiesToEdit, index: number)  {
+    const objectsUpdate = objects
+
+    if (objectProptiesEdit.style.font) {
+      objectsUpdate[index].style.font = objectProptiesEdit.style.font
+    }
+
+    if (objectProptiesEdit.style.background) {
+      objectsUpdate[index].style.background = objectProptiesEdit.style.background
+    }
+
+    if (objectProptiesEdit.style.border) {
+      objectsUpdate[index].style.border = objectProptiesEdit.style.border
+    }
+
+    objectsUpdate[index] =  {
+      ...objectsUpdate[index],
+      state: objectProptiesEdit.comon.positionAndSize
+    }
+
+    setObjects(objectsUpdate);
   }
 
   function handleStartManipulation(event: React.MouseEvent, manipulation: string) {
@@ -330,19 +358,6 @@ const Screen: React.FC = () => {
     const objectsUpdate = objects.slice();
     objectsUpdate[objectIdentify].state = updateObjectState;
     setObjects(objectsUpdate);
-
-    // if (toolSelected === 'Square' && screenRef.current) {
-    //   const screen = screenRef.current;
-    //   const context = screen.getContext('2d');
-
-    //   if (!context) return;
-    //   Rect(
-    //     context,
-    //     { x: stateManipulation.cursorPositionX, y: stateManipulation.cursorPositionY },
-    //     { x: width, y: height },
-    //     '#AA88FF'
-    //   );
-    // }
   }
 
   function handleOnMouseUpScreen(event: React.MouseEvent) {
@@ -416,7 +431,9 @@ const Screen: React.FC = () => {
 
               </ManipulationBorder>
               {objects[index].editingPropties &&
-                <ModalProptiesObject objectPropties={objectProptiesToEdit[index]} />
+                <ModalProptiesObject
+                  setPropties={mapObjectStateToObjectProptiesEdit(object)}
+                  getPropties={(propties) => mapSetSetObjectStateFromObjectProptiesEdit(propties, index)} />
               }
             </>
           )

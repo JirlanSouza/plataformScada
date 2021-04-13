@@ -1,27 +1,17 @@
 import React from "react";
+import {
+  BackgroundPropties,
+  BorderPropties,
+  FontPropties,
+  PositionAndSizePropties
+} from "../components/ModalProptiesObject";
 
-export interface ObjectPositionAndSizePropties {
-  positionX: number,
-  positionY: number,
-  width: number,
-  height: number
-}
-
-interface fontPropties {
-  size: number,
-  color: string,
-  bold: boolean,
-  italic: boolean
-}
-
-
+export interface ObjectPositionAndSizePropties extends PositionAndSizePropties {};
 
 export interface ObjectStylePropties {
-  background: string,
-  borderColor: string,
-  border: number,
-  borderRadius: number,
-  font: fontPropties
+  font: FontPropties,
+  background: BackgroundPropties,
+  border: BorderPropties,
 }
 
 export interface ObjectEspecificPropties {
@@ -30,7 +20,7 @@ export interface ObjectEspecificPropties {
 
 export type ObjectComponent = React.FC<{
   objectIdentify: number,
-  positionAndSize: ObjectPositionAndSizePropties,
+  positionAndSize: PositionAndSizePropties,
   style: ObjectStylePropties,
   especificPropties?: ObjectEspecificPropties
   onClick: (identify: number) => void,

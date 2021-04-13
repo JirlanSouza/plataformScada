@@ -10,7 +10,7 @@ export const Container = styled.div`
   border-radius: 5px;
   background: ${props => props.theme.pallete.surface};
   box-shadow: 0 0 3px ${props => props.theme.pallete.onSurface};
-  z-index: 2;
+  z-index: 10;
 `;
 
 export const TopBar = styled.div`

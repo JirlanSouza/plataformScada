@@ -3,53 +3,61 @@ import React, { useState } from "react";
 import ColorSelection from "../../ColorSelection";
 import { Content, InputWrapper, Secssion, Title } from "../styles";
 import { FontPropties } from '../';
+import { TogleSwitch } from "../../Checkbox";
 
-export const FontProptiesEdit: React.FC<{ propties: FontPropties }> = (props) => {
-  const [fontPropties, setFontPropties] = useState({} as FontPropties);
+interface IFontProptiesEdit {
+  propties: FontPropties,
+  getPropties: (propties: FontPropties) => void
+}
+
+export const FontProptiesEdit: React.FC<IFontProptiesEdit> = (props) => {
+  const [bold, setBold] = useState(false);
 
   function handleFontSize(event: React.ChangeEvent<HTMLInputElement>) {
     const newValue = parseInt(event.target.value);
     if (newValue < 7) {
-      setFontPropties({
-        ...fontPropties,
+      props.getPropties({
+        ...props.propties,
         size: 7
       });
       return;
     }
 
     if (newValue > 64) {
-      setFontPropties({
-        ...fontPropties,
+      props.getPropties({
+        ...props.propties,
         size: 64
       });
       return;
     }
 
-    setFontPropties({
-      ...fontPropties,
+    props.getPropties({
+      ...props.propties,
       size: newValue
     });
   }
 
   function handleFontColor (color: string) {
-    setFontPropties({
-      ...fontPropties,
+    props.getPropties({
+      ...props.propties,
       color
     });
   }
 
-  function handleFontBold (event: React.ChangeEvent<HTMLInputElement>) {
-    setFontPropties({
-      ...fontPropties,
-      bold: Boolean(event.target.value)
+  function handleFontBold (value: boolean) {
+    props.getPropties({
+      ...props.propties,
+      bold: value
     });
+    console.log(value, props.propties.bold);
   }
 
-  function handleFontItalic (event: React.ChangeEvent<HTMLInputElement>) {
-    setFontPropties({
-      ...fontPropties,
-      italic: Boolean(event.target.value)
+  function handleFontItalic (value: boolean) {
+    props.getPropties({
+      ...props.propties,
+      italic: value
     });
+    console.log(value, props.propties.italic);
   }
 
   return (
@@ -59,22 +67,22 @@ export const FontProptiesEdit: React.FC<{ propties: FontPropties }> = (props) =>
       <Content>
       <InputWrapper>
         <label>Size</label>
-        <input type='number' value={fontPropties.size} onChange={handleFontSize} />
+        <input type='number' value={props.propties.size} onChange={handleFontSize} />
       </InputWrapper>
 
       <InputWrapper>
         <label>Color</label>
-        <ColorSelection setColor={fontPropties.color} getColor={handleFontColor} />
+        <ColorSelection setColor={props.propties.color} getColor={handleFontColor} />
       </InputWrapper>
 
       <InputWrapper>
         <label>Bold</label>
-        <input type='radio' value={String(fontPropties.bold)} onChange={handleFontBold} />
+        <TogleSwitch setValue={props.propties.bold} getValue={handleFontBold} />
       </InputWrapper>
 
       <InputWrapper>
         <label>Italic</label>
-        <input type='radio' value={String(fontPropties.italic)} onChange={handleFontItalic} />
+        <TogleSwitch setValue={props.propties.italic} getValue={handleFontItalic} />
       </InputWrapper>
       </Content>
     </Secssion>

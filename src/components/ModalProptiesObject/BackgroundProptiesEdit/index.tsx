@@ -1,14 +1,17 @@
-import React, { useState } from "react";
+import React from "react";
 
 import ColorSelection from "../../ColorSelection";
 import { Content, InputWrapper, Secssion, Title } from "../styles";
 import { BackgroundPropties } from '..';
 
-export const BackgroundProptiesEdit: React.FC<{ propties: BackgroundPropties }> = (props) => {
-  const [backgroundPropties, setBackgroundPropties] = useState({} as BackgroundPropties);
+interface IBackgroundProptiesEdit {
+  propties: BackgroundPropties,
+  getPropties: (propties: BackgroundPropties) => void
+}
 
+export const BackgroundProptiesEdit: React.FC<IBackgroundProptiesEdit> = (props) => {
   function handleBackgroundColor(color: string) {
-    setBackgroundPropties({ color });
+    props.getPropties({ color });
   }
 
   return (
@@ -18,7 +21,7 @@ export const BackgroundProptiesEdit: React.FC<{ propties: BackgroundPropties }> 
       <Content>
       <InputWrapper>
         <label>Color</label>
-        <ColorSelection setColor={backgroundPropties.color} getColor={handleBackgroundColor} />
+        <ColorSelection setColor={props.propties.color} getColor={handleBackgroundColor} />
       </InputWrapper>
       </Content>
     </Secssion>
