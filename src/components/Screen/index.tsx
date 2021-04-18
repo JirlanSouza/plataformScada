@@ -6,7 +6,7 @@ import { Container, Wrapper } from './styles';
 import { Triangle, Rectangle, Circle, Button, BarGraph } from '../../projectObjects/index';
 
 import ManipulationBorder from '../ManipulationBorder';
-import { manipulations } from '../../manipulations/moveAndResizeManipulations';
+import { manipulations } from '../../core/object/manipulations/moveAndResizeManipulations';
 import { ObjectComponent, ObjectStylePropties } from '../../projectObjects/ObjectPorpties';
 import InsertingObjectArea from '../InsertingObjectArea';
 import ModalProptiesObject, { ObjectProptiesToEdit } from '../ModalProptiesObject';

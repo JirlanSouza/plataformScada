@@ -1,18 +1,21 @@
-export interface IObject<ObjectComponent> {
+export interface IObject {
+  id: number,
+  type: string,
   selected: boolean,
   editingPropties: boolean,
-  componentToRender: ObjectComponent
-  state: {
-    positionX: number,
-    positionY: number,
+  position: {
+    x: number,
+    y: number,
+  },
+  size: {
     width: number,
     height: number,
-  }
+  },
   style: ObjectStylePropties
 }
 
 export interface ObjectStylePropties {
-  font: FontPropties,
+  font?: FontPropties,
   background: BackgroundPropties,
   border: BorderPropties,
 }
@@ -35,8 +38,8 @@ export interface BorderPropties {
 }
 
 export interface PositionAndSizePropties {
-  positionX: number,
-  positionY: number,
+  x: number,
+  y: number,
   width: number,
   height: number
 }

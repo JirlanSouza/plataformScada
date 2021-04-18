@@ -1,4 +1,0 @@
-import { IObject } from './IObject';
-
-
-
