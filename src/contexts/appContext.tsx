@@ -30,6 +30,7 @@ export const AppContextProvider: React.FC = ({ children }) => {
   const [subScribers, setSubScribers] = useState([] as FunctionMouseEvent[]);
 
   function appClickEvent (event: React.MouseEvent) {
+    console.log('========> APP CLICK <=======')
     subScribers.forEach(subScriber => {
       subScriber(event);
     })

@@ -75,33 +75,6 @@ const Screen: React.FC = () => {
   const { toolSelected } = useEditorContext();
   const { containerWidth } = useProjectTreeContext();
 
-  // useEffect(() => {
-  //   const canvas = screenRef?.current;
-  //   const context = canvas?.getContext('2d');
-  //   console.log(context);
-
-  //   if (canvas && context) {
-  //     context.clearRect(0, 0, screenWidth, screenHeight);
-  //     context.strokeStyle = theme.pallete.onBackground
-
-  //     for (let i = lineGridWeight; i <= screenWidth; i += lineGridWeight) {
-  //       context.beginPath();
-  //       context.moveTo(i, 0);
-  //       context.lineTo(i, screenHeight);
-  //       context.stroke();
-  //       context.closePath();
-  //     };
-
-  //     for (let i = lineGridWeight; i <= screenHeight; i += lineGridWeight) {
-  //       context.beginPath();
-  //       context.moveTo(0, i);
-  //       context.lineTo(screenWidth, i);
-  //       context.stroke();
-  //       context.closePath();
-  //     };
-  //   }
-  // }, [screenWidth, screenHeight, lineGridWeight, objects]);
-
   useEffect(() => {
     if (objectIdentify !== -1) return;
     const objectsUpdate = objects.slice();
@@ -126,9 +99,9 @@ const Screen: React.FC = () => {
 
   }, [keysPressed]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  function calcCursorPositionOnScreen(event: React.MouseEvent) {
-    const cursorPositionX = event.pageX - containerWidth
-    const cursorPositionY = event.pageY - parseInt(theme.headerHeight)
+  function calcCursorPositionOnScreen(positionX: number, positionY: number) {
+    const cursorPositionX = positionX - containerWidth
+    const cursorPositionY = positionY - parseInt(theme.headerHeight)
 
     return { cursorPositionX, cursorPositionY };
   }
@@ -148,7 +121,7 @@ const Screen: React.FC = () => {
   }
 
   function cursorOnInObject(objects: Object[], mouseEvent: React.MouseEvent) {
-    const { cursorPositionX, cursorPositionY } = calcCursorPositionOnScreen(mouseEvent);
+    const { cursorPositionX, cursorPositionY } = calcCursorPositionOnScreen(mouseEvent.clientX, mouseEvent.clientY);
     let cursorIsOnInObject = false;
 
     objects.forEach(object => {
@@ -171,7 +144,7 @@ const Screen: React.FC = () => {
 
   function handleStartInsertObject(event: React.MouseEvent) {
     if (toolSelected === 'Cursor') return;
-    const cursorPosition = calcCursorPositionOnScreen(event)
+    const cursorPosition = calcCursorPositionOnScreen(event.clientX, event.clientY)
 
     setStateInsertObject(cursorPosition);
     setinsertingtObjectAreaState({
@@ -223,6 +196,8 @@ const Screen: React.FC = () => {
   }
 
   function handleSelectObject(identify: number) {
+    console.log('OBJECTS ===>>>', objects);
+    console.log('SELECT OBJECT =====>>>', identify, !startManipulations[identify], !isManipulating);
     if (!startManipulations[identify] && !isManipulating && toolSelected === 'Cursor') {
       const objectsUpdate = objects.slice();
 
@@ -231,10 +206,11 @@ const Screen: React.FC = () => {
           objectsUpdate[index].selected = false;
         });
       }
-      objectsUpdate[identify].selected = true;
+      objectsUpdate[1].selected = true;
 
       setObjects(objectsUpdate);
       setObjectIdentify(identify);
+      console.log('OBJECTS 2 ===>>>', objects, objectsUpdate);
     }
   }
 
@@ -254,8 +230,8 @@ const Screen: React.FC = () => {
       state: {
         positionX: stateInsertObject.cursorPositionX,
         positionY: stateInsertObject.cursorPositionY,
-        width: calcCursorPositionOnScreen(event).cursorPositionX - stateInsertObject.cursorPositionX,
-        height: calcCursorPositionOnScreen(event).cursorPositionY - stateInsertObject.cursorPositionY
+        width: calcCursorPositionOnScreen(event.clientX, event.clientY).cursorPositionX - stateInsertObject.cursorPositionX,
+        height: calcCursorPositionOnScreen(event.clientX, event.clientY).cursorPositionY - stateInsertObject.cursorPositionY
       },
       style: {
         font: {
@@ -293,7 +269,7 @@ const Screen: React.FC = () => {
     return objectProptiesToEdit;
   }
 
-  function mapSetSetObjectStateFromObjectProptiesEdit(objectProptiesEdit: ObjectProptiesToEdit, index: number)  {
+  function mapSetSetObjectStateFromObjectProptiesEdit(objectProptiesEdit: ObjectProptiesToEdit, index: number) {
     const objectsUpdate = objects
 
     if (objectProptiesEdit.style.font) {
@@ -308,7 +284,7 @@ const Screen: React.FC = () => {
       objectsUpdate[index].style.border = objectProptiesEdit.style.border
     }
 
-    objectsUpdate[index] =  {
+    objectsUpdate[index] = {
       ...objectsUpdate[index],
       state: objectProptiesEdit.comon.positionAndSize
     }
@@ -316,12 +292,13 @@ const Screen: React.FC = () => {
     setObjects(objectsUpdate);
   }
 
-  function handleStartManipulation(event: React.MouseEvent, manipulation: string) {
+  function handleStartManipulation(manipulation: string, positionX: number, positionY: number) {
     if (toolSelected !== 'Cursor') return
+    const { cursorPositionX, cursorPositionY } = calcCursorPositionOnScreen(positionX, positionY)
     setStateManipulation({
       manipulation,
-      cursorPositionX: calcCursorPositionOnScreen(event).cursorPositionX,
-      cursorPositionY: calcCursorPositionOnScreen(event).cursorPositionY,
+      cursorPositionX,
+      cursorPositionY
     });
     setIsManipulating(true);
   }
@@ -333,9 +310,10 @@ const Screen: React.FC = () => {
       setShowCursorObject(false);
     }
 
+    const { cursorPositionX, cursorPositionY } = calcCursorPositionOnScreen(event.clientX, event.clientY);
     const cursorPosition = {
-      X: calcCursorPositionOnScreen(event).cursorPositionX,
-      Y: calcCursorPositionOnScreen(event).cursorPositionY,
+      X: cursorPositionX,
+      Y: cursorPositionY,
     }
 
     if (insertingtObjectAreaState.isInserting) {
@@ -412,23 +390,14 @@ const Screen: React.FC = () => {
               <ManipulationBorder
                 key={index}
                 objectIdentify={index}
-                show={object.selected}
+                show={!!object.selected}
                 objectPositionAndSize={object.state}
                 objectStyle={object.style}
-                startMoveManipulation={event => handleStartManipulation(event, 'move')}
-                startResizeUpManipulation={event => handleStartManipulation(event, 'resizeUp')}
-                startResizeDownManipulation={event => handleStartManipulation(event, 'resizeDown')}
-                startResizeLeftManipulation={event => handleStartManipulation(event, 'resizeLeft')}
-                startResizeRightManipulation={event => handleStartManipulation(event, 'resizeRight')}
-                startResizeLeftUpManipulation={event => handleStartManipulation(event, 'resizeLeftUp')}
-                startResizeRightUpManipulation={event => handleStartManipulation(event, 'resizeRightUp')}
-                startResizeRightDownManipulation={event => handleStartManipulation(event, 'resizeRightDown')}
-                startResizeLeftDownManipulation={event => handleStartManipulation(event, 'resizeLeftDown')}
+                manipulateObject={event => handleStartManipulation}
                 setShowManipulation={() => handleSelectObject(index)}
                 setShowProptiesEdit={() => handleObjectDoubleClick(index)}
               >
                 {object.componentToRender}
-
               </ManipulationBorder>
               {objects[index].editingPropties &&
                 <ModalProptiesObject

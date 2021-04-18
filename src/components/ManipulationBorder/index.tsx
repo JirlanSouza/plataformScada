@@ -30,15 +30,7 @@ interface ManipulationBorderPropties {
   show: boolean,
   objectPositionAndSize: ObjectPositionAndSizePropties,
   objectStyle: ObjectStylePropties
-  startMoveManipulation: (event: React.MouseEvent) => void,
-  startResizeUpManipulation: (event: React.MouseEvent) => void,
-  startResizeDownManipulation: (event: React.MouseEvent) => void,
-  startResizeLeftManipulation: (event: React.MouseEvent) => void,
-  startResizeRightManipulation: (event: React.MouseEvent) => void,
-  startResizeLeftUpManipulation: (event: React.MouseEvent) => void,
-  startResizeRightUpManipulation: (event: React.MouseEvent) => void,
-  startResizeRightDownManipulation: (event: React.MouseEvent) => void,
-  startResizeLeftDownManipulation: (event: React.MouseEvent) => void,
+  manipulateObject: (manipulationName: string, positionX: number, positionY: number) => void,
   setShowManipulation: (identify: number) => void,
   setShowProptiesEdit: (identify: number) => void
 }
@@ -49,15 +41,7 @@ const ManipulationBorder: React.FC<ManipulationBorderPropties> = ({
   show,
   objectPositionAndSize,
   objectStyle,
-  startMoveManipulation,
-  startResizeUpManipulation,
-  startResizeDownManipulation,
-  startResizeLeftManipulation,
-  startResizeRightManipulation,
-  startResizeLeftUpManipulation,
-  startResizeRightUpManipulation,
-  startResizeRightDownManipulation,
-  startResizeLeftDownManipulation,
+  manipulateObject,
   setShowManipulation,
   setShowProptiesEdit
 }) => {
@@ -72,21 +56,21 @@ const ManipulationBorder: React.FC<ManipulationBorderPropties> = ({
         >
 
           <Top>
-            <LeftUp onMouseDown={startResizeLeftUpManipulation} />
-            <Up onMouseDown={startResizeUpManipulation}/>
-            <RightUp onMouseDown={startResizeRightUpManipulation} />
+            <LeftUp onMouseDown={(event) => manipulateObject('resizeLeftUp', event.clientX, event.clientY)} />
+            <Up onMouseDown={(event) => manipulateObject('resizeUp', event.clientX, event.clientY)} />
+            <RightUp onMouseDown={(event) => manipulateObject('resizeRightUp', event.clientX, event.clientY)} />
           </Top>
 
           <Center>
-            <Left onMouseDown={startResizeLeftManipulation} />
-            <FiMove size={24} onMouseDown={startMoveManipulation} />
-            <Right onMouseDown={startResizeRightManipulation} />
+            <Left onMouseDown={(event) => manipulateObject('resizeLeft', event.clientX, event.clientY)} />
+            <FiMove size={24} onMouseDown={(event) => manipulateObject('move', event.clientX, event.clientY)} />
+            <Right onMouseDown={(event) => manipulateObject('resizeRight', event.clientX, event.clientY)} />
           </Center>
 
           <Base>
-            <LeftDown onMouseDown={startResizeLeftDownManipulation} />
-            <Down onMouseDown={startResizeDownManipulation} />
-            <RightDown onMouseDown={startResizeRightDownManipulation} />
+            <LeftDown onMouseDown={(event) => manipulateObject('resizeLeftDown', event.clientX, event.clientY)} />
+            <Down onMouseDown={(event) => manipulateObject('resizeDown', event.clientX, event.clientY)} />
+            <RightDown onMouseDown={(event) => manipulateObject('resizeRightDown', event.clientX, event.clientY)} />
           </Base>
 
         </Container>
