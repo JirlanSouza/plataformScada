@@ -3,7 +3,7 @@ import { theme } from '../../styles/theme';
 import { useEditorContext, useProjectTreeContext, useAppContext } from '../../contexts';
 
 import { Container, Wrapper } from './styles';
-import { Triangle, Rectangle, Circle, Button, BarGraph } from '../../projectObjects/index';
+import { ObjectsComponentsRender } from '../../projectObjects/index';
 
 import ManipulationBorder from '../ManipulationBorder';
 import { manipulations } from '../../core/object/manipulations/moveAndResizeManipulations';
@@ -11,7 +11,8 @@ import { ObjectComponent, ObjectStylePropties } from '../../projectObjects/Objec
 import InsertingObjectArea from '../InsertingObjectArea';
 import ModalProptiesObject from '../ModalProptiesObject';
 
-import { useAppSelector } from '../../store';
+import { useAppSelector, useAppDispatch } from '../../store';
+import { select, manipulate } from '../../store/Object'
 
 type ObjectComponentToRender = ObjectComponent;
 
@@ -28,16 +29,9 @@ interface Object {
   style: ObjectStylePropties
 }
 
-const ObjectsComponentsRender: { [key: string]: ObjectComponent } = {
-  'Rectangle': Rectangle,
-  'Circle': Circle,
-  'Triangle': Triangle,
-  'Button': Button,
-  'BarGraph': BarGraph
-}
-
-
 const Screen: React.FC = () => {
+
+  const dispatch = useAppDispatch();
 
   const objects = useAppSelector(state => state.objects)
 
@@ -75,7 +69,7 @@ const Screen: React.FC = () => {
     const cursorPositionX = positionX - containerWidth
     const cursorPositionY = positionY - parseInt(theme.headerHeight)
 
-    return { cursorPositionX, cursorPositionY };
+    return { x: cursorPositionX, y: cursorPositionY };
   }
 
   interface RegionPropties { X: number, Y: number, width: number, height: number }
@@ -93,7 +87,7 @@ const Screen: React.FC = () => {
   }
 
   function cursorOnInObject(objects: Object[], mouseEvent: React.MouseEvent) {
-    const { cursorPositionX, cursorPositionY } = calcCursorPositionOnScreen(mouseEvent.clientX, mouseEvent.clientY);
+    const cursorPosition = calcCursorPositionOnScreen(mouseEvent.clientX, mouseEvent.clientY);
     let cursorIsOnInObject = false;
 
     objects.forEach(object => {
@@ -105,7 +99,7 @@ const Screen: React.FC = () => {
         height: object.state.height
       }
 
-      const cursorInObjectRegion = cursorInScreenRegion(regionPropties, cursorPositionX, cursorPositionY);
+      const cursorInObjectRegion = cursorInScreenRegion(regionPropties, cursorPosition.x, cursorPosition.y);
 
       cursorIsOnInObject = cursorInObjectRegion;
     })
@@ -139,8 +133,6 @@ const Screen: React.FC = () => {
     return (keysPressed.isKeyCtrl && keysPressed.isKeyShift && keysPressed.keyPressed === '');
   }
 
-  const Component = ObjectsComponentsRender['rect'];
-
   return (
     <Wrapper>
       <Container
@@ -151,6 +143,7 @@ const Screen: React.FC = () => {
         showCursorObject={showCursorObject}
       >
         {objects.map((object, index) => {
+          const ObjectComponent = ObjectsComponentsRender[object.type];
           return (
             <>
               <ManipulationBorder
@@ -159,16 +152,22 @@ const Screen: React.FC = () => {
                 show={object.selected}
                 position={object.position}
                 size={object.size}
-                manipulateObject={() => {}}
+                manipulateObject={
+                  (manipulation, cursorPosition) => dispatch(
+                    manipulate({
+                      id: index,
+                      manipulation,
+                      cursorPosition : calcCursorPositionOnScreen(cursorPosition.x, cursorPosition.y)
+                    }))}
               >
-               <Component
-                position={object.position}
-                size={object.size}
-                objectIdentify={index}
-                style={object.style}
-                onClick={() => {}}
-                onDoubleClick={() => {}}
-              />
+                <ObjectComponent
+                  position={object.position}
+                  size={object.size}
+                  objectIdentify={index}
+                  style={object.style}
+                  onClick={() => dispatch(select({ id: index }))}
+                  onDoubleClick={() => { }}
+                />
               </ManipulationBorder>
               {object.editingPropties &&
                 <ModalProptiesObject objectId={index} />

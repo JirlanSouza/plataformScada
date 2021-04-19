@@ -1,6 +1,8 @@
+import { ObjectsTypes } from '../../projectObjects';
+
 export interface IObject {
   id: number,
-  type: string,
+  type: ObjectsTypes,
   selected: boolean,
   editingPropties: boolean,
   position: {

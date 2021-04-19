@@ -1,4 +1,5 @@
 import { IObject } from './IObject';
+import { ObjectsTypes } from '../../projectObjects';
 
 export class Object implements IObject {
   selected = false;
@@ -16,7 +17,7 @@ export class Object implements IObject {
 
   constructor(
     public id: number,
-    public type: string,
+    public type: ObjectsTypes,
     public position: {x: number, y: number},
     public size: { width: number, height: number }
     ) {}
