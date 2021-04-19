@@ -8,19 +8,20 @@ function diferenceByPorcentage (percentage: number, value: number) {
 }
 
 export const Triangle: ObjectComponent = (props) => {
-  const height = props.positionAndSize.height - diferenceByPorcentage(31.799, props.positionAndSize.height)
+  const height = props.size.height - diferenceByPorcentage(31.799, props.size.height)
 
   return (
     <Container
-      positionAndSize={props.positionAndSize}
+      position={props.position}
+      size={props.size}
       objectStyle={props.style}
       onClick={() => props.onClick(props.objectIdentify)}
       onDoubleClick={() => props.onDoubleClick(props.objectIdentify)}
     >
         <polygon
           points={`
-            ${props.positionAndSize.width / 2},0
-            ${props.positionAndSize.width},${height}
+            ${props.size.width / 2},0
+            ${props.size.width},${height}
             0,${height}
           `}
           fill={props.style.background.color}

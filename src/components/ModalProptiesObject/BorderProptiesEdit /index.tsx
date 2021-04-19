@@ -1,8 +1,8 @@
 import React from "react";
 
+import { BorderPropties } from '../../../core/object';
 import ColorSelection from "../../ColorSelection";
 import { Content, InputWrapper, Secssion, Title } from "../styles";
-import { BorderPropties } from '../';
 
 interface IBorderProptiesEdit {
   propties: BorderPropties,

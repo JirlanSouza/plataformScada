@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 
+import { FontPropties } from '../../../core/object';
 import ColorSelection from "../../ColorSelection";
 import { Content, InputWrapper, Secssion, Title } from "../styles";
-import { FontPropties } from '../';
 import { TogleSwitch } from "../../Checkbox";
 
 interface IFontProptiesEdit {

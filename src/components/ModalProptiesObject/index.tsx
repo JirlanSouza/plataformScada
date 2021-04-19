@@ -1,97 +1,65 @@
 import React, { useState } from 'react';
 
-import { firstCharToUpCase } from '../../utils/firstCharToUperCase';
+import { useAppSelector, useAppDispatch } from '../../store';
+import { edit } from '../../store/Object'
 
 import { BackgroundProptiesEdit } from './BackgroundProptiesEdit';
 import { BorderProptiesEdit } from './BorderProptiesEdit ';
 import { FontProptiesEdit } from './FontProptiesEdit';
 import { PositionAndSizeProptieEdit } from './PositionAndSizeProptieEdit';
 
-import { Container, InputWrapper, Menu, TopBar } from './styles';
+import { Container, Menu, TopBar } from './styles';
 
-export interface ObjectProptiesToEdit {
-  style: {
-    font?: FontPropties,
-    background?: BackgroundPropties,
-    border?: BorderPropties
-  },
-  comon: {
-    positionAndSize: PositionAndSizePropties
-  },
-  conection: {
-    tag: string
-  },
-}
+import {
+  FontPropties,
+  BackgroundPropties,
+  BorderPropties,
+  PositionPropties,
+  SizePropties
+} from '../../core/object';
 
-export interface FontPropties {
-  size: number,
-  color: string,
-  bold: boolean,
-  italic: boolean
-}
-
-export interface BackgroundPropties {
-  color: string,
-}
-
-export interface BorderPropties {
-  color: string,
-  style: string,
-  width: number
-}
-
-export interface PositionAndSizePropties {
-  positionX: number,
-  positionY: number,
-  width: number,
-  height: number
-}
-
-interface ObjectEdit {
-  setPropties: ObjectProptiesToEdit,
-  getPropties: (propties: ObjectProptiesToEdit) => void
-}
-
-const ModalProptiesObject: React.FC<ObjectEdit> = (props) => {
+const ModalProptiesObject: React.FC<{ objectId: number }> = (props) => {
   const [menuItemSelected, setMenuItemSelected] = useState('style');
 
+  const object = useAppSelector(state => state.objects[props.objectId])
+  const dispatch = useAppDispatch()
+
   function getFontPropties(propties: FontPropties) {
-    props.getPropties({
-      ...props.setPropties,
+    dispatch(edit({
+      ...object,
       style: {
-        ...props.setPropties.style,
+        ...object.style,
         font: propties
       }
-    })
+    }));
   }
 
   function getBackgroundPropties(propties: BackgroundPropties) {
-    props.getPropties({
-      ...props.setPropties,
+    dispatch(edit({
+      ...object,
       style: {
-        ...props.setPropties.style,
+        ...object.style,
         background: propties
       }
-    })
+    }));
   }
 
   function getBorderPropties(propties: BorderPropties) {
-    props.getPropties({
-      ...props.setPropties,
+    dispatch(edit({
+      ...object,
       style: {
-        ...props.setPropties.style,
+        ...object.style,
         border: propties
       }
-    })
+    }));
   }
 
-  function getPositionAnSizaPropties(propties: PositionAndSizePropties) {
-    props.getPropties({
-      ...props.setPropties,
-      comon: {
-        positionAndSize: propties
-      }
-    })
+  function getPositionAnSizaPropties(propties: { position: PositionPropties, size: SizePropties }) {
+    dispatch(edit({
+      ...object,
+      position: propties.position,
+      size: propties.size
+    }));
   }
 
   return (
@@ -107,26 +75,29 @@ const ModalProptiesObject: React.FC<ObjectEdit> = (props) => {
       </TopBar>
 
       {menuItemSelected === 'style' && (
-        props.setPropties.style.font &&
-        <FontProptiesEdit propties={props.setPropties.style.font} getPropties={getFontPropties} />
+        object.style.font &&
+        <FontProptiesEdit propties={object.style.font} getPropties={getFontPropties} />
       )
       }
 
       {menuItemSelected === 'style' && (
-        props.setPropties.style.background &&
-        <BackgroundProptiesEdit propties={props.setPropties.style.background} getPropties={getBackgroundPropties} />
+        object.style.background &&
+        <BackgroundProptiesEdit propties={object.style.background} getPropties={getBackgroundPropties} />
       )
       }
 
       {menuItemSelected === 'style' && (
-        props.setPropties.style.border &&
-        <BorderProptiesEdit propties={props.setPropties.style.border} getPropties={getBorderPropties} />
+        object.style.border &&
+        <BorderProptiesEdit propties={object.style.border} getPropties={getBorderPropties} />
       )
       }
 
       {menuItemSelected === 'comon' && (
-        props.setPropties.style.border &&
-        <PositionAndSizeProptieEdit propties={props.setPropties.comon.positionAndSize} getPropties={getPositionAnSizaPropties} />
+        object.style.border &&
+        <PositionAndSizeProptieEdit
+          propties={{ position: object.position, size: object.size }}
+          getPropties={getPositionAnSizaPropties}
+        />
       )
       }
 

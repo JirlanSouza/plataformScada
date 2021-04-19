@@ -4,10 +4,8 @@ const cornerRecoil = '-8px';
 const cornerBorderRadius = '2px';
 
 interface ObjectStylePropties {
-  positionX: number,
-  positionY: number,
-  width: number,
-  height: number
+  position: { x: number, y: number },
+  size: { width: number, height: number }
 }
 
 export const Container = styled.div<ObjectStylePropties>`
@@ -15,10 +13,10 @@ export const Container = styled.div<ObjectStylePropties>`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  top: ${props => (props.positionY - 2) + 'px'};
-  left: ${props => (props.positionX - 2) + 'px'};
-  width: ${props => (props.width + 4) + 'px'};
-  height: ${props => (props.height + 4) + 'px'};
+  top: ${props => (props.position.y - 2) + 'px'};
+  left: ${props => (props.position.x - 2) + 'px'};
+  width: ${props => (props.size.width + 4) + 'px'};
+  height: ${props => (props.size.height + 4) + 'px'};
   border: solid 2px ${props => props.theme.pallete.onPrimary};
 
 `;

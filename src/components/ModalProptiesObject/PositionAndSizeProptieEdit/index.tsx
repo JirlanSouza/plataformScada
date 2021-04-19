@@ -1,7 +1,13 @@
 import React from "react";
 
+import { PositionPropties, SizePropties } from '../../../core/object';
+
 import { Content, InputWrapper, Secssion, Title } from "../styles";
-import { PositionAndSizePropties } from '..';
+
+interface PositionAndSizePropties {
+  position: PositionPropties,
+  size: SizePropties
+}
 
 interface IPositionAndSizeProptieEdit {
   propties: PositionAndSizePropties,
@@ -12,14 +18,20 @@ export const PositionAndSizeProptieEdit: React.FC<IPositionAndSizeProptieEdit> =
   function handlePositionX(event: React.ChangeEvent<HTMLInputElement>) {
     props.getPropties({
       ...props.propties,
-      positionX: parseInt(event.target.value)
+      position: {
+        ...props.propties.position,
+        x: parseInt(event.target.value)
+      }
     })
   }
 
   function handlePositionY(event: React.ChangeEvent<HTMLInputElement>) {
     props.getPropties({
       ...props.propties,
-      positionY: parseInt(event.target.value)
+      position: {
+        ...props.propties.position,
+        y: parseInt(event.target.value)
+      }
     })
   }
 
@@ -27,7 +39,10 @@ export const PositionAndSizeProptieEdit: React.FC<IPositionAndSizeProptieEdit> =
   function handleWidth(event: React.ChangeEvent<HTMLInputElement>) {
     props.getPropties({
       ...props.propties,
-      width: parseInt(event.target.value)
+      size: {
+        ...props.propties.size,
+        width: parseInt(event.target.value)
+      }
     })
   }
 
@@ -35,7 +50,10 @@ export const PositionAndSizeProptieEdit: React.FC<IPositionAndSizeProptieEdit> =
   function handleHeight(event: React.ChangeEvent<HTMLInputElement>) {
     props.getPropties({
       ...props.propties,
-      height: parseInt(event.target.value)
+      size: {
+        ...props.propties.size,
+        height: parseInt(event.target.value)
+      }
     })
   }
 
@@ -48,12 +66,12 @@ export const PositionAndSizeProptieEdit: React.FC<IPositionAndSizeProptieEdit> =
         <Content>
           <InputWrapper>
             <label>Position X</label>
-            <input type='number' value={props.propties.positionX} onChange={handlePositionX} />
+            <input type='number' value={props.propties.position.x} onChange={handlePositionX} />
           </InputWrapper>
 
           <InputWrapper>
             <label>Position Y</label>
-            <input type='number' value={props.propties.positionY} onChange={handlePositionY} />
+            <input type='number' value={props.propties.position.y} onChange={handlePositionY} />
           </InputWrapper>
         </Content>
       </Secssion>
@@ -63,12 +81,12 @@ export const PositionAndSizeProptieEdit: React.FC<IPositionAndSizeProptieEdit> =
         <Content>
           <InputWrapper>
             <label>Width</label>
-            <input type='number' value={props.propties.width} onChange={handleWidth} />
+            <input type='number' value={props.propties.size.width} onChange={handleWidth} />
           </InputWrapper>
 
           <InputWrapper>
             <label>Height</label>
-            <input type='number' value={props.propties.height} onChange={handleHeight} />
+            <input type='number' value={props.propties.size.height} onChange={handleHeight} />
           </InputWrapper>
         </Content>
       </Secssion>

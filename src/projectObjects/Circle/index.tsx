@@ -6,7 +6,8 @@ import { ObjectComponent } from '../ObjectPorpties';
 export const Circle: ObjectComponent = (props) => {
   return (
     <Container
-      positionAndSize={props.positionAndSize}
+      position={props.position}
+      size={props.size}
       objectStyle={props.style}
       onClick={() => props.onClick(props.objectIdentify)}
       onDoubleClick={() => props.onDoubleClick(props.objectIdentify)}

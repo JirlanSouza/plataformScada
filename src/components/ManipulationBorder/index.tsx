@@ -1,11 +1,7 @@
 import React from 'react';
 import { FiMove } from 'react-icons/fi';
 
-import {
-  ObjectComponent,
-  ObjectPositionAndSizePropties,
-  ObjectStylePropties
-} from '../../projectObjects/ObjectPorpties';
+
 
 import {
   Base,
@@ -22,37 +18,29 @@ import {
   Up
 } from './styles';
 
-type ManipulationChildren = ObjectComponent;
-
 interface ManipulationBorderPropties {
-  objectIdentify: number,
-  children: ManipulationChildren;
+  objectId: number,
   show: boolean,
-  objectPositionAndSize: ObjectPositionAndSizePropties,
-  objectStyle: ObjectStylePropties
+  position: { x: number, y: number },
+  size: { width: number, height: number }
   manipulateObject: (manipulationName: string, positionX: number, positionY: number) => void,
-  setShowManipulation: (identify: number) => void,
-  setShowProptiesEdit: (identify: number) => void
 }
 
 const ManipulationBorder: React.FC<ManipulationBorderPropties> = ({
-  objectIdentify,
+  objectId,
   children,
   show,
-  objectPositionAndSize,
-  objectStyle,
-  manipulateObject,
-  setShowManipulation,
-  setShowProptiesEdit
+  position,
+  size,
+  manipulateObject
 }) => {
+
   return (
     <>
       {show &&
         <Container
-          positionX={objectPositionAndSize.positionX}
-          positionY={objectPositionAndSize.positionY}
-          width={objectPositionAndSize.width}
-          height={objectPositionAndSize.height}
+          position={position}
+          size={size}
         >
 
           <Top>
@@ -75,13 +63,7 @@ const ManipulationBorder: React.FC<ManipulationBorderPropties> = ({
 
         </Container>
       }
-      {children({
-        objectIdentify,
-        positionAndSize: objectPositionAndSize,
-        style: objectStyle,
-        onClick: setShowManipulation,
-        onDoubleClick: setShowProptiesEdit
-      })}
+      {children}
     </>
   );
 }

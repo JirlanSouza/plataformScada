@@ -1,8 +1,8 @@
 import React from "react";
 
+import { BackgroundPropties } from '../../../core/object';
 import ColorSelection from "../../ColorSelection";
 import { Content, InputWrapper, Secssion, Title } from "../styles";
-import { BackgroundPropties } from '..';
 
 interface IBackgroundProptiesEdit {
   propties: BackgroundPropties,

@@ -37,9 +37,12 @@ export interface BorderPropties {
   width: number
 }
 
-export interface PositionAndSizePropties {
+export interface PositionPropties {
   x: number,
   y: number,
+}
+
+export interface SizePropties {
   width: number,
-  height: number
+  height: number,
 }

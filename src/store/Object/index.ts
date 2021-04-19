@@ -8,6 +8,7 @@ interface ManiputeObjectActionPayload extends Pick<IObject, 'id' | 'position' | 
   manipulation: string,
   cursorPosition: Extract<IObject, 'position'>
 }
+type EditObjectActionPayload = Pick<IObject, 'id' | 'position' | 'size' | 'style'>
 type RemoveObjectActionPayload = Pick<IObject, 'id'>
 
 export const ObjectsSlice = createSlice({
@@ -32,11 +33,20 @@ export const ObjectsSlice = createSlice({
         size: newObjectPorpties.size
       }
     },
+    edit: (state, action: PayloadAction<EditObjectActionPayload>) => {
+      const { id, position, size, style } = action.payload
+      state[id] = {
+        ...state[id],
+        position,
+        size,
+        style
+      }
+    },
     remove: (state, action: PayloadAction<RemoveObjectActionPayload>) => {
       delete state[action.payload.id]
     }
   }
 });
 
-export const { add, manipulate, remove } = ObjectsSlice.actions;
+export const { add, manipulate, edit, remove } = ObjectsSlice.actions;
 export const objectsReducer = ObjectsSlice.reducer;

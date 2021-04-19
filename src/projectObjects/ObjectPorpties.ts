@@ -1,26 +1,16 @@
 import React from "react";
-import {
-  BackgroundPropties,
-  BorderPropties,
-  FontPropties,
-  PositionAndSizePropties
-} from "../components/ModalProptiesObject";
+import { PositionPropties, SizePropties, ObjectStylePropties } from "../core/object";
 
-export interface ObjectPositionAndSizePropties extends PositionAndSizePropties {};
-
-export interface ObjectStylePropties {
-  font: FontPropties,
-  background: BackgroundPropties,
-  border: BorderPropties,
-}
+export type { PositionPropties, SizePropties, ObjectStylePropties };
 
 export interface ObjectEspecificPropties {
   propties: any
-}
+};
 
 export type ObjectComponent = React.FC<{
   objectIdentify: number,
-  positionAndSize: PositionAndSizePropties,
+  position: PositionPropties,
+  size: SizePropties,
   style: ObjectStylePropties,
   especificPropties?: ObjectEspecificPropties
   onClick: (identify: number) => void,

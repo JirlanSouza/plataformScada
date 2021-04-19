@@ -16,31 +16,31 @@ export const BarGraph: ObjectComponent = (props) => {
   const [valuePercentage, setValuePercentage] = useState(27);
 
   useEffect(() => {
-    if (props.positionAndSize.width > 120) {
+    if (props.size.width > 120) {
       setFullContainer(false)
     } else {
       setFullContainer(true);
     }
 
-  }, [props.positionAndSize]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [props]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (fullContainer) {
-      setBarWidth(props.positionAndSize.width);
-      setBarHeight(calcHeightBar(props.positionAndSize.height, valuePercentage));
+      setBarWidth(props.size.width);
+      setBarHeight(calcHeightBar(props.size.height, valuePercentage));
       setBarPositionX(0);
-      setBarPositionY(props.positionAndSize.height - barHeight);
+      setBarPositionY(props.size.height - barHeight);
       return;
     }
-    
-    const barHeightUpdate = calcHeightBar(props.positionAndSize.height - 40, valuePercentage)
-    
-    setBarWidth(props.positionAndSize.width - 60);
+
+    const barHeightUpdate = calcHeightBar(props.size.height - 40, valuePercentage)
+
+    setBarWidth(props.size.width - 60);
     setBarHeight(barHeightUpdate);
     setBarPositionX(10);
-    setBarPositionY(props.positionAndSize.height - (barHeightUpdate + 40));
+    setBarPositionY(props.size.height - (barHeightUpdate + 40));
 
-  }, [fullContainer, props.positionAndSize]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [fullContainer, props]) // eslint-disable-line react-hooks/exhaustive-deps
 
   function calcHeightBar(objectHeight: number, percentage: number) {
     return (objectHeight / 100) * percentage;
@@ -48,19 +48,20 @@ export const BarGraph: ObjectComponent = (props) => {
 
   return (
     <Container
-      positionAndSize={props.positionAndSize}
+      position={props.position}
+      size={props.size}
       objectStyle={props.style}
       onClick={() => props.onClick(props.objectIdentify)}
       onDoubleClick={() => props.onDoubleClick(props.objectIdentify)}
     >
-      <svg width={props.positionAndSize.width} height={props.positionAndSize.height}>
+      <svg width={props.size.width} height={props.size.height}>
         <g transform={fullContainer ? '' : `translate(40,20)`}>
           {!fullContainer &&
             <g className="y axis">
 
               {array.map((item, index) => {
                 return (
-                  <g className="tick" transform={`translate(0,${index * ((props.positionAndSize.height - 40) / 10)})`}><line x2="-6" y2="0"></line>
+                  <g className="tick" transform={`translate(0,${index * ((props.size.height - 40) / 10)})`}><line x2="-6" y2="0"></line>
                     <text dy=".32em" x="-9" y="0" >{(item + 1) * 10}%</text>
                   </g>
                 )
@@ -68,7 +69,7 @@ export const BarGraph: ObjectComponent = (props) => {
 
               }
 
-              <path className="domain" d={`M-6,0H0V${props.positionAndSize.height - 40}H-6`}></path>
+              <path className="domain" d={`M-6,0H0V${props.size.height - 40}H-6`}></path>
             </g>
           }
           <rect
