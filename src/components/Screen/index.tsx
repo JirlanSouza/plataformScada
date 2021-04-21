@@ -1,18 +1,18 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { theme } from '../../styles/theme';
-import { useEditorContext, useProjectTreeContext, useAppContext } from '../../contexts';
+import { useProjectTreeContext, useAppContext } from '../../contexts';
 
 import { Container, Wrapper } from './styles';
 import { ObjectsComponentsRender } from '../../projectObjects/index';
 
 import ManipulationBorder from '../ManipulationBorder';
-import { manipulations } from '../../core/object/manipulations/moveAndResizeManipulations';
 import { ObjectComponent, ObjectStylePropties } from '../../projectObjects/ObjectPorpties';
 import InsertingObjectArea from '../InsertingObjectArea';
 import ModalProptiesObject from '../ModalProptiesObject';
 
 import { useAppSelector, useAppDispatch } from '../../store';
-import { select, manipulate } from '../../store/Object'
+import { select, manipulate, unSelect } from '../../store/Object'
+import { selectedObject, startManipulation, stopManipulation, unSelectedObject } from '../../store/Editor';
 
 type ObjectComponentToRender = ObjectComponent;
 
@@ -34,24 +34,11 @@ const Screen: React.FC = () => {
   const dispatch = useAppDispatch();
 
   const objects = useAppSelector(state => state.objects)
+  const editor = useAppSelector(state => state.editor)
 
   const [screenWidth, setScreenWdth] = useState(1366);
   const [screenHeight, setScreenHeight] = useState(768);
-  const [isManipulating, setIsManipulating] = useState(false);
 
-  const [stateManipulation, setStateManipulation] = useState({
-    manipulation: '',
-    cursorPositionX: 0,
-    cursorPositionY: 0
-  });
-
-  const [stateInsertObject, setStateInsertObject] = useState({
-    cursorPositionX: 0,
-    cursorPositionY: 0
-  });
-
-  const [startManipulations, setStartManipulations] = useState([] as boolean[]);
-  const [objectIdentify, setObjectIdentify] = useState(-1);
   const [insertingtObjectAreaState, setinsertingtObjectAreaState] = useState({
     isInserting: false,
     positionX: 0,
@@ -86,28 +73,6 @@ const Screen: React.FC = () => {
     return (cursorIsInsideRegigionX && cursorIsInsideRegionY);
   }
 
-  function cursorOnInObject(objects: Object[], mouseEvent: React.MouseEvent) {
-    const cursorPosition = calcCursorPositionOnScreen(mouseEvent.clientX, mouseEvent.clientY);
-    let cursorIsOnInObject = false;
-
-    objects.forEach(object => {
-
-      const regionPropties = {
-        X: object.state.positionX,
-        Y: object.state.positionY,
-        width: object.state.width,
-        height: object.state.height
-      }
-
-      const cursorInObjectRegion = cursorInScreenRegion(regionPropties, cursorPosition.x, cursorPosition.y);
-
-      cursorIsOnInObject = cursorInObjectRegion;
-    })
-
-    return cursorIsOnInObject;
-
-  }
-
   function handleKeyPressed(event: React.KeyboardEvent<HTMLDivElement>) {
 
     const keyEventProps = {
@@ -129,8 +94,30 @@ const Screen: React.FC = () => {
     setKeysPressed(keyEventProps);
   }
 
-  function isCtrlAndShiftKeysPressed() {
-    return (keysPressed.isKeyCtrl && keysPressed.isKeyShift && keysPressed.keyPressed === '');
+  function handleMouseMove(event: React.MouseEvent) {
+    if (editor.manipulating) {
+      const maniputionPropties = {
+        id: editor.initialStateOfManipulation.objectSelected,
+        manipulation: editor.initialStateOfManipulation.manipulation,
+        cursorPosition: calcCursorPositionOnScreen(event.clientX, event.clientY)
+      }
+
+      dispatch(manipulate(maniputionPropties));
+    }
+  }
+
+  function handleMouseUp() {
+    if (editor.manipulating) {
+      dispatch(stopManipulation());
+    }
+  }
+
+  function handleClick(event: React.MouseEvent) {
+    if (objects.hasObjectsSelecteds) {
+      dispatch(unSelect({
+        cursorPosition: calcCursorPositionOnScreen(event.clientX, event.clientY)
+      }));
+    }
   }
 
   return (
@@ -141,8 +128,11 @@ const Screen: React.FC = () => {
         tabIndex={0}
         screen={{ width: screenWidth, height: screenHeight }}
         showCursorObject={showCursorObject}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        onClick={handleClick}
       >
-        {objects.map((object, index) => {
+        {objects.items.map((object, index) => {
           const ObjectComponent = ObjectsComponentsRender[object.type];
           return (
             <>
@@ -154,10 +144,10 @@ const Screen: React.FC = () => {
                 size={object.size}
                 manipulateObject={
                   (manipulation, cursorPosition) => dispatch(
-                    manipulate({
-                      id: index,
+                    startManipulation({
+                      objectSelected: index,
                       manipulation,
-                      cursorPosition : calcCursorPositionOnScreen(cursorPosition.x, cursorPosition.y)
+                      position: calcCursorPositionOnScreen(cursorPosition.x, cursorPosition.y)
                     }))}
               >
                 <ObjectComponent
@@ -165,7 +155,7 @@ const Screen: React.FC = () => {
                   size={object.size}
                   objectIdentify={index}
                   style={object.style}
-                  onClick={() => dispatch(select({ id: index }))}
+                  onClick={() => { dispatch(select({ id: index }))}}
                   onDoubleClick={() => { }}
                 />
               </ManipulationBorder>

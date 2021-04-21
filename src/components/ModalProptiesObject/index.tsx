@@ -21,9 +21,9 @@ import {
 const ModalProptiesObject: React.FC<{ objectId: number }> = (props) => {
   const [menuItemSelected, setMenuItemSelected] = useState('style');
 
-  const object = useAppSelector(state => state.objects[props.objectId])
+  const object = useAppSelector(state => state.objects.items[props.objectId])
   const dispatch = useAppDispatch()
-
+  
   function getFontPropties(propties: FontPropties) {
     dispatch(edit({
       ...object,

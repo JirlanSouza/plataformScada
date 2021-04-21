@@ -1,21 +1,15 @@
-// function calcCursorPositionOnScreen(positionX: number, positionY: number) {
-//   const cursorPositionX = positionX - containerWidth
-//   const cursorPositionY = positionY - parseInt(theme.headerHeight)
+interface RegionPropties { x: number, y: number, width: number, height: number }
+interface CursorPosition { x: number, y: number} 
 
-//   return { cursorPositionX, cursorPositionY };
-// }
+function cursorInScreenRegion(regionPropties: RegionPropties, cursorPosition: CursorPosition) {
+  const regionXStartObject = regionPropties.x;
+  const regionXEndObject = regionPropties.x + regionPropties.width;
+  const regionYStartObject = regionPropties.y;
+  const regionYEndObject = regionPropties.y + regionPropties.height;
 
-// interface RegionPropties { X: number, Y: number, width: number, height: number }
+  const cursorIsInsideRegigionX = (cursorPosition.x >= regionXStartObject && cursorPosition.x <= regionXEndObject)
+  const cursorIsInsideRegionY = (cursorPosition.y >= regionYStartObject && cursorPosition.y <= regionYEndObject)
 
-// function cursorInScreenRegion(regionPropties: RegionPropties, cursorPositionX: number, cursorPositionY: number) {
-//   const regionXStartObject = regionPropties.X;
-//   const regionXEndObject = regionPropties.X + regionPropties.width;
-//   const regionYStartObject = regionPropties.Y;
-//   const regionYEndObject = regionPropties.Y + regionPropties.height;
-
-//   const cursorIsInsideRegigionX = (cursorPositionX >= regionXStartObject && cursorPositionX <= regionXEndObject)
-//   const cursorIsInsideRegionY = (cursorPositionY >= regionYStartObject && cursorPositionY <= regionYEndObject)
-
-//   return (cursorIsInsideRegigionX && cursorIsInsideRegionY);
-// }
-export {};
+  return (cursorIsInsideRegigionX && cursorIsInsideRegionY);
+}
+export { cursorInScreenRegion };
