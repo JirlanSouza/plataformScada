@@ -23,6 +23,7 @@ export const ObjectsSlice = createSlice({
   name: 'Objects',
   initialState: {
     hasObjectsSelecteds: false,
+    hasObjectsEditingsPropties: false,
     items: [new Object(
       0,
       'Button',
@@ -38,7 +39,7 @@ export const ObjectsSlice = createSlice({
     ] as IObject[]
   },
   reducers: {
-    add: (state, action: PayloadAction<AddObjectActionPayload>) => {
+    addObject: (state, action: PayloadAction<AddObjectActionPayload>) => {
       state.items.push(new Object(
         state.items.length,
         action.payload.type,
@@ -46,7 +47,7 @@ export const ObjectsSlice = createSlice({
         action.payload.size
       ))
     },
-    manipulate: (state, action: PayloadAction<ManiputeObjectActionPayload>) => {
+    manipulateObject: (state, action: PayloadAction<ManiputeObjectActionPayload>) => {
       const { id, manipulation, cursorPosition } = action.payload
       const { position, size } = state.items[id]
       const newObjectPorpties = manipulations[manipulation]({ position, size, cursorPosition })
@@ -57,7 +58,7 @@ export const ObjectsSlice = createSlice({
         size: newObjectPorpties.size
       }
     },
-    edit: (state, action: PayloadAction<EditObjectActionPayload>) => {
+    editObject: (state, action: PayloadAction<EditObjectActionPayload>) => {
       const { id, position, size, style } = action.payload
       state.items[id] = {
         ...state.items[id],
@@ -66,10 +67,15 @@ export const ObjectsSlice = createSlice({
         style
       }
     },
-    remove: (state, action: PayloadAction<RemoveObjectActionPayload>) => {
-      delete state.items[action.payload.id]
+    removeObject: (state) => {
+      state.items.forEach((object, index) => {
+        if (object.selected) {
+          delete state.items[index]
+        }
+
+      });
     },
-    select: (state, action: PayloadAction<{ id: number }>) => {
+    selectObject: (state, action: PayloadAction<{ id: number }>) => {
       state.items[action.payload.id] = {
         ...state.items[action.payload.id],
         selected: true
@@ -77,7 +83,7 @@ export const ObjectsSlice = createSlice({
 
       state.hasObjectsSelecteds = true;
     },
-    unSelect: (state, action: PayloadAction<UnSelectObjectActionPayload>) => {
+    unSelectObject: (state, action: PayloadAction<UnSelectObjectActionPayload>) => {
       let hasNotObjectSelected = true;
 
       state.items.forEach((object, index) => {
@@ -94,9 +100,29 @@ export const ObjectsSlice = createSlice({
       });
 
       state.hasObjectsSelecteds = !hasNotObjectSelected;
-    }
+    },
+    editingProptiesObject: (state, action: PayloadAction<number>) => {
+      state.items[action.payload].editingPropties = true;
+      state.hasObjectsEditingsPropties = true;
+    },
+    unEditingProptiesObject: (state, action: PayloadAction<UnSelectObjectActionPayload>) => {
+      const index = state.items.findIndex(object => object.editingPropties === true);
+        
+      if (index === -1) return;
+      state.items[index].editingPropties = false;
+      state.hasObjectsEditingsPropties = false;
+    },
   }
 });
 
-export const { add, manipulate, edit, remove, select, unSelect } = ObjectsSlice.actions;
+export const {
+  addObject,
+  manipulateObject,
+  editObject,
+  removeObject,
+  selectObject,
+  unSelectObject,
+  editingProptiesObject,
+  unEditingProptiesObject
+} = ObjectsSlice.actions;
 export const objectsReducer = ObjectsSlice.reducer;

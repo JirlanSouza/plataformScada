@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { useAppSelector, useAppDispatch } from '../../store';
-import { edit } from '../../store/Object'
+import { editObject } from '../../store/Object'
 
 import { BackgroundProptiesEdit } from './BackgroundProptiesEdit';
 import { BorderProptiesEdit } from './BorderProptiesEdit ';
@@ -25,7 +25,7 @@ const ModalProptiesObject: React.FC<{ objectId: number }> = (props) => {
   const dispatch = useAppDispatch()
   
   function getFontPropties(propties: FontPropties) {
-    dispatch(edit({
+    dispatch(editObject({
       ...object,
       style: {
         ...object.style,
@@ -35,7 +35,7 @@ const ModalProptiesObject: React.FC<{ objectId: number }> = (props) => {
   }
 
   function getBackgroundPropties(propties: BackgroundPropties) {
-    dispatch(edit({
+    dispatch(editObject({
       ...object,
       style: {
         ...object.style,
@@ -45,7 +45,7 @@ const ModalProptiesObject: React.FC<{ objectId: number }> = (props) => {
   }
 
   function getBorderPropties(propties: BorderPropties) {
-    dispatch(edit({
+    dispatch(editObject({
       ...object,
       style: {
         ...object.style,
@@ -55,7 +55,7 @@ const ModalProptiesObject: React.FC<{ objectId: number }> = (props) => {
   }
 
   function getPositionAnSizaPropties(propties: { position: PositionPropties, size: SizePropties }) {
-    dispatch(edit({
+    dispatch(editObject({
       ...object,
       position: propties.position,
       size: propties.size

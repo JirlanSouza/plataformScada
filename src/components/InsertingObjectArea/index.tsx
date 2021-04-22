@@ -4,10 +4,14 @@ import { Container } from './styles';
 
 export interface InsertingObjectAreaState {
   isInserting: boolean,
-  positionX: number,
-  positionY: number,
-  width: number,
-  height: number
+  position: {
+    x: number,
+    y: number,
+  },
+  size: {
+    width: number,
+    height: number
+  }
 }
 
 const InsertingObjectArea: React.FC<{InsertingObjectAreaState: InsertingObjectAreaState}> = ({

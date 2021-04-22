@@ -1,10 +1,11 @@
 import React, { createContext, useContext,  useState } from 'react';
+import { ObjectsTypes } from '../projectObjects';
 
 interface IEditorContext {
   lineGridWeight: number;
   setLineGridWeight: (value: number) => void;
-  toolSelected: string;
-  setToolSelected: (tool: string) => void;
+  toolSelected: ObjectsTypes;
+  setToolSelected: (tool: ObjectsTypes) => void;
   keyPressed: string;
   setKeyPressed: (key: string) => void;
   basicsColors: string[];
@@ -16,7 +17,7 @@ const EditorContext = createContext({} as IEditorContext);
 
 export const EditorContextProvider: React.FC = ({ children }) => {
   const [lineGridWeight, setLineGridWeight] = useState(20);
-  const [toolSelected, setToolSelected] = useState('Cursor');
+  const [toolSelected, setToolSelected] = useState('Cursor' as ObjectsTypes);
   const [keyPressed, setKeyPressed] = useState('');
   const [basicsColors, setBasicColors] = useState([
     '#201B2D',

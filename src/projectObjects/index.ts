@@ -13,4 +13,4 @@ export const ObjectsComponentsRender: { [key: string]: ObjectComponent } = {
   'BarGraph': BarGraph
 }
 
-export type ObjectsTypes = 'Rectangle' | 'Circle' | 'Triangle' | 'Button' | 'BarGraph';
+export type ObjectsTypes = 'Cursor' | 'Rectangle' | 'Circle' | 'Triangle' | 'Button' | 'BarGraph';

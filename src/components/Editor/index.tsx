@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { useProjectTreeContext } from '../../contexts/projectTreeContext';
-import { resizeContainer } from '../../utils/resizezeContainers';
+import { resizeContainer } from '../../utils/size';
 import Screen from '../Screen';
 
 import { Container } from './styles';

@@ -1,4 +1,5 @@
 import React from 'react';
+import { IconType } from 'react-icons';
 import {
   FiMousePointer,
   FiType,
@@ -10,24 +11,29 @@ import {
   FiTrendingUp
 } from 'react-icons/fi';
 import { useEditorContext } from '../../contexts';
+import { ObjectsTypes } from '../../projectObjects';
 
 import { Container } from './styles';
 
+interface Tool {
+  name: ObjectsTypes,
+  icon: IconType
+}
 const ToolBar: React.FC = () => {
-  const tools = [
+  const tools: Tool[] = [
     {name: 'Cursor', icon: FiMousePointer },
-    {name: 'Text', icon: FiType },
+//  {name: 'Text', icon: FiType },
     {name: 'Circle', icon: FiCircle },
     {name: 'Rectangle', icon: FiSquare },
     {name: 'Triangle', icon: FiTriangle},
     {name: 'Button', icon: FiBluetooth},
     {name: 'BarGraph', icon: FiBarChart },
-    {name: 'Trending', icon: FiTrendingUp },
+//  {name: 'Trending', icon: FiTrendingUp },
   ];
 
   const { setToolSelected } = useEditorContext();
 
-  function handleSelectTool (tool: string) {
+  function handleSelectTool (tool: ObjectsTypes) {
     setToolSelected(tool);
   }
 

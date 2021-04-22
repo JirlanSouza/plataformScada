@@ -1,10 +1,8 @@
-import { createAsyncThunk,  createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { PositionPropties } from '../../core/object'
-import { RootState } from '../';
-
-interface StartManipulationActionPayload { 
-  objectSelected:  number,
+interface StartManipulationActionPayload {
+  objectSelected: number,
   manipulation: string,
   position: PositionPropties
 }
@@ -14,6 +12,7 @@ interface StartManipulationActionPayload {
 const EditorSlice = createSlice({
   name: 'editor',
   initialState: {
+    toolSelected: 'Cursor',
     existObjectSelected: false,
     manipulating: false,
     initialStateOfManipulation: {
@@ -26,6 +25,9 @@ const EditorSlice = createSlice({
     }
   },
   reducers: {
+    selectTool: (state, action: PayloadAction<string>) => {
+      state.toolSelected = action.payload;
+    },
     selectedObject: state => {
       state.existObjectSelected = true;
     },
@@ -42,5 +44,11 @@ const EditorSlice = createSlice({
   }
 });
 
-export const { selectedObject, unSelectedObject, startManipulation, stopManipulation } = EditorSlice.actions;
+export const {
+  selectTool,
+  selectedObject,
+  unSelectedObject,
+  startManipulation,
+  stopManipulation
+} = EditorSlice.actions;
 export const editorReducer = EditorSlice.reducer;

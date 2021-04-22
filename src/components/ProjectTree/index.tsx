@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { FiChevronRight, FiChevronDown, FiFolder, FiMonitor, FiImage } from 'react-icons/fi';
 import { useAppContext } from '../../contexts';
 import { useProjectTreeContext } from '../../contexts/projectTreeContext';
-import { resizeContainer } from '../../utils/resizezeContainers';
+import { resizeContainer } from '../../utils/size';
 
 import { Container, Resizer, ProjectFolders } from './styles';
 
