@@ -20,9 +20,9 @@ export const Triangle: ObjectComponent = (props) => {
     >
         <polygon
           points={`
-            ${props.size.width / 2},0
-            ${props.size.width},${height}
-            0,${height}
+            ${props.size.width / 2},${props.style.border.width | 0}
+            ${props.size.width - (props.style.border.width | 0)},${height - (props.style.border.width | 0)}
+            ${props.style.border.width | 0},${height - (props.style.border.width | 0)}
           `}
           fill={props.style.background.color}
           stroke={props.style.border.color}

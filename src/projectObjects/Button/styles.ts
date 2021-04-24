@@ -10,7 +10,7 @@ export const Container = styled.button<{ position: PositionPropties, size: SizeP
   height: ${props => props.size.height + 'px'};
   box-shadow: 0 0 6px ${props => props.theme.pallete.onPrimary};
   background: ${props => props.objectStyle.background.color};
-  border: ${props => props.objectStyle.border.width}
+  border: ${props => props.objectStyle.border.width + 'px'}
   ${props => props.objectStyle.border.style}
   ${props => props.objectStyle.border.color}
 `;

@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 
 import { useAppSelector, useAppDispatch } from '../../store';
-import { editObject } from '../../store/Object'
+import { editObject, unEditingProptiesObject } from '../../store/Object'
 
 import { BackgroundProptiesEdit } from './BackgroundProptiesEdit';
 import { BorderProptiesEdit } from './BorderProptiesEdit ';
 import { FontProptiesEdit } from './FontProptiesEdit';
 import { PositionAndSizeProptieEdit } from './PositionAndSizeProptieEdit';
+import { Button, ButtonsWarapper } from '../ui/Button';
 
-import { Container, Menu, TopBar } from './styles';
+import { Body, Container, Menu, TopBar } from './styles';
 
 import {
   FontPropties,
@@ -23,10 +24,11 @@ const ModalProptiesObject: React.FC<{ objectId: number }> = (props) => {
 
   const object = useAppSelector(state => state.objects.items[props.objectId])
   const dispatch = useAppDispatch()
-  
+
   function getFontPropties(propties: FontPropties) {
     dispatch(editObject({
       ...object,
+      id: props.objectId,
       style: {
         ...object.style,
         font: propties
@@ -37,6 +39,7 @@ const ModalProptiesObject: React.FC<{ objectId: number }> = (props) => {
   function getBackgroundPropties(propties: BackgroundPropties) {
     dispatch(editObject({
       ...object,
+      id: props.objectId,
       style: {
         ...object.style,
         background: propties
@@ -47,6 +50,7 @@ const ModalProptiesObject: React.FC<{ objectId: number }> = (props) => {
   function getBorderPropties(propties: BorderPropties) {
     dispatch(editObject({
       ...object,
+      id: props.objectId,
       style: {
         ...object.style,
         border: propties
@@ -54,12 +58,17 @@ const ModalProptiesObject: React.FC<{ objectId: number }> = (props) => {
     }));
   }
 
-  function getPositionAnSizaPropties(propties: { position: PositionPropties, size: SizePropties }) {
+  function getPositionAnSizePropties(propties: { position: PositionPropties, size: SizePropties }) {
     dispatch(editObject({
       ...object,
+      id: props.objectId,
       position: propties.position,
       size: propties.size
     }));
+  }
+
+  function handleDone () {
+    dispatch(unEditingProptiesObject(props.objectId));
   }
 
   return (
@@ -74,33 +83,38 @@ const ModalProptiesObject: React.FC<{ objectId: number }> = (props) => {
         </Menu>
       </TopBar>
 
-      {menuItemSelected === 'style' && (
-        object.style.font &&
-        <FontProptiesEdit propties={object.style.font} getPropties={getFontPropties} />
-      )
-      }
+      <Body>
+        {menuItemSelected === 'style' && (
+          object.style.font &&
+          <FontProptiesEdit propties={object.style.font} getPropties={getFontPropties} />
+        )
+        }
 
-      {menuItemSelected === 'style' && (
-        object.style.background &&
-        <BackgroundProptiesEdit propties={object.style.background} getPropties={getBackgroundPropties} />
-      )
-      }
+        {menuItemSelected === 'style' && (
+          object.style.background &&
+          <BackgroundProptiesEdit propties={object.style.background} getPropties={getBackgroundPropties} />
+        )
+        }
 
-      {menuItemSelected === 'style' && (
-        object.style.border &&
-        <BorderProptiesEdit propties={object.style.border} getPropties={getBorderPropties} />
-      )
-      }
+        {menuItemSelected === 'style' && (
+          object.style.border &&
+          <BorderProptiesEdit propties={object.style.border} getPropties={getBorderPropties} />
+        )
+        }
 
-      {menuItemSelected === 'comon' && (
-        object.style.border &&
-        <PositionAndSizeProptieEdit
-          propties={{ position: object.position, size: object.size }}
-          getPropties={getPositionAnSizaPropties}
-        />
-      )
-      }
+        {menuItemSelected === 'comon' && (
+          <PositionAndSizeProptieEdit
+            propties={{ position: object.position, size: object.size }}
+            getPropties={getPositionAnSizePropties}
+          />
+        )
+        }
+      </Body>
 
+      <ButtonsWarapper>
+        <Button onClick={handleDone}>Done</Button>
+        <Button>Cancel</Button>
+      </ButtonsWarapper>
     </Container>
   );
 }

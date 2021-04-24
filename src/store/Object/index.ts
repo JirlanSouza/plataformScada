@@ -105,11 +105,8 @@ export const ObjectsSlice = createSlice({
       state.items[action.payload].editingPropties = true;
       state.hasObjectsEditingsPropties = true;
     },
-    unEditingProptiesObject: (state, action: PayloadAction<UnSelectObjectActionPayload>) => {
-      const index = state.items.findIndex(object => object.editingPropties === true);
-        
-      if (index === -1) return;
-      state.items[index].editingPropties = false;
+    unEditingProptiesObject: (state, action: PayloadAction<number>) => {
+      state.items[action.payload].editingPropties = false;
       state.hasObjectsEditingsPropties = false;
     },
   }

@@ -61,11 +61,13 @@ export const Menu = styled.nav`
   }
 `;
 
+export const Body = styled.div`
+  height: 70%;
+`;
+
 export const Secssion = styled.div`
   margin: 10px;
   border-bottom: 1px solid ${props => props.theme.pallete.onPrimary};
-
-  
 `;
 
 export const Title = styled.h3`

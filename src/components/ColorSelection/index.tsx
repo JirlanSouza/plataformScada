@@ -17,7 +17,7 @@ import {
 const ColorSelection: React.FC<{ setColor: string, getColor: (color: string) => void}> = ({ setColor, getColor}) => {
   const [showBoxSelection, setShowBoxSelection] = useState(false);
   const [colorSelected, setColorSelected] = useState(setColor);
-  const [customColor, setCustomColor] = useState('#050508');
+  const [customColor, setCustomColor] = useState(setColor);
 
   const { appClickEventSubScribe } = useAppContext();
   const { basicsColors, favoriteColors, setFavoriteColors } = useEditorContext();
@@ -30,26 +30,26 @@ const ColorSelection: React.FC<{ setColor: string, getColor: (color: string) => 
     setColorSelected(setColor);
   }, [setColor]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  useEffect(() => {
-    getColor(colorSelected);
-  }, [colorSelected]); // eslint-disable-line react-hooks/exhaustive-deps
-
   const hanndleAppScrennClick = useCallback((event: React.MouseEvent) => {
     if (showBoxSelection) {
       setShowBoxSelection(false);
       setCustomColor('');
     }
-    console.log('App click', showBoxSelection);
   }, [showBoxSelection]);
 
-  function handleSelectColorFromTheCustom (color: string) {
+  function handleSelectColor (color: string) {
     setColorSelected(color);
+    getColor(color);
+  }
+
+  function handleSelectColorFromTheCustom (color: string) {
     setCustomColor(color);
+    handleSelectColor(color);
+    
   }
 
   function handleAddFavoriteColor () {
-    setFavoriteColors([...favoriteColors, customColor])
-    alert(customColor)
+    setFavoriteColors([...favoriteColors, customColor]);
     setCustomColor('');
   }
 
@@ -63,7 +63,7 @@ const ColorSelection: React.FC<{ setColor: string, getColor: (color: string) => 
           <BoxTypeColor>
           {basicsColors.map((color, index) => {
             return (
-              <BoxColor key={index} color={color} onClick={() => setColorSelected(color)} />
+              <BoxColor key={index} color={color} onClick={() => handleSelectColor(color)} />
             )
           })}
           </BoxTypeColor>
@@ -71,7 +71,7 @@ const ColorSelection: React.FC<{ setColor: string, getColor: (color: string) => 
           <TitleTypeColor>Favoritas</TitleTypeColor>
           {favoriteColors.map((color, index) => {
             return (
-              <BoxColor key={index} color={color} onClick={() => setColorSelected(color)} />
+              <BoxColor key={index} color={color} onClick={() => handleSelectColor(color)} />
             )
           })}
           </BoxTypeColor>

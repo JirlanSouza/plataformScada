@@ -9,7 +9,7 @@ export const Container = styled.div<{ position: PositionPropties, size: SizeProp
   width: ${props => props.size.width + 'px'};
   height: ${props => props.size.height + 'px'};
   background: ${props => props.objectStyle.background.color};
-  border: ${props => props.objectStyle.border.width}
+  border: ${props => props.objectStyle.border.width + 'px'}
   ${props => props.objectStyle.border.style}
   ${props => props.objectStyle.border.color}
 `;

@@ -10,4 +10,7 @@ export const Container = styled.div<{ position: PositionPropties, size: SizeProp
   height: ${props => props.size.height + 'px'};
   border-radius: 50%;
   background: ${props => props.objectStyle.background.color};
+  border: ${props => props.objectStyle.border.width + 'px'}
+  ${props => props.objectStyle.border.style}
+  ${props => props.objectStyle.border.color}
 `;

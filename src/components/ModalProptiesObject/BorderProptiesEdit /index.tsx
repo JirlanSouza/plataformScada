@@ -25,8 +25,8 @@ export const BorderProptiesEdit: React.FC<IBorderProptiesEdit> = (props) => {
   }
 
   function handleBorderWidth(event: React.ChangeEvent<HTMLInputElement>) {
-    const newValue = parseInt(event.target.value);
-    if (newValue < 0) {
+    const newValue = parseInt(event.target.value) | 0;
+    if (newValue <= 0) {
       props.getPropties({
         ...props.propties,
         width: 0
