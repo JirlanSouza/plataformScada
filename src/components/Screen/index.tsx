@@ -36,6 +36,9 @@ const Screen: React.FC = () => {
     }
   });
 
+  const [screenMouseUp, setScreenMouseUp] = useState(false);
+  const [screenMouseMove, setScreenMouseMove] = useState({x: 0, y: 0});
+
   const { appKeyPressedEvent, appKeyEventSubcribe } = useAppContext();
   const { containerWidth } = useProjectTreeContext();
   const { toolSelected } = useEditorContext();
@@ -106,7 +109,7 @@ const Screen: React.FC = () => {
   }
 
   function handleMouseMove(event: React.MouseEvent) {
-
+    setScreenMouseMove({ x: event.clientX, y: event.clientY });
 
     if (editor.manipulating) {
       const maniputionPropties = {
@@ -131,11 +134,14 @@ const Screen: React.FC = () => {
     }
   }
 
-  function handleObjectDoubleClick (objectId: number) {
+  function handleObjectDoubleClick(objectId: number) {
+    if (objects.hasObjectsEditingsPropties) return;
     dispatch(editingProptiesObject(objectId));
   }
 
   function handleMouseUp() {
+    setScreenMouseUp(!screenMouseUp);
+
     if (editor.manipulating) {
       dispatch(stopManipulation());
     }
@@ -203,7 +209,12 @@ const Screen: React.FC = () => {
                 />
               </ManipulationBorder>
               {object.editingPropties &&
-                <ModalProptiesObject objectId={index} />
+                <ModalProptiesObject
+                  objectId={index}
+                  open={object.editingPropties}
+                  screenMouseMove={screenMouseMove}
+                  screenMouseUp={screenMouseUp}
+                  />
               }
             </>
           )

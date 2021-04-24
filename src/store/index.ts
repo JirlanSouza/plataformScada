@@ -1,5 +1,6 @@
 import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
+import { dialogObjectProptiesEditReducer } from './diologObjectProptiesEdit';
 import { editorReducer } from './Editor';
 
 import { objectsReducer } from './Object';
@@ -7,7 +8,8 @@ import { objectsReducer } from './Object';
 const store = configureStore({
   reducer: {
     objects: objectsReducer,
-    editor: editorReducer
+    editor: editorReducer,
+    dilogObjectProptiesEdit: dialogObjectProptiesEditReducer
   }
 });
 

@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 
-export const Container = styled.div`
+export const Container = styled.dialog<{ position: { x: number, y: number }}>`
   position: fixed;
-  top: 80px;
-  left: 300px;
+  top: ${props => props.position.y + 'px'};
+  left: ${props => props.position.x + 'px'};
   width: 400px;
   height: 500px;
   border: 2px solid ${props => props.theme.pallete.onPrimary};
@@ -11,6 +11,11 @@ export const Container = styled.div`
   background: ${props => props.theme.pallete.surface};
   box-shadow: 0 0 3px ${props => props.theme.pallete.onSurface};
   z-index: 10;
+
+  svg {
+    margin-right: 6px;
+    cursor: move
+  }
 `;
 
 export const TopBar = styled.div`

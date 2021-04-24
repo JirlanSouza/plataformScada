@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { useAppSelector, useAppDispatch } from '../../store';
 import { editObject, unEditingProptiesObject } from '../../store/Object'
@@ -18,12 +18,31 @@ import {
   PositionPropties,
   SizePropties
 } from '../../core/object';
+import { FiGrid } from 'react-icons/fi';
+import { theme } from '../../styles/theme';
+import { moveDialog } from '../../store/diologObjectProptiesEdit';
 
-const ModalProptiesObject: React.FC<{ objectId: number }> = (props) => {
+const ModalProptiesObject: React.FC<{
+  objectId: number,
+  open: boolean,
+  screenMouseMove: {x: number, y: number},
+  screenMouseUp: boolean
+}> = (props) => {
   const [menuItemSelected, setMenuItemSelected] = useState('style');
+  const [movingDialog, setMovingDialog] = useState(false);
+  const [positionDiffDialog, setPositionDiffDialog] = useState({x: 0, y: 0});
 
-  const object = useAppSelector(state => state.objects.items[props.objectId])
+  const object = useAppSelector(state => state.objects.items[props.objectId]);
+  const dialogObjectProptiesEdit = useAppSelector( state => state.dilogObjectProptiesEdit);
   const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    handleMouseUp();
+  }, [props.screenMouseUp]);
+
+  useEffect(() => {
+    handleMoveDialog(props.screenMouseMove);
+  }, [props.screenMouseMove]);
 
   function getFontPropties(propties: FontPropties) {
     dispatch(editObject({
@@ -67,12 +86,35 @@ const ModalProptiesObject: React.FC<{ objectId: number }> = (props) => {
     }));
   }
 
-  function handleDone () {
+  function handleDone() {
     dispatch(unEditingProptiesObject(props.objectId));
   }
 
+  function handleMouseDown (event: React.MouseEvent) {
+    setPositionDiffDialog({
+      x: event.clientX - dialogObjectProptiesEdit.position.x,
+      y: event.clientY - dialogObjectProptiesEdit.position.y
+    });
+    setMovingDialog(true);
+  }
+
+  function handleMoveDialog (cursorPosition: {x: number, y: number}) {
+    if (!movingDialog) return;
+    dispatch(moveDialog({
+      x: (dialogObjectProptiesEdit.position.x - positionDiffDialog.x) + (cursorPosition.x - dialogObjectProptiesEdit.position.x),
+      y: (dialogObjectProptiesEdit.position.y - positionDiffDialog.y) + (cursorPosition.y - dialogObjectProptiesEdit.position.y),
+    }));    
+  }
+
+  function handleMouseUp () {
+    setMovingDialog(false);
+  }
+
   return (
-    <Container>
+    <Container
+      position={dialogObjectProptiesEdit.position}
+      open={props.open}
+    >
       <TopBar>
         <Menu >
           <ul>
@@ -81,6 +123,12 @@ const ModalProptiesObject: React.FC<{ objectId: number }> = (props) => {
             <li onClick={() => setMenuItemSelected('conection')} >Conection</li>
           </ul>
         </Menu>
+        <FiGrid
+          color={theme.pallete.onPrimary}
+          size={24}
+          onMouseDown={handleMouseDown}
+          onMouseUp={handleMouseUp}
+          />
       </TopBar>
 
       <Body>
