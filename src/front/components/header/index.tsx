@@ -2,7 +2,7 @@ import React from 'react';
 
 import { useAppContext } from '../../contexts';
 
-import MenuBar from '../MenuBar'
+import MenuBar from '../MenuBar';
 import ToolBar from '../ToolBar';
 import ActionsBar from '../ActionsBar';
 
@@ -16,11 +16,10 @@ const Header: React.FC = () => {
       // onKeyDown={(event) => setKeyPressed(event.key)}
       tabIndex={0}
     >
-      <MenuBar />
       <ActionsBar />
       <ToolBar />
     </Container>
   );
-}
+};
 
 export default Header;
