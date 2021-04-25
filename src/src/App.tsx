@@ -3,10 +3,8 @@ import { ThemeProvider } from 'styled-components';
 import { AppContextProvider } from './contexts';
 import Main from './pages/Main';
 
-import { GlobalStyle } from './styles/globalStyles';
+import GlobalStyle from './styles/globalStyles';
 import { theme } from './styles/theme';
-
-
 
 const App: React.FC = () => {
   return (
@@ -17,6 +15,6 @@ const App: React.FC = () => {
       <GlobalStyle />
     </ThemeProvider>
   );
-}
+};
 
 export default App;

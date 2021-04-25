@@ -1,0 +1,18 @@
+{
+  "name": "platformscada",
+  "productName": "PlatForm Scada",
+  "version": "0.0.1",
+  "description": "",
+  "main": "./main.prod.js",
+  "author": {
+    "name": "Jirlan Souza",
+    "email": "jirlansouza08e@gmail.com",
+    "url": "https://github.com/jirlansouza/platformscada"
+  },
+  "scripts": {
+    "electron-rebuild": "node -r ../.erb/scripts/BabelRegister.js ../.erb/scripts/ElectronRebuild.js",
+    "postinstall": "yarn electron-rebuild"
+  },
+  "license": "MIT",
+  "dependencies": {}
+}
