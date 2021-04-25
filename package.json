@@ -2,6 +2,7 @@
   "name": "platformscada",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "dependencies": {
     "@reduxjs/toolkit": "^1.5.1",
     "@testing-library/jest-dom": "^5.11.4",
@@ -11,18 +12,21 @@
     "@types/node": "^12.0.0",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
+    "express": "^4.17.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-icons": "^4.2.0",
     "react-redux": "^7.2.3",
     "react-scripts": "4.0.3",
     "redux": "^4.0.5",
+    "socket.io": "^4.0.1",
     "styled-components": "^5.2.3",
     "typescript": "^4.1.2",
     "web-vitals": "^1.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
+    "start:server": "ts-node-dev --transpile-only --ignore-watch node_modules backend/main.ts",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -46,6 +50,8 @@
     ]
   },
   "devDependencies": {
-    "@types/styled-components": "^5.1.9"
+    "@types/express": "^4.17.11",
+    "@types/styled-components": "^5.1.9",
+    "ts-node-dev": "^1.1.6"
   }
 }
