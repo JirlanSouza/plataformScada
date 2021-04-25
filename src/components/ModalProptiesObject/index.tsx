@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { useAppSelector, useAppDispatch } from '../../store';
-import { editObject, unEditingProptiesObject } from '../../store/Object'
+import { screenActions } from '../../store/screens'
 
 import { BackgroundProptiesEdit } from './BackgroundProptiesEdit';
 import { BorderProptiesEdit } from './BorderProptiesEdit ';
@@ -32,7 +32,7 @@ const ModalProptiesObject: React.FC<{
   const [movingDialog, setMovingDialog] = useState(false);
   const [positionDiffDialog, setPositionDiffDialog] = useState({x: 0, y: 0});
 
-  const object = useAppSelector(state => state.objects.items[props.objectId]);
+  const object = useAppSelector(state => state.screens[0].objects.items[props.objectId]);
   const dialogObjectProptiesEdit = useAppSelector( state => state.dilogObjectProptiesEdit);
   const dispatch = useAppDispatch()
 
@@ -45,7 +45,7 @@ const ModalProptiesObject: React.FC<{
   }, [props.screenMouseMove]);
 
   function getFontPropties(propties: FontPropties) {
-    dispatch(editObject({
+    dispatch(screenActions.editObject({
       ...object,
       id: props.objectId,
       style: {
@@ -56,7 +56,7 @@ const ModalProptiesObject: React.FC<{
   }
 
   function getBackgroundPropties(propties: BackgroundPropties) {
-    dispatch(editObject({
+    dispatch(screenActions.editObject({
       ...object,
       id: props.objectId,
       style: {
@@ -67,7 +67,7 @@ const ModalProptiesObject: React.FC<{
   }
 
   function getBorderPropties(propties: BorderPropties) {
-    dispatch(editObject({
+    dispatch(screenActions.editObject({
       ...object,
       id: props.objectId,
       style: {
@@ -78,7 +78,7 @@ const ModalProptiesObject: React.FC<{
   }
 
   function getPositionAnSizePropties(propties: { position: PositionPropties, size: SizePropties }) {
-    dispatch(editObject({
+    dispatch(screenActions.editObject({
       ...object,
       id: props.objectId,
       position: propties.position,
@@ -87,7 +87,7 @@ const ModalProptiesObject: React.FC<{
   }
 
   function handleDone() {
-    dispatch(unEditingProptiesObject(props.objectId));
+    dispatch(screenActions.unEditingProptiesObject(props.objectId));
   }
 
   function handleMouseDown (event: React.MouseEvent) {

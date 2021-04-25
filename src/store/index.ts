@@ -3,11 +3,11 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { dialogObjectProptiesEditReducer } from './diologObjectProptiesEdit';
 import { editorReducer } from './Editor';
 
-import { objectsReducer } from './Object';
+import { screensReducer } from './screens';
 
 const store = configureStore({
   reducer: {
-    objects: objectsReducer,
+    screens: screensReducer,
     editor: editorReducer,
     dilogObjectProptiesEdit: dialogObjectProptiesEditReducer
   }

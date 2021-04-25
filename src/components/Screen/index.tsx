@@ -10,7 +10,7 @@ import InsertingObjectArea from '../InsertingObjectArea';
 import ModalProptiesObject from '../ModalProptiesObject';
 
 import { useAppSelector, useAppDispatch } from '../../store';
-import { selectObject, unSelectObject, manipulateObject, addObject, removeObject, editingProptiesObject } from '../../store/Object'
+import { screenActions } from '../../store/screens'
 import { startManipulation, stopManipulation } from '../../store/Editor';
 import { calcSizeFromPreviousPosition } from '../../utils/size';
 
@@ -18,11 +18,9 @@ const Screen: React.FC = () => {
 
   const dispatch = useAppDispatch();
 
-  const objects = useAppSelector(state => state.objects)
-  const editor = useAppSelector(state => state.editor)
-
-  const [screenWidth, setScreenWdth] = useState(1366);
-  const [screenHeight, setScreenHeight] = useState(768);
+  const editor = useAppSelector(state => state.editor);
+  const screen = useAppSelector( state => state.screens[0]);
+  const objects = useAppSelector(state => state.screens[0].objects)
 
   const [insertingtObjectAreaState, setInsertingtObjectAreaState] = useState({
     isInserting: false,
@@ -47,7 +45,7 @@ const Screen: React.FC = () => {
     appKeyEventSubcribe({
       keyEvent: 'Delete',
       fn: () => {
-        dispatch(removeObject())
+        dispatch(screenActions.removeObject())
       }
     }
     )
@@ -94,7 +92,7 @@ const Screen: React.FC = () => {
   function handleSelectObject(id: number) {
     if (toolSelected !== 'Cursor') return;
 
-    dispatch(selectObject({ id }));
+    dispatch(screenActions.selectObject({ id }));
   }
 
   function handleStartManipulation(objectId: number, manipulation: string, cursorPosition: { x: number, y: number }) {
@@ -118,7 +116,7 @@ const Screen: React.FC = () => {
         cursorPosition: calcCursorPositionOnScreen(event.clientX, event.clientY)
       }
 
-      dispatch(manipulateObject(maniputionPropties));
+      dispatch(screenActions.manipulateObject(maniputionPropties));
     }
 
     if (toolSelected !== 'Cursor' && insertingtObjectAreaState.isInserting) {
@@ -136,7 +134,7 @@ const Screen: React.FC = () => {
 
   function handleObjectDoubleClick(objectId: number) {
     if (objects.hasObjectsEditingsPropties) return;
-    dispatch(editingProptiesObject(objectId));
+    dispatch(screenActions.editingProptiesObject(objectId));
   }
 
   function handleMouseUp() {
@@ -147,7 +145,7 @@ const Screen: React.FC = () => {
     }
 
     if (toolSelected !== 'Cursor' && insertingtObjectAreaState.isInserting) {
-      dispatch(addObject({
+      dispatch(screenActions.addObject({
         type: toolSelected,
         position: insertingtObjectAreaState.position,
         size: insertingtObjectAreaState.size
@@ -166,7 +164,7 @@ const Screen: React.FC = () => {
 
   function handleClick(event: React.MouseEvent) {
     if (objects.hasObjectsSelecteds) {
-      dispatch(unSelectObject({
+      dispatch(screenActions.unSelectObject({
         cursorPosition: calcCursorPositionOnScreen(event.clientX, event.clientY)
       }));
     }
@@ -178,7 +176,7 @@ const Screen: React.FC = () => {
         onKeyDown={handleKeyPressed}
         onKeyUp={handleKeyDespressed}
         tabIndex={0}
-        screen={{ width: screenWidth, height: screenHeight }}
+        screen={screen.size}
         showCursorObject={toolSelected !== 'Cursor'}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
