@@ -1,17 +1,25 @@
 import styled from 'styled-components';
 
-import { PositionPropties, SizePropties, ObjectStylePropties } from '../ObjectPorpties';
+import {
+  PositionPropties,
+  SizePropties,
+  ObjectStylePropties,
+} from '../ObjectPorpties';
 
-export const Container = styled.div<{ position: PositionPropties, size: SizePropties, objectStyle: ObjectStylePropties}>`
+export const Container = styled.div<{
+  position: PositionPropties;
+  size: SizePropties;
+  objectStyle: ObjectStylePropties;
+}>`
   position: absolute;
-  top: ${props => props.position.y + 'px'};
-  left: ${props => props.position.x + 'px'};
-  width: ${props => props.size.width + 'px'};
-  height: ${props => props.size.height + 'px'};
-  border-radius: ${props => ((props.size.width /100) * 10) + 'px'};
+  top: ${(props) => `${props.position.y}px`};
+  left: ${(props) => `${props.position.x}px`};
+  width: ${(props) => `${props.size.width}px`};
+  height: ${(props) => `${props.size.height}px`};
+  border-radius: ${(props) => `${(props.size.width / 100) * 10}px`};
   border: none;
-  box-shadow: 0 0 6px ${props => props.theme.pallete.onPrimary};
-  background: ${props => props.objectStyle.background.color};
+  box-shadow: 0 0 6px ${(props) => props.theme.pallete.onPrimary};
+  background: ${(props) => props.objectStyle.background.color};
   overflow: hidden;
 
   text-anchor: end;
@@ -22,13 +30,13 @@ export const Container = styled.div<{ position: PositionPropties, size: SizeProp
 
   .axis {
     font-size: 12px;
-    color: ${props => props.objectStyle.font?.color};
+    color: ${(props) => props.objectStyle.font?.color};
   }
 
   .axis path,
   .axis line {
     fill: none;
-    stroke: #FCFCFC;
+    stroke: #fcfcfc;
     shape-rendering: crispEdges;
   }
 `;

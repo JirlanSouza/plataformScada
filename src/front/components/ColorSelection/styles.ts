@@ -16,12 +16,12 @@ export const Container = styled.div`
   }
 `;
 
-export const ColorSelected = styled.div<{ color: string}>`
+export const ColorSelected = styled.div<{ color: string }>`
   width: 70%;
   height: 26px;
   border-radius: 4px;
   outline: none;
-  background: ${props => props.color};
+  background: ${(props) => props.color};
   box-shadow: 0 0 1px gray;
 `;
 
@@ -54,19 +54,18 @@ export const CurrentCustomColor = styled(BoxTypeColor)`
   justify-content: space-between;
 `;
 
-
-export const BoxColor = styled.div<{color: string}>`
+export const BoxColor = styled.div<{ color: string }>`
   width: 24px;
   height: 24px;
-  border: 1px solid ${props => props.theme.pallete.onPrimary};
+  border: 1px solid ${(props) => props.theme.pallete.onPrimary};
   border-radius: 2px;
   margin: 1px;
   outline: none;
-  background: ${props => props.color};
+  background: ${(props) => props.color};
   cursor: pointer;
 
   :hover {
-    border: 2px solid ${props => props.theme.pallete.onPrimary};
+    border: 2px solid ${(props) => props.theme.pallete.onPrimary};
   }
 `;
 
@@ -78,23 +77,23 @@ export const Button = styled.button`
   padding: 0 5px 0 5px;
   border-radius: 3px;
   border: none;
-  background: ${props => props.theme.pallete.primary.main};
-  color: ${props => props.theme.pallete.onSurface};
+  background: ${(props) => props.theme.pallete.primary.main};
+  color: ${(props) => props.theme.pallete.onSurface};
   font-size: 13px;
   font-weight: 600;
   outline: none;
   cursor: pointer;
 
   :hover {
-    border: 2px solid ${props => props.theme.pallete.onPrimary};
-    opacity: .9;
+    border: 2px solid ${(props) => props.theme.pallete.onPrimary};
+    opacity: 0.9;
   }
 
   label {
     font-size: 13px;
     font-weight: 600;
     cursor: pointer;
-    }
+  }
 
   input {
     position: absolute;

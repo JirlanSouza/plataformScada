@@ -1,35 +1,37 @@
-import React from "react";
+import React from 'react';
 
 import { BorderPropties } from '../../../core/object';
-import ColorSelection from "../../ColorSelection";
-import { Content, InputWrapper, Secssion, Title } from "../styles";
+import ColorSelection from '../../ColorSelection';
+import { Content, InputWrapper, Secssion, Title } from '../styles';
 
 interface IBorderProptiesEdit {
-  propties: BorderPropties,
-  getPropties: (propties: BorderPropties) => void
+  propties: BorderPropties;
+  getPropties: (propties: BorderPropties) => void;
 }
 
 export const BorderProptiesEdit: React.FC<IBorderProptiesEdit> = (props) => {
   function handleBorderColor(color: string) {
     props.getPropties({
       ...props.propties,
-      color
-    })
+      color,
+    });
   }
 
-  function handlehandleBorderStyle(event: React.ChangeEvent<HTMLSelectElement>) {
+  function handlehandleBorderStyle(
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) {
     props.getPropties({
       ...props.propties,
-      style: event.target.value
-    })
+      style: event.target.value,
+    });
   }
 
   function handleBorderWidth(event: React.ChangeEvent<HTMLInputElement>) {
-    const newValue = parseInt(event.target.value) | 0;
+    const newValue = parseInt(event.target.value, 10) || 0;
     if (newValue <= 0) {
       props.getPropties({
         ...props.propties,
-        width: 0
+        width: 0,
       });
       return;
     }
@@ -37,15 +39,15 @@ export const BorderProptiesEdit: React.FC<IBorderProptiesEdit> = (props) => {
     if (newValue > 100) {
       props.getPropties({
         ...props.propties,
-        width: 100
-      })
+        width: 100,
+      });
       return;
     }
 
     props.getPropties({
       ...props.propties,
-      width: newValue
-    })
+      width: newValue,
+    });
   }
 
   return (
@@ -55,12 +57,18 @@ export const BorderProptiesEdit: React.FC<IBorderProptiesEdit> = (props) => {
       <Content>
         <InputWrapper>
           <label>Color</label>
-          <ColorSelection setColor={props.propties.color} getColor={handleBorderColor} />
+          <ColorSelection
+            setColor={props.propties.color}
+            getColor={handleBorderColor}
+          />
         </InputWrapper>
 
         <InputWrapper>
           <label>Style</label>
-          <select value={props.propties.style} onChange={handlehandleBorderStyle} >
+          <select
+            value={props.propties.style}
+            onChange={handlehandleBorderStyle}
+          >
             <option>Solid</option>
             <option>Dotted</option>
             <option>Dashad</option>
@@ -70,9 +78,13 @@ export const BorderProptiesEdit: React.FC<IBorderProptiesEdit> = (props) => {
 
         <InputWrapper>
           <label>width</label>
-          <input type='number' value={props.propties.width} onChange={handleBorderWidth} />
+          <input
+            type="number"
+            value={props.propties.width}
+            onChange={handleBorderWidth}
+          />
         </InputWrapper>
       </Content>
     </Secssion>
-  )
-}
+  );
+};

@@ -1,20 +1,20 @@
 import styled from 'styled-components';
 
-export const Container = styled.dialog<{ position: { x: number, y: number }}>`
+export const Container = styled.dialog<{ position: { x: number; y: number } }>`
   position: fixed;
-  top: ${props => props.position.y + 'px'};
-  left: ${props => props.position.x + 'px'};
+  top: ${(props) => `${props.position.y}px`};
+  left: ${(props) => `${props.position.x}px`};
   width: 400px;
   height: 500px;
-  border: 2px solid ${props => props.theme.pallete.onPrimary};
+  border: 2px solid ${(props) => props.theme.pallete.onPrimary};
   border-radius: 5px;
-  background: ${props => props.theme.pallete.surface};
-  box-shadow: 0 0 3px ${props => props.theme.pallete.onSurface};
+  background: ${(props) => props.theme.pallete.surface};
+  box-shadow: 0 0 3px ${(props) => props.theme.pallete.onSurface};
   z-index: 10;
 
   svg {
     margin-right: 6px;
-    cursor: move
+    cursor: move;
   }
 `;
 
@@ -26,8 +26,8 @@ export const TopBar = styled.div`
   left: 0px;
   width: 100%;
   height: 40px;
-  border-bottom: 1px solid ${props => props.theme.pallete.onPrimary};
-  background: ${props => props.theme.pallete.surface};
+  border-bottom: 1px solid ${(props) => props.theme.pallete.onPrimary};
+  background: ${(props) => props.theme.pallete.surface};
 `;
 
 export const Menu = styled.nav`
@@ -43,25 +43,25 @@ export const Menu = styled.nav`
     list-style: none;
 
     :nth-last-child(1) {
-        padding-right: 10px;
-        border-right: 1px solid ${props => props.theme.pallete.onPrimary};
-      }
+      padding-right: 10px;
+      border-right: 1px solid ${(props) => props.theme.pallete.onPrimary};
+    }
 
     li {
       max-width: max-content;
       font-weight: 500;
-      color: ${props => props.theme.pallete.onSurface};
+      color: ${(props) => props.theme.pallete.onSurface};
       cursor: pointer;
 
       :hover {
-        opacity: .7;
+        opacity: 0.7;
       }
     }
 
     li + li {
       margin-left: 10px;
       padding-left: 10px;
-      border-left: 1px solid ${props => props.theme.pallete.onPrimary};
+      border-left: 1px solid ${(props) => props.theme.pallete.onPrimary};
     }
   }
 `;
@@ -72,11 +72,11 @@ export const Body = styled.div`
 
 export const Secssion = styled.div`
   margin: 10px;
-  border-bottom: 1px solid ${props => props.theme.pallete.onPrimary};
+  border-bottom: 1px solid ${(props) => props.theme.pallete.onPrimary};
 `;
 
 export const Title = styled.h3`
-  color: ${props => props.theme.pallete.onSurface};
+  color: ${(props) => props.theme.pallete.onSurface};
   margin-bottom: 10px;
 `;
 
@@ -97,18 +97,14 @@ export const InputWrapper = styled.div`
 
   label {
     font-size: 14px;
-    color: ${props => props.theme.pallete.onSurface};
+    color: ${(props) => props.theme.pallete.onSurface};
     margin-bottom: 5px;
   }
 
-  input, select {
+  input,
+  select {
     height: 30px;
     font-weight: 500;
     outline: none;
   }
-
-
-  
 `;
-
-

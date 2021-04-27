@@ -11,7 +11,7 @@
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import path from 'path';
-import { app, BrowserWindow, shell } from 'electron';
+import { app, BrowserWindow, shell, session } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
@@ -38,25 +38,22 @@ if (
   require('electron-debug')();
 }
 
-const installExtensions = async () => {
-  const installer = require('electron-devtools-installer');
-  const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
-  const extensions = ['REACT_DEVELOPER_TOOLS'];
-
-  return installer
-    .default(
-      extensions.map((name) => installer[name]),
-      forceDownload
-    )
-    .catch(console.log);
-};
-
 const createWindow = async () => {
   if (
     process.env.NODE_ENV === 'development' ||
     process.env.DEBUG_PROD === 'true'
   ) {
-    await installExtensions();
+    // await installExtensions();
+    const extenssionIntaled = await session.defaultSession.loadExtension(
+      path.join(__dirname, '../extensions/redux_devtools/2.17.0_0'),
+      { allowFileAccess: true }
+    );
+    // installExtension([REACT_DEVELOPER_TOOLS]);
+    console.log(
+      ' ================>>>> EXTENSION INSTALLED',
+      extenssionIntaled,
+      '<<<<=================='
+    );
   }
 
   const RESOURCES_PATH = app.isPackaged
@@ -74,10 +71,11 @@ const createWindow = async () => {
     icon: getAssetPath('icon.png'),
     webPreferences: {
       nodeIntegration: true,
+      contextIsolation: false,
     },
   });
 
-  mainWindow.loadURL(`file://${__dirname}/front/index.html`);
+  mainWindow.loadFile(`${__dirname}/front/index.html`);
 
   mainWindow.webContents.on('did-finish-load', () => {
     if (!mainWindow) {

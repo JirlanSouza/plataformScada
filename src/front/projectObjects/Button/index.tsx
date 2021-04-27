@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { ObjectComponent } from '../ObjectPorpties'
+import { ObjectComponent } from '../ObjectPorpties';
 
 import { Container } from './styles';
 
@@ -12,8 +12,6 @@ export const Button: ObjectComponent = (props) => {
       objectStyle={props.style}
       onClick={() => props.onClick(props.objectIdentify)}
       onDoubleClick={() => props.onDoubleClick(props.objectIdentify)}
-    >
-
-    </Container>
+    />
   );
-}
+};

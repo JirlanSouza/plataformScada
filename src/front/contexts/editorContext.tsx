@@ -1,4 +1,4 @@
-import React, { createContext, useContext,  useState } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import { ObjectsTypes } from '../projectObjects';
 
 interface IEditorContext {
@@ -41,23 +41,23 @@ export const EditorContextProvider: React.FC = ({ children }) => {
 
   return (
     <EditorContext.Provider
-      value = {{
-      lineGridWeight,
-      setLineGridWeight,
-      toolSelected,
-      setToolSelected,
-      keyPressed,
-      setKeyPressed,
-      basicsColors,
-      favoriteColors,
-      setFavoriteColors
+      value={{
+        lineGridWeight,
+        setLineGridWeight,
+        toolSelected,
+        setToolSelected,
+        keyPressed,
+        setKeyPressed,
+        basicsColors,
+        favoriteColors,
+        setFavoriteColors,
       }}
     >
-      { children}
-    </EditorContext.Provider >
+      {children}
+    </EditorContext.Provider>
   );
-}
+};
 
-export function useEditorContext (): IEditorContext {
+export function useEditorContext(): IEditorContext {
   return useContext(EditorContext);
 }

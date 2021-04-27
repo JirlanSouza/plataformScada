@@ -9,14 +9,15 @@ const store = configureStore({
   reducer: {
     screens: screensReducer,
     editor: editorReducer,
-    dilogObjectProptiesEdit: dialogObjectProptiesEditReducer
-  }
+    dilogObjectProptiesEdit: dialogObjectProptiesEditReducer,
+  },
+  devTools: true,
 });
 
-export type RootState = ReturnType<typeof store.getState>
-export type AppDispatch = typeof store.dispatch
-export type AppThunk = ThunkAction<void, RootState, null, Action<string>>
-export const useAppDispatch = () => useDispatch<AppDispatch>()
-export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
+export type AppThunk = ThunkAction<void, RootState, null, Action<string>>;
+export const useAppDispatch = () => useDispatch<AppDispatch>();
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
 export default store;

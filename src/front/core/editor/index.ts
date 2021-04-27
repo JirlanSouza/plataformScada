@@ -1,4 +1,4 @@
 export interface IEditor {
-  state: {},
-  screen: {}
+  state: {};
+  screen: {};
 }

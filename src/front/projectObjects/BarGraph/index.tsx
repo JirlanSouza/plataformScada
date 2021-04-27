@@ -4,8 +4,8 @@ import { ObjectComponent } from '../ObjectPorpties';
 
 import { Container } from './styles';
 
-let array = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-array = array.reverse()
+let array = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+array = array.reverse();
 
 export const BarGraph: ObjectComponent = (props) => {
   const [fullContainer, setFullContainer] = useState(false);
@@ -17,11 +17,10 @@ export const BarGraph: ObjectComponent = (props) => {
 
   useEffect(() => {
     if (props.size.width > 120) {
-      setFullContainer(false)
+      setFullContainer(false);
     } else {
       setFullContainer(true);
     }
-
   }, [props]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
@@ -33,14 +32,16 @@ export const BarGraph: ObjectComponent = (props) => {
       return;
     }
 
-    const barHeightUpdate = calcHeightBar(props.size.height - 40, valuePercentage)
+    const barHeightUpdate = calcHeightBar(
+      props.size.height - 40,
+      valuePercentage
+    );
 
     setBarWidth(props.size.width - 60);
     setBarHeight(barHeightUpdate);
     setBarPositionX(10);
     setBarPositionY(props.size.height - (barHeightUpdate + 40));
-
-  }, [fullContainer, props]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [fullContainer, props]); // eslint-disable-line react-hooks/exhaustive-deps
 
   function calcHeightBar(objectHeight: number, percentage: number) {
     return (objectHeight / 100) * percentage;
@@ -56,31 +57,40 @@ export const BarGraph: ObjectComponent = (props) => {
     >
       <svg width={props.size.width} height={props.size.height}>
         <g transform={fullContainer ? '' : `translate(40,20)`}>
-          {!fullContainer &&
+          {!fullContainer && (
             <g className="y axis">
-
               {array.map((item, index) => {
                 return (
-                  <g className="tick" transform={`translate(0,${index * ((props.size.height - 40) / 10)})`}><line x2="-6" y2="0"></line>
-                    <text dy=".32em" x="-9" y="0" >{(item + 1) * 10}%</text>
+                  <g
+                    key={index}
+                    className="tick"
+                    transform={`translate(0,${
+                      index * ((props.size.height - 40) / 10)
+                    })`}
+                  >
+                    <line x2="-6" y2="0" />
+                    <text dy=".32em" x="-9" y="0">
+                      {(item + 1) * 10}%
+                    </text>
                   </g>
-                )
-              })
+                );
+              })}
 
-              }
-
-              <path className="domain" d={`M-6,0H0V${props.size.height - 40}H-6`}></path>
+              <path
+                className="domain"
+                d={`M-6,0H0V${props.size.height - 40}H-6`}
+              />
             </g>
-          }
+          )}
           <rect
-            className="bar" x={barPositionX}
+            className="bar"
+            x={barPositionX}
             width={barWidth}
             y={barPositionY}
             height={barHeight}
-          >
-          </rect>
+          />
         </g>
       </svg>
     </Container>
   );
-}
+};

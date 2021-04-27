@@ -1,14 +1,16 @@
 import styled, { css } from 'styled-components';
 
-export const Container = styled.div<{resizing: boolean}>`
-position: relative;
+export const Container = styled.div<{ resizing: boolean }>`
+  position: relative;
   flex: 1;
   width: 100px;
   height: 100%;
-  background: ${props => props.theme.pallete.background};
+  background: ${(props) => props.theme.pallete.background};
   overflow: auto;
 
-  ${props => props.resizing && css`
-  cursor: col-resize;
-`};
+  ${(props) =>
+    props.resizing &&
+    css`
+      cursor: col-resize;
+    `};
 `;

@@ -1,38 +1,56 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 
 import { useProjectTreeContext } from '../../contexts/projectTreeContext';
+import { changeEditorArea } from '../../store/Editor';
 import { resizeContainer } from '../../utils/size';
 import Screen from '../Screen';
 
 import { Container } from './styles';
 
 const Editor: React.FC = () => {
-  const { 
+  const dispatch = useDispatch();
+
+  const {
     containerWidth,
     setContainerWidth,
     isClickedBorderContainer,
-    setIsClickedBorderContainer
-    } = useProjectTreeContext();
+    setIsClickedBorderContainer,
+  } = useProjectTreeContext();
 
-  function handleResizeMove (event: React.MouseEvent<HTMLElement, MouseEvent>) {
+  const editorContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (editorContainerRef.current) {
+      const editorArea = {
+        width: editorContainerRef.current.clientWidth,
+        height: editorContainerRef.current.clientHeight,
+      };
+
+      dispatch(changeEditorArea(editorArea));
+    }
+  }, [containerWidth]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  function handleResizeMove(event: React.MouseEvent<HTMLElement, MouseEvent>) {
     if (!isClickedBorderContainer) return;
-    const width = resizeContainer(containerWidth, event.clientX)
+    const width = resizeContainer(containerWidth, event.clientX);
     setContainerWidth(width);
   }
 
-  function handleResizeFinal (event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+  function handleResizeFinal() {
     setIsClickedBorderContainer(false);
   }
 
   return (
     <Container
+      ref={editorContainerRef}
       resizing={isClickedBorderContainer}
       onMouseUp={handleResizeFinal}
-      onMouseMove={event => handleResizeMove(event)
-    }>
-      <Screen />   
+      onMouseMove={(event) => handleResizeMove(event)}
+    >
+      <Screen />
     </Container>
   );
-}
+};
 
 export default Editor;

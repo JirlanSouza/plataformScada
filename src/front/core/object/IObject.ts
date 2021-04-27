@@ -1,50 +1,50 @@
 import { ObjectsTypes } from '../../projectObjects';
 
 export interface IObject {
-  id: number,
-  type: ObjectsTypes,
-  selected: boolean,
-  editingPropties: boolean,
+  id: number;
+  type: ObjectsTypes;
+  selected: boolean;
+  editingPropties: boolean;
   position: {
-    x: number,
-    y: number,
-  },
+    x: number;
+    y: number;
+  };
   size: {
-    width: number,
-    height: number,
-  },
-  style: ObjectStylePropties
+    width: number;
+    height: number;
+  };
+  style: ObjectStylePropties;
 }
 
 export interface ObjectStylePropties {
-  font?: FontPropties,
-  background: BackgroundPropties,
-  border: BorderPropties,
+  font?: FontPropties;
+  background: BackgroundPropties;
+  border: BorderPropties;
 }
 
 export interface FontPropties {
-  size: number,
-  color: string,
-  bold: boolean,
-  italic: boolean
+  size: number;
+  color: string;
+  bold: boolean;
+  italic: boolean;
 }
 
 export interface BackgroundPropties {
-  color: string,
+  color: string;
 }
 
 export interface BorderPropties {
-  color: string,
-  style: string,
-  width: number
+  color: string;
+  style: string;
+  width: number;
 }
 
 export interface PositionPropties {
-  x: number,
-  y: number,
+  x: number;
+  y: number;
 }
 
 export interface SizePropties {
-  width: number,
-  height: number,
+  width: number;
+  height: number;
 }

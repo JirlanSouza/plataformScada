@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 
 interface ProjectTreeResize {
   containerWidth: number;
@@ -12,27 +12,28 @@ interface ProjectTreeResize {
 const ProjectTreeContext = createContext({} as ProjectTreeResize);
 
 export const ProjectTreeContextProvider: React.FC = ({ children }) => {
-
   const [containerWidth, setContainerWidth] = useState(250);
   const [positionBorderContainer, setPositionBorderContainer] = useState(250);
-  const [isClickedBorderContainer, setIsClickedBorderContainer] = useState(false);
+  const [isClickedBorderContainer, setIsClickedBorderContainer] = useState(
+    false
+  );
 
   return (
     <ProjectTreeContext.Provider
-      value = {{
+      value={{
         containerWidth,
-      setContainerWidth,
-      positionBorderContainer,
-      setPositionBorderContainer,
-      isClickedBorderContainer,
-      setIsClickedBorderContainer,
+        setContainerWidth,
+        positionBorderContainer,
+        setPositionBorderContainer,
+        isClickedBorderContainer,
+        setIsClickedBorderContainer,
       }}
     >
-      { children}
-    </ProjectTreeContext.Provider >
+      {children}
+    </ProjectTreeContext.Provider>
   );
-}
+};
 
-export function useProjectTreeContext (): ProjectTreeResize {
+export function useProjectTreeContext(): ProjectTreeResize {
   return useContext(ProjectTreeContext);
 }

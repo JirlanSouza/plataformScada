@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 
+import { FiGrid } from 'react-icons/fi';
 import { useAppSelector, useAppDispatch } from '../../store';
-import { screenActions } from '../../store/screens'
+import { screenActions } from '../../store/screens';
 
 import { BackgroundProptiesEdit } from './BackgroundProptiesEdit';
 import { BorderProptiesEdit } from './BorderProptiesEdit ';
@@ -16,25 +17,28 @@ import {
   BackgroundPropties,
   BorderPropties,
   PositionPropties,
-  SizePropties
+  SizePropties,
 } from '../../core/object';
-import { FiGrid } from 'react-icons/fi';
 import { theme } from '../../styles/theme';
 import { moveDialog } from '../../store/diologObjectProptiesEdit';
 
 const ModalProptiesObject: React.FC<{
-  objectId: number,
-  open: boolean,
-  screenMouseMove: {x: number, y: number},
-  screenMouseUp: boolean
+  objectId: number;
+  open: boolean;
+  screenMouseMove: { x: number; y: number };
+  screenMouseUp: boolean;
 }> = (props) => {
   const [menuItemSelected, setMenuItemSelected] = useState('style');
   const [movingDialog, setMovingDialog] = useState(false);
-  const [positionDiffDialog, setPositionDiffDialog] = useState({x: 0, y: 0});
+  const [positionDiffDialog, setPositionDiffDialog] = useState({ x: 0, y: 0 });
 
-  const object = useAppSelector(state => state.screens[0].objects.items[props.objectId]);
-  const dialogObjectProptiesEdit = useAppSelector( state => state.dilogObjectProptiesEdit);
-  const dispatch = useAppDispatch()
+  const object = useAppSelector(
+    (state) => state.screens[0].objects.items[props.objectId]
+  );
+  const dialogObjectProptiesEdit = useAppSelector(
+    (state) => state.dilogObjectProptiesEdit
+  );
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     handleMouseUp();
@@ -45,82 +49,98 @@ const ModalProptiesObject: React.FC<{
   }, [props.screenMouseMove]);
 
   function getFontPropties(propties: FontPropties) {
-    dispatch(screenActions.editObject({
-      ...object,
-      id: props.objectId,
-      style: {
-        ...object.style,
-        font: propties
-      }
-    }));
+    dispatch(
+      screenActions.editObject({
+        ...object,
+        id: props.objectId,
+        style: {
+          ...object.style,
+          font: propties,
+        },
+      })
+    );
   }
 
   function getBackgroundPropties(propties: BackgroundPropties) {
-    dispatch(screenActions.editObject({
-      ...object,
-      id: props.objectId,
-      style: {
-        ...object.style,
-        background: propties
-      }
-    }));
+    dispatch(
+      screenActions.editObject({
+        ...object,
+        id: props.objectId,
+        style: {
+          ...object.style,
+          background: propties,
+        },
+      })
+    );
   }
 
   function getBorderPropties(propties: BorderPropties) {
-    dispatch(screenActions.editObject({
-      ...object,
-      id: props.objectId,
-      style: {
-        ...object.style,
-        border: propties
-      }
-    }));
+    dispatch(
+      screenActions.editObject({
+        ...object,
+        id: props.objectId,
+        style: {
+          ...object.style,
+          border: propties,
+        },
+      })
+    );
   }
 
-  function getPositionAnSizePropties(propties: { position: PositionPropties, size: SizePropties }) {
-    dispatch(screenActions.editObject({
-      ...object,
-      id: props.objectId,
-      position: propties.position,
-      size: propties.size
-    }));
+  function getPositionAnSizePropties(propties: {
+    position: PositionPropties;
+    size: SizePropties;
+  }) {
+    dispatch(
+      screenActions.editObject({
+        ...object,
+        id: props.objectId,
+        position: propties.position,
+        size: propties.size,
+      })
+    );
   }
 
   function handleDone() {
     dispatch(screenActions.unEditingProptiesObject(props.objectId));
   }
 
-  function handleMouseDown (event: React.MouseEvent) {
+  function handleMouseDown(event: React.MouseEvent) {
     setPositionDiffDialog({
       x: event.clientX - dialogObjectProptiesEdit.position.x,
-      y: event.clientY - dialogObjectProptiesEdit.position.y
+      y: event.clientY - dialogObjectProptiesEdit.position.y,
     });
     setMovingDialog(true);
   }
 
-  function handleMoveDialog (cursorPosition: {x: number, y: number}) {
+  function handleMoveDialog(cursorPosition: { x: number; y: number }) {
     if (!movingDialog) return;
-    dispatch(moveDialog({
-      x: (dialogObjectProptiesEdit.position.x - positionDiffDialog.x) + (cursorPosition.x - dialogObjectProptiesEdit.position.x),
-      y: (dialogObjectProptiesEdit.position.y - positionDiffDialog.y) + (cursorPosition.y - dialogObjectProptiesEdit.position.y),
-    }));    
+    dispatch(
+      moveDialog({
+        x:
+          dialogObjectProptiesEdit.position.x -
+          positionDiffDialog.x +
+          (cursorPosition.x - dialogObjectProptiesEdit.position.x),
+        y:
+          dialogObjectProptiesEdit.position.y -
+          positionDiffDialog.y +
+          (cursorPosition.y - dialogObjectProptiesEdit.position.y),
+      })
+    );
   }
 
-  function handleMouseUp () {
+  function handleMouseUp() {
     setMovingDialog(false);
   }
 
   return (
-    <Container
-      position={dialogObjectProptiesEdit.position}
-      open={props.open}
-    >
+    <Container position={dialogObjectProptiesEdit.position} open={props.open}>
       <TopBar>
-        <Menu >
+        <Menu>
           <ul>
-            <li onClick={() => setMenuItemSelected('style')} >Style</li>
-            <li onClick={() => setMenuItemSelected('comon')} >Comon</li>
-            <li onClick={() => setMenuItemSelected('conection')} >Conection</li>
+            <li onClick={() => setMenuItemSelected('style')}>Style</li>
+            <li onClick={() => setMenuItemSelected('comon')}>Comon</li>
+            <li onClick={() => setMenuItemSelected('conection')}>Conection</li>
           </ul>
         </Menu>
         <FiGrid
@@ -128,35 +148,37 @@ const ModalProptiesObject: React.FC<{
           size={24}
           onMouseDown={handleMouseDown}
           onMouseUp={handleMouseUp}
-          />
+        />
       </TopBar>
 
       <Body>
-        {menuItemSelected === 'style' && (
-          object.style.font &&
-          <FontProptiesEdit propties={object.style.font} getPropties={getFontPropties} />
-        )
-        }
+        {menuItemSelected === 'style' && object.style.font && (
+          <FontProptiesEdit
+            propties={object.style.font}
+            getPropties={getFontPropties}
+          />
+        )}
 
-        {menuItemSelected === 'style' && (
-          object.style.background &&
-          <BackgroundProptiesEdit propties={object.style.background} getPropties={getBackgroundPropties} />
-        )
-        }
+        {menuItemSelected === 'style' && object.style.background && (
+          <BackgroundProptiesEdit
+            propties={object.style.background}
+            getPropties={getBackgroundPropties}
+          />
+        )}
 
-        {menuItemSelected === 'style' && (
-          object.style.border &&
-          <BorderProptiesEdit propties={object.style.border} getPropties={getBorderPropties} />
-        )
-        }
+        {menuItemSelected === 'style' && object.style.border && (
+          <BorderProptiesEdit
+            propties={object.style.border}
+            getPropties={getBorderPropties}
+          />
+        )}
 
         {menuItemSelected === 'comon' && (
           <PositionAndSizeProptieEdit
             propties={{ position: object.position, size: object.size }}
             getPropties={getPositionAnSizePropties}
           />
-        )
-        }
+        )}
       </Body>
 
       <ButtonsWarapper>
@@ -165,6 +187,6 @@ const ModalProptiesObject: React.FC<{
       </ButtonsWarapper>
     </Container>
   );
-}
+};
 
 export default ModalProptiesObject;

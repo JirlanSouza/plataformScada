@@ -8,44 +8,51 @@ import {
   FiRotateCw,
   FiZoomIn,
   FiZoomOut,
-  FiMaximize
+  FiMaximize,
 } from 'react-icons/fi';
-import { useEditorContext } from '../../contexts/editorContext';
 
-import { Container } from './styles';
+import { useAppDispatch, useAppSelector } from '../../store';
+import { toFitZoomInEditorSpace, zoomIn, zoomOut } from '../../store/Editor';
+import { ActionButtom, Container } from './styles';
 
 const ActionsBar: React.FC = () => {
-  const { lineGridWeight, setLineGridWeight } = useEditorContext()
-  function lineGridWeightUp () {
-    setLineGridWeight(lineGridWeight + 1)
+  const dispatch = useAppDispatch();
+  const screenSize = useAppSelector((state) => state.screens[0].size);
+
+  function handleZoomIn() {
+    dispatch(zoomIn());
   }
 
-  function lineGridWeightDown () {
-    setLineGridWeight(lineGridWeight - 1)
+  function handleZoomOut() {
+    dispatch(zoomOut());
+  }
+
+  function handleToFitScreen() {
+    dispatch(toFitZoomInEditorSpace(screenSize));
   }
 
   const tools = [
-    {name: 'Novo projeto', icon: FiFilePlus, action: () => {}},
-    {name: 'Abrir projeto', icon: FiFolder, action: () => {}},
-    {name: 'Salvar', icon: FiSave, action: () => {}},
-    {name: 'Imprimir', icon: FiPrinter, action: () => {}},
-    {name: 'Rotacionar', icon: FiRotateCcw, action: () => {}},
-    {name: 'RotacionarCw', icon: FiRotateCw, action: () => {}},
-    {name: 'ZoomIn', icon: FiZoomIn, action: lineGridWeightUp },
-    {name: 'ZoomOut', icon: FiZoomOut, action: lineGridWeightDown },
-    {name: 'Enquadrar', icon: FiMaximize, action: () => {}},
-  ]
+    { name: 'Novo projeto', icon: FiFilePlus, action: () => {} },
+    { name: 'Abrir projeto', icon: FiFolder, action: () => {} },
+    { name: 'Salvar', icon: FiSave, action: () => {} },
+    { name: 'Imprimir', icon: FiPrinter, action: () => {} },
+    { name: 'Rotacionar', icon: FiRotateCcw, action: () => {} },
+    { name: 'RotacionarCw', icon: FiRotateCw, action: () => {} },
+    { name: 'ZoomIn', icon: FiZoomIn, action: handleZoomIn },
+    { name: 'ZoomOut', icon: FiZoomOut, action: handleZoomOut },
+    { name: 'Enquadrar', icon: FiMaximize, action: handleToFitScreen },
+  ];
   return (
     <Container>
       {tools.map((tool) => {
         return (
-          <li key={tool.name} onClick={() => tool.action()}>
+          <ActionButtom key={tool.name} onClick={() => tool.action()}>
             <tool.icon size={18} />
-          </li>
-        )
-      })}      
+          </ActionButtom>
+        );
+      })}
     </Container>
   );
-}
+};
 
 export default ActionsBar;

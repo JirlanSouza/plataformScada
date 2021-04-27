@@ -11,7 +11,6 @@ export const Rectangle: ObjectComponent = (props) => {
       objectStyle={props.style}
       onClick={() => props.onClick(props.objectIdentify)}
       onDoubleClick={() => props.onDoubleClick(props.objectIdentify)}
-    >
-    </Container>
+    />
   );
-}
+};

@@ -4,8 +4,8 @@ const cornerRecoil = '-8px';
 const cornerBorderRadius = '2px';
 
 interface ObjectStylePropties {
-  position: { x: number, y: number },
-  size: { width: number, height: number }
+  position: { x: number; y: number };
+  size: { width: number; height: number };
 }
 
 export const Container = styled.div<ObjectStylePropties>`
@@ -13,12 +13,11 @@ export const Container = styled.div<ObjectStylePropties>`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  top: ${props => (props.position.y - 2) + 'px'};
-  left: ${props => (props.position.x - 2) + 'px'};
-  width: ${props => (props.size.width + 4) + 'px'};
-  height: ${props => (props.size.height + 4) + 'px'};
-  border: solid 2px ${props => props.theme.pallete.onPrimary};
-
+  top: ${(props) => `${props.position.y - 2}px`};
+  left: ${(props) => `${props.position.x - 2}px`};
+  width: ${(props) => `${props.size.width + 4}px`};
+  height: ${(props) => `${props.size.height + 4}px`};
+  border: solid 2px ${(props) => props.theme.pallete.onPrimary};
 `;
 
 const baseStyle = styled.div`
@@ -28,7 +27,7 @@ const baseStyle = styled.div`
   width: 100%;
   height: auto;
 
-  transition: cursor .2s ease;
+  transition: cursor 0.2s ease;
 `;
 
 export const Top = styled(baseStyle)``;
@@ -43,7 +42,7 @@ export const Center = styled.div`
 
   svg {
     cursor: move;
-    stroke: ${props => props.theme.pallete.primary.main};
+    stroke: ${(props) => props.theme.pallete.primary.main};
     z-index: 1;
   }
 `;
@@ -52,9 +51,9 @@ export const Base = styled(baseStyle)``;
 
 const Corners = styled.div`
   position: absolute;
-  width:10px;
+  width: 10px;
   height: 10px;
-  background: ${props => props.theme.pallete.primary.main};
+  background: ${(props) => props.theme.pallete.primary.main};
   z-index: 1;
 `;
 
@@ -62,7 +61,7 @@ export const RightUp = styled(Corners)`
   top: ${cornerRecoil};
   right: ${cornerRecoil};
   left: inherit;
-  border-radius: 0 0 0 ${cornerBorderRadius}; 
+  border-radius: 0 0 0 ${cornerBorderRadius};
   cursor: nesw-resize;
 `;
 

@@ -1,13 +1,13 @@
 import React, { createContext, useContext, useState } from 'react';
 
 interface KeyEventProps {
-  keyPressed: string,
-  isKeyCtrl: boolean,
-  isKeyShift: boolean,
-  isKeyAlt: boolean
+  keyPressed: string;
+  isKeyCtrl: boolean;
+  isKeyShift: boolean;
+  isKeyAlt: boolean;
 }
 
-type KeyEvent = 'Delete' | 'Ctrl + Shift'
+type KeyEvent = 'Delete' | 'Ctrl + Shift';
 
 const KeyEvents = [
   {
@@ -16,46 +16,46 @@ const KeyEvents = [
       keyPressed: 'Delete',
       isKeyCtrl: false,
       isKeyShift: false,
-      isKeyAlt: false
-    }
+      isKeyAlt: false,
+    },
   },
   {
     name: 'Delete',
     keyPressed: 'Delete',
     isKeyCtrl: true,
     isKeyShift: true,
-    isKeyAlt: false
-  }
-]
+    isKeyAlt: false,
+  },
+];
 
-type FunctionMouseEvent = (event: React.MouseEvent) => void
+type FunctionMouseEvent = (event: React.MouseEvent) => void;
 interface KeyEventSubScriber {
-  keyEvent: KeyEvent,
-  fn: () => void
+  keyEvent: KeyEvent;
+  fn: () => void;
 }
 
 interface IAppContext {
   keyEvent: KeyEventProps;
-  appKeyPressedEvent: (keyEventProps: KeyEventProps) => void
+  appKeyPressedEvent: (keyEventProps: KeyEventProps) => void;
   appClickEvent: FunctionMouseEvent;
   appClickEventSubScribe: (fn: FunctionMouseEvent) => void;
-  appKeyEventSubcribe: (subScriber: KeyEventSubScriber) => void
+  appKeyEventSubcribe: (subScriber: KeyEventSubScriber) => void;
 }
 
-function eventKeyPorpsIsIgual (props1: KeyEventProps, props2: KeyEventProps) {
+function eventKeyPorpsIsIgual(props1: KeyEventProps, props2: KeyEventProps) {
   let hasPropsNotIgual = false;
-  hasPropsNotIgual = props1.keyPressed !== props2.keyPressed
+  hasPropsNotIgual = props1.keyPressed !== props2.keyPressed;
 
   if (!hasPropsNotIgual) {
-    hasPropsNotIgual = props1.isKeyCtrl !== props2.isKeyCtrl
+    hasPropsNotIgual = props1.isKeyCtrl !== props2.isKeyCtrl;
   }
 
   if (!hasPropsNotIgual) {
-    hasPropsNotIgual = props1.isKeyShift !== props2.isKeyShift
+    hasPropsNotIgual = props1.isKeyShift !== props2.isKeyShift;
   }
 
   if (!hasPropsNotIgual) {
-    hasPropsNotIgual = props1.isKeyAlt !== props2.isKeyAlt
+    hasPropsNotIgual = props1.isKeyAlt !== props2.isKeyAlt;
   }
 
   return !hasPropsNotIgual;
@@ -68,16 +68,18 @@ export const AppContextProvider: React.FC = ({ children }) => {
     keyPressed: '',
     isKeyCtrl: false,
     isKeyShift: false,
-    isKeyAlt: false
+    isKeyAlt: false,
   });
 
   const [subScribers, setSubScribers] = useState([] as FunctionMouseEvent[]);
-  const [keyEventSubScribers, setKeyEventSubScribers] = useState([] as KeyEventSubScriber[]);
+  const [keyEventSubScribers, setKeyEventSubScribers] = useState(
+    [] as KeyEventSubScriber[]
+  );
 
   function appClickEvent(event: React.MouseEvent) {
-    subScribers.forEach(subScriber => {
+    subScribers.forEach((subScriber) => {
       subScriber(event);
-    })
+    });
   }
 
   function appClickEventSubScribe(fn: (event: React.MouseEvent) => void) {
@@ -86,13 +88,18 @@ export const AppContextProvider: React.FC = ({ children }) => {
   }
 
   function appKeyPressedEvent(keyEventProps: KeyEventProps) {
-    keyEventSubScribers.forEach(subScriber => {
-      const keyEvent = KeyEvents.find(keyEvent => keyEvent.name === subScriber.keyEvent);
+    keyEventSubScribers.forEach((subScriber) => {
+      const keyEvent = KeyEvents.find(
+        (keyEvent) => keyEvent.name === subScriber.keyEvent
+      );
 
-      if (keyEvent?.keyEventProps && eventKeyPorpsIsIgual(keyEventProps, keyEvent?.keyEventProps)) {
+      if (
+        keyEvent?.keyEventProps &&
+        eventKeyPorpsIsIgual(keyEventProps, keyEvent?.keyEventProps)
+      ) {
         subScriber.fn();
       }
-    })
+    });
   }
 
   function appKeyEventSubcribe(subScriber: KeyEventSubScriber) {
@@ -106,13 +113,13 @@ export const AppContextProvider: React.FC = ({ children }) => {
         appKeyPressedEvent,
         appClickEvent,
         appClickEventSubScribe,
-        appKeyEventSubcribe
+        appKeyEventSubcribe,
       }}
     >
-      { children}
-    </AppContext.Provider >
+      {children}
+    </AppContext.Provider>
   );
-}
+};
 
 export function useAppContext(): IAppContext {
   return useContext(AppContext);

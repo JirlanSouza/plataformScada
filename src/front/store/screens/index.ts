@@ -9,28 +9,27 @@ import {
   selectObject,
   unSelectObject,
   editingProptiesObject,
-  unEditingProptiesObject
- } from './Objects';
+  unEditingProptiesObject,
+} from './Objects';
 
 interface ObjectsState {
-  hasObjectsSelecteds: boolean,
-  hasObjectsEditingsPropties: boolean,
-  items: IObject[]
+  hasObjectsSelecteds: boolean;
+  hasObjectsEditingsPropties: boolean;
+  items: IObject[];
 }
 
 export interface ScreenState {
-  id: number,
-  name: string,
-  isStartScreen: boolean,
+  id: number;
+  name: string;
+  isStartScreen: boolean;
   size: {
-    width: number,
-    height: number
-  }
-  objects: ObjectsState
+    width: number;
+    height: number;
+  };
+  objects: ObjectsState;
 }
 
 export type ScreensState = ScreenState[];
-
 
 export const ScreensSlice = createSlice({
   name: 'screens',
@@ -41,14 +40,14 @@ export const ScreensSlice = createSlice({
       isStartScreen: false,
       size: {
         width: 1366,
-        height: 768
+        height: 768,
       },
       objects: {
         hasObjectsSelecteds: false,
         hasObjectsEditingsPropties: false,
-        items: [] as IObject[]
-      }
-    }
+        items: [] as IObject[],
+      },
+    },
   ] as ScreensState,
   reducers: {
     addObject,
@@ -59,7 +58,7 @@ export const ScreensSlice = createSlice({
     unSelectObject,
     editingProptiesObject,
     unEditingProptiesObject,
-  }
+  },
 });
 
 export const screenActions = ScreensSlice.actions;
