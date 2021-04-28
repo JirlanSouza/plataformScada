@@ -2,6 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { useProjectTreeContext } from '../../contexts/projectTreeContext';
+import { useAppSelector } from '../../store';
 import { changeEditorArea } from '../../store/Editor';
 import { resizeContainer } from '../../utils/size';
 import Screen from '../Screen';
@@ -10,6 +11,8 @@ import { Container } from './styles';
 
 const Editor: React.FC = () => {
   const dispatch = useDispatch();
+
+  const screens = useAppSelector((state) => state.screens);
 
   const {
     containerWidth,
@@ -48,7 +51,9 @@ const Editor: React.FC = () => {
       onMouseUp={handleResizeFinal}
       onMouseMove={(event) => handleResizeMove(event)}
     >
-      <Screen />
+      {screens.screenOpening > -1 && (
+        <Screen screenId={screens.screenOpening} />
+      )}
     </Container>
   );
 };

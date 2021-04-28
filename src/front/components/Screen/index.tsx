@@ -18,12 +18,14 @@ import { screenActions } from '../../store/screens';
 import { startManipulation, stopManipulation } from '../../store/Editor';
 import { calcSizeFromPreviousPosition } from '../../utils/size';
 
-const Screen: React.FC = () => {
+const Screen: React.FC<{ screenId: number }> = (props) => {
   const dispatch = useAppDispatch();
 
   const editor = useAppSelector((state) => state.editor);
-  const screen = useAppSelector((state) => state.screens[0]);
-  const objects = useAppSelector((state) => state.screens[0].objects);
+  const screen = useAppSelector((state) => state.screens.items[props.screenId]);
+  const objects = useAppSelector(
+    (state) => state.screens.items[props.screenId].objects
+  );
 
   const [insertingtObjectAreaState, setInsertingtObjectAreaState] = useState({
     isInserting: false,
@@ -60,9 +62,33 @@ const Screen: React.FC = () => {
     return { width, height };
   }
 
-  function calcCursorPositionOnScreen(positionX: number, positionY: number) {
-    const cursorPositionX = positionX - containerWidth;
-    const cursorPositionY = positionY - parseInt(theme.headerHeight, 10);
+  function calcPositionRenderByEditorZoom(position: { x: number; y: number }) {
+    const x = (position.x / 100) * editor.zoom;
+    const y = (position.y / 100) * editor.zoom;
+
+    return { x, y };
+  }
+
+  function calcCursorPositionInScreenByEditorZoom(position: {
+    x: number;
+    y: number;
+  }) {
+    const x = position.x + (position.x / 100) * (100 - editor.zoom);
+    const y = position.y + (position.y / 100) * (100 - editor.zoom);
+
+    return { x, y };
+  }
+
+  function calcSizeRenderByEditorZoom(size: { width: number; height: number }) {
+    const width = (size.width / 100) * editor.zoom;
+    const height = (size.height / 100) * editor.zoom;
+
+    return { width, height };
+  }
+
+  function calcCursorPositionOnScreen(position: { x: number; y: number }) {
+    const cursorPositionX = position.x - containerWidth;
+    const cursorPositionY = position.y - parseInt(theme.headerHeight, 10);
 
     return { x: cursorPositionX, y: cursorPositionY };
   }
@@ -92,7 +118,10 @@ const Screen: React.FC = () => {
       setInsertingtObjectAreaState({
         ...insertingtObjectAreaState,
         isInserting: true,
-        position: calcCursorPositionOnScreen(event.clientX, event.clientY),
+        position: calcCursorPositionOnScreen({
+          x: event.clientX,
+          y: event.clientY,
+        }),
       });
     }
   }
@@ -114,10 +143,10 @@ const Screen: React.FC = () => {
       startManipulation({
         objectSelected: objectId,
         manipulation,
-        position: calcCursorPositionOnScreen(
-          cursorPosition.x,
-          cursorPosition.y
-        ),
+        position: calcCursorPositionOnScreen({
+          x: cursorPosition.x,
+          y: cursorPosition.y,
+        }),
       })
     );
   }
@@ -126,23 +155,32 @@ const Screen: React.FC = () => {
     setScreenMouseMove({ x: event.clientX, y: event.clientY });
 
     if (editor.manipulating) {
-      const maniputionPropties = {
+      const manipulationPropties = {
         id: editor.initialStateOfManipulation.objectSelected,
         manipulation: editor.initialStateOfManipulation.manipulation,
         cursorPosition: calcCursorPositionOnScreen(
-          event.clientX,
-          event.clientY
+          calcCursorPositionInScreenByEditorZoom({
+            x: event.clientX,
+            y: event.clientY,
+          })
         ),
       };
-
-      dispatch(screenActions.manipulateObject(maniputionPropties));
+      console.log(
+        'Teste',
+        calcPositionRenderByEditorZoom(manipulationPropties.cursorPosition).x,
+        calcCursorPositionOnScreen({
+          x: event.clientX,
+          y: event.clientY,
+        }).x
+      );
+      dispatch(screenActions.manipulateObject(manipulationPropties));
     }
 
     if (toolSelected !== 'Cursor' && insertingtObjectAreaState.isInserting) {
-      const currentPosition = calcCursorPositionOnScreen(
-        event.clientX,
-        event.clientY
-      );
+      const currentPosition = calcCursorPositionOnScreen({
+        x: event.clientX,
+        y: event.clientY,
+      });
 
       setInsertingtObjectAreaState({
         ...insertingtObjectAreaState,
@@ -190,10 +228,10 @@ const Screen: React.FC = () => {
     if (objects.hasObjectsSelecteds && !objects.hasObjectsEditingsPropties) {
       dispatch(
         screenActions.unSelectObject({
-          cursorPosition: calcCursorPositionOnScreen(
-            event.clientX,
-            event.clientY
-          ),
+          cursorPosition: calcCursorPositionOnScreen({
+            x: event.clientX,
+            y: event.clientY,
+          }),
         })
       );
     }
@@ -220,15 +258,19 @@ const Screen: React.FC = () => {
                 key={object.id}
                 objectId={index}
                 show={object.selected}
-                position={object.position}
-                size={object.size}
+                position={calcPositionRenderByEditorZoom(object.position)}
+                size={calcSizeRenderByEditorZoom(object.size)}
                 manipulateObject={(manipulation, cursorPosition) =>
-                  handleStartManipulation(index, manipulation, cursorPosition)
+                  handleStartManipulation(
+                    index,
+                    manipulation,
+                    calcCursorPositionInScreenByEditorZoom(cursorPosition)
+                  )
                 }
               >
                 <ObjectComponent
-                  position={object.position}
-                  size={object.size}
+                  position={calcPositionRenderByEditorZoom(object.position)}
+                  size={calcSizeRenderByEditorZoom(object.size)}
                   objectIdentify={index}
                   style={object.style}
                   onClick={() => handleSelectObject(index)}

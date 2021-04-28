@@ -17,7 +17,7 @@ import { ActionButtom, Container } from './styles';
 
 const ActionsBar: React.FC = () => {
   const dispatch = useAppDispatch();
-  const screenSize = useAppSelector((state) => state.screens[0].size);
+  const screenSize = useAppSelector((state) => state.screens.items[0].size);
 
   function handleZoomIn() {
     dispatch(zoomIn());

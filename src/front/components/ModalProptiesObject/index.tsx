@@ -33,7 +33,10 @@ const ModalProptiesObject: React.FC<{
   const [positionDiffDialog, setPositionDiffDialog] = useState({ x: 0, y: 0 });
 
   const object = useAppSelector(
-    (state) => state.screens[0].objects.items[props.objectId]
+    (state) =>
+      state.screens.items[state.screens.screenOpening].objects.items[
+        props.objectId
+      ]
   );
   const dialogObjectProptiesEdit = useAppSelector(
     (state) => state.dilogObjectProptiesEdit
@@ -46,7 +49,7 @@ const ModalProptiesObject: React.FC<{
 
   useEffect(() => {
     handleMoveDialog(props.screenMouseMove);
-  }, [props.screenMouseMove]);
+  }, [props.screenMouseMove]); // eslint-disable-line react-hooks/exhaustive-deps
 
   function getFontPropties(propties: FontPropties) {
     dispatch(

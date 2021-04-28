@@ -7,11 +7,12 @@ import {
   FiMonitor,
   FiImage,
   FiChevronLeft,
-  FiFilePlus,
   FiPlusSquare,
 } from 'react-icons/fi';
 import { useAppContext } from '../../contexts';
 import { useProjectTreeContext } from '../../contexts/projectTreeContext';
+import { useAppDispatch, useAppSelector } from '../../store';
+import { screenActions } from '../../store/screens';
 import { resizeContainer } from '../../utils/size';
 
 import {
@@ -25,6 +26,9 @@ import {
 } from './styles';
 
 const ProjectTree: React.FC = () => {
+  const dispatch = useAppDispatch();
+  const screens = useAppSelector((state) => state.screens);
+
   const [folders, setFolders] = useState([
     { name: 'Conections', filds: [], opening: false, iconFilds: FiImage },
     {
@@ -106,6 +110,10 @@ const ProjectTree: React.FC = () => {
     setFolders(foldersToUpdate);
   }
 
+  function handleFileClick(folderId: number, fileId: number) {
+    dispatch(screenActions.onpeningScreen(fileId));
+  }
+
   return (
     <Container
       resizing={isClickedBorderContainer}
@@ -135,9 +143,13 @@ const ProjectTree: React.FC = () => {
                     Add new {folder.name.substr(0, folder.name.length - 1)}
                   </File>
 
-                  {folder.filds.map((fild) => {
+                  {screens.items.map((fild) => {
                     return (
-                      <File key={fild.name} className="FileItem">
+                      <File
+                        key={fild.name}
+                        className="FileItem"
+                        onClick={() => handleFileClick(0, fild.id)}
+                      >
                         <folder.iconFilds className="file" size={18} />
                         {fild.name}
                       </File>
