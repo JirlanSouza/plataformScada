@@ -2,7 +2,7 @@ import React from 'react';
 
 import { BackgroundPropties } from '../../../core/object';
 import ColorSelection from '../../ColorSelection';
-import { Content, InputWrapper, Secssion, Title } from '../styles';
+import { Content, InputWrapper, Secssion, SecssionTitle } from '../styles';
 
 interface IBackgroundProptiesEdit {
   propties: BackgroundPropties;
@@ -18,7 +18,7 @@ export const BackgroundProptiesEdit: React.FC<IBackgroundProptiesEdit> = (
 
   return (
     <Secssion>
-      <Title>Background</Title>
+      <SecssionTitle>Background</SecssionTitle>
 
       <Content>
         <InputWrapper>

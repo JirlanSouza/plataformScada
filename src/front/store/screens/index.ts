@@ -12,90 +12,60 @@ import {
   unEditingProptiesObject,
 } from './Objects';
 
-interface ObjectsState {
+type ObjectsState = {
   hasObjectsSelecteds: boolean;
   hasObjectsEditingsPropties: boolean;
   items: IObject[];
-}
+};
 
-export interface ScreenState {
+type ScreenItemState = {
+  id: number;
+  name: string;
+  isStartScreen: boolean;
+  size: {
+    width: number;
+    height: number;
+  };
+  objects: ObjectsState;
+};
+
+export type ScreenState = {
   screenOpening: number;
-  items: {
-    id: number;
-    name: string;
-    isStartScreen: boolean;
-    size: {
-      width: number;
-      height: number;
-    };
-    objects: ObjectsState;
-  }[];
-}
+  items: ScreenItemState[];
+};
+
+type AddScreenActionPayload = {
+  name: string;
+  size: {
+    width: number;
+    height: number;
+  };
+};
 
 export const ScreensSlice = createSlice({
   name: 'screens',
   initialState: {
     screenOpening: -1,
-    items: [
-      {
-        id: 0,
-        name: 'home',
-        isStartScreen: false,
-        size: {
-          width: 1366,
-          height: 768,
-        },
-        objects: {
-          hasObjectsSelecteds: false,
-          hasObjectsEditingsPropties: false,
-          items: [] as IObject[],
-        },
-      },
-      {
-        id: 1,
-        name: 'geral',
-        isStartScreen: false,
-        size: {
-          width: 1366,
-          height: 768,
-        },
-        objects: {
-          hasObjectsSelecteds: false,
-          hasObjectsEditingsPropties: false,
-          items: [] as IObject[],
-        },
-      },
-      {
-        id: 2,
-        name: 'geral operação',
-        isStartScreen: false,
-        size: {
-          width: 1366,
-          height: 768,
-        },
-        objects: {
-          hasObjectsSelecteds: false,
-          hasObjectsEditingsPropties: false,
-          items: [] as IObject[],
-        },
-      },
-      {
-        id: 3,
-        name: 'operação',
-        isStartScreen: false,
-        size: {
-          width: 1366,
-          height: 768,
-        },
-        objects: {
-          hasObjectsSelecteds: false,
-          hasObjectsEditingsPropties: false,
-          items: [] as IObject[],
-        },
-      },
-    ],
+    items: [] as ScreenItemState[],
   },
   reducers: {
+    addScreen: (state, action: PayloadAction<AddScreenActionPayload>) => {
+      state.items = [
+        ...state.items,
+        {
+          ...action.payload,
+          id: state.items.length,
+          isStartScreen: false,
+          objects: {
+            hasObjectsSelecteds: false,
+            hasObjectsEditingsPropties: false,
+            items: [],
+          },
+        },
+      ];
+
+      // state.screenOpening = state.items.length;
+    },
     onpeningScreen: (state, action: PayloadAction<number>) => {
       state.screenOpening = action.payload;
     },

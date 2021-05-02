@@ -15,9 +15,8 @@ export const Container = styled.div<{
   left: 0;
   width: ${(props) => `${props.screen.width}px`};
   height: ${(props) => `${props.screen.height}px`};
-  border: 2px solid ${(props) => props.theme.headerBackgound};
+  border: 2px solid ${(props) => props.theme.pallete.onPrimary};
   outline: none;
-  background: red;
 
   ${(props) =>
     props.showCursorObject &&

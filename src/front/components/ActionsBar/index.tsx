@@ -17,7 +17,8 @@ import { ActionButtom, Container } from './styles';
 
 const ActionsBar: React.FC = () => {
   const dispatch = useAppDispatch();
-  const screenSize = useAppSelector((state) => state.screens.items[0].size);
+  const editorZoom = useAppSelector((state) => state.editor.zoom);
+  const screenSize = useAppSelector((state) => state.screens.items[0]?.size);
 
   function handleZoomIn() {
     dispatch(zoomIn());
@@ -51,6 +52,7 @@ const ActionsBar: React.FC = () => {
           </ActionButtom>
         );
       })}
+      <h3>{editorZoom}</h3>
     </Container>
   );
 };

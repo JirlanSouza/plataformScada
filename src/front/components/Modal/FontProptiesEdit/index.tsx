@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { FontPropties } from '../../../core/object';
 import ColorSelection from '../../ColorSelection';
-import { Content, InputWrapper, Secssion, Title } from '../styles';
+import { Content, InputWrapper, Secssion, SecssionTitle } from '../styles';
 import { TogleSwitch } from '../../Checkbox';
 
 interface IFontProptiesEdit {
@@ -62,7 +62,7 @@ export const FontProptiesEdit: React.FC<IFontProptiesEdit> = (props) => {
 
   return (
     <Secssion>
-      <Title>Font</Title>
+      <SecssionTitle>Font</SecssionTitle>
 
       <Content>
         <InputWrapper>

@@ -17,6 +17,7 @@ const EditorSlice = createSlice({
       height: 0,
     },
     zoom: 100,
+    zoomIsFitInEditorSpace: false,
     existObjectSelected: false,
     manipulating: false,
     initialStateOfManipulation: {
@@ -36,12 +37,18 @@ const EditorSlice = createSlice({
       state.area = action.payload;
     },
     zoomOut: (state) => {
-      state.zoom -= (state.zoom / 100) * 5;
+      state.zoom -= 5; // (state.zoom / 100) * 5;
     },
     zoomIn: (state) => {
-      state.zoom += (state.zoom / 100) * 5;
+      state.zoom += 5; // (state.zoom / 100) * 5;
     },
     toFitZoomInEditorSpace: (state, action: PayloadAction<SizePropties>) => {
+      if (state.zoomIsFitInEditorSpace) {
+        state.zoom = 100;
+        state.zoomIsFitInEditorSpace = false;
+        return;
+      }
+
       let proportion: number;
 
       if (state.area.width > state.area.height) {
@@ -51,6 +58,7 @@ const EditorSlice = createSlice({
       }
 
       state.zoom = proportion;
+      state.zoomIsFitInEditorSpace = true;
     },
     selectedObject: (state) => {
       state.existObjectSelected = true;

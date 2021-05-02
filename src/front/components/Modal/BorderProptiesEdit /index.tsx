@@ -2,7 +2,7 @@ import React from 'react';
 
 import { BorderPropties } from '../../../core/object';
 import ColorSelection from '../../ColorSelection';
-import { Content, InputWrapper, Secssion, Title } from '../styles';
+import { Content, InputWrapper, Secssion, SecssionTitle } from '../styles';
 
 interface IBorderProptiesEdit {
   propties: BorderPropties;
@@ -52,7 +52,7 @@ export const BorderProptiesEdit: React.FC<IBorderProptiesEdit> = (props) => {
 
   return (
     <Secssion>
-      <Title>Border</Title>
+      <SecssionTitle>Border</SecssionTitle>
 
       <Content>
         <InputWrapper>

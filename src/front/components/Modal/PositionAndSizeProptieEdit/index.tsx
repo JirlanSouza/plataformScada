@@ -2,7 +2,7 @@ import React from 'react';
 
 import { PositionPropties, SizePropties } from '../../../core/object';
 
-import { Content, InputWrapper, Secssion, Title } from '../styles';
+import { Content, InputWrapper, Secssion, SecssionTitle } from '../styles';
 
 interface PositionAndSizePropties {
   position: PositionPropties;
@@ -60,7 +60,7 @@ export const PositionAndSizeProptieEdit: React.FC<IPositionAndSizeProptieEdit> =
   return (
     <>
       <Secssion>
-        <Title>Position</Title>
+        <SecssionTitle>Position</SecssionTitle>
         <Content>
           <InputWrapper>
             <label>Position X</label>
@@ -83,7 +83,7 @@ export const PositionAndSizeProptieEdit: React.FC<IPositionAndSizeProptieEdit> =
       </Secssion>
 
       <Secssion>
-        <Title>Size</Title>
+        <SecssionTitle>Size</SecssionTitle>
         <Content>
           <InputWrapper>
             <label>Width</label>

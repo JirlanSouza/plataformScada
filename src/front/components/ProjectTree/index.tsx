@@ -14,6 +14,7 @@ import { useProjectTreeContext } from '../../contexts/projectTreeContext';
 import { useAppDispatch, useAppSelector } from '../../store';
 import { screenActions } from '../../store/screens';
 import { resizeContainer } from '../../utils/size';
+import StartScreenPropties from '../Modal/StartScreenPropties';
 
 import {
   Container,
@@ -28,6 +29,8 @@ import {
 const ProjectTree: React.FC = () => {
   const dispatch = useAppDispatch();
   const screens = useAppSelector((state) => state.screens);
+
+  const [showAddFileDialog, setShowAddFileDialog] = useState(false);
 
   const [folders, setFolders] = useState([
     { name: 'Conections', filds: [], opening: false, iconFilds: FiImage },
@@ -114,68 +117,87 @@ const ProjectTree: React.FC = () => {
     dispatch(screenActions.onpeningScreen(fileId));
   }
 
+  function handleAddNewFile() {
+    setShowAddFileDialog(true);
+  }
+
+  function handleFinishAddNewFile(screenPropties: {
+    name: string;
+    size: { width: number; height: number };
+  }) {
+    dispatch(screenActions.addScreen(screenPropties));
+  }
+
   return (
-    <Container
-      resizing={isClickedBorderContainer}
-      resize={containerWidth}
-      onClick={appClickEvent}
-      onMouseUp={handleResizeFinal}
-      onMouseMove={(event) => handleResizeMove(event)}
-    >
-      <ProjectFolders>
-        {folders.map((folder, index) => {
-          return (
-            <Folder key={folder.name}>
-              <FolderIconsWrapper onClick={() => handleOpenFolder(index)}>
-                {folder.opening ? (
-                  <FiChevronDown size={18} />
-                ) : (
-                  <FiChevronRight size={18} />
+    <>
+      <Container
+        resizing={isClickedBorderContainer}
+        resize={containerWidth}
+        onClick={appClickEvent}
+        onMouseUp={handleResizeFinal}
+        onMouseMove={(event) => handleResizeMove(event)}
+      >
+        <ProjectFolders>
+          {folders.map((folder, index) => {
+            return (
+              <Folder key={folder.name}>
+                <FolderIconsWrapper onClick={() => handleOpenFolder(index)}>
+                  {folder.opening ? (
+                    <FiChevronDown size={18} />
+                  ) : (
+                    <FiChevronRight size={18} />
+                  )}
+                  <FiFolder className="folder" size={18} />
+                  {folder.name}
+                </FolderIconsWrapper>
+
+                {folder.opening && (
+                  <FilesContainer>
+                    <File className="FileItem" onClick={handleAddNewFile}>
+                      <FiPlusSquare size={18} />
+                      Add new {folder.name.substr(0, folder.name.length - 1)}
+                    </File>
+
+                    {screens.items.map((fild) => {
+                      return (
+                        <File
+                          key={fild.name}
+                          className="FileItem"
+                          onClick={() => handleFileClick(0, fild.id)}
+                        >
+                          <folder.iconFilds className="file" size={17} />
+                          {fild.name}
+                        </File>
+                      );
+                    })}
+                  </FilesContainer>
                 )}
-                <FiFolder className="folder" size={18} />
-                {folder.name}
-              </FolderIconsWrapper>
-
-              {folder.opening && (
-                <FilesContainer>
-                  <File className="FileItem">
-                    <FiPlusSquare size={18} />
-                    Add new {folder.name.substr(0, folder.name.length - 1)}
-                  </File>
-
-                  {screens.items.map((fild) => {
-                    return (
-                      <File
-                        key={fild.name}
-                        className="FileItem"
-                        onClick={() => handleFileClick(0, fild.id)}
-                      >
-                        <folder.iconFilds className="file" size={18} />
-                        {fild.name}
-                      </File>
-                    );
-                  })}
-                </FilesContainer>
-              )}
-            </Folder>
-          );
-        })}
-      </ProjectFolders>
-      <Resizer isClosing={projectTreeIsClosed} onMouseDown={handleResize}>
-        <div
-          onClick={handleClosedProjectTree}
-          onKeyPress={handleClosedProjectTree}
-          role="button"
-          tabIndex={0}
-        >
-          {projectTreeIsClosed ? (
-            <FiChevronRight size={20} />
-          ) : (
-            <FiChevronLeft size={20} />
-          )}
-        </div>
-      </Resizer>
-    </Container>
+              </Folder>
+            );
+          })}
+        </ProjectFolders>
+        <Resizer isClosing={projectTreeIsClosed} onMouseDown={handleResize}>
+          <div
+            onClick={handleClosedProjectTree}
+            onKeyPress={handleClosedProjectTree}
+            role="button"
+            tabIndex={0}
+          >
+            {projectTreeIsClosed ? (
+              <FiChevronRight size={20} />
+            ) : (
+              <FiChevronLeft size={20} />
+            )}
+          </div>
+        </Resizer>
+        {showAddFileDialog && (
+          <StartScreenPropties
+            setShowDialog={setShowAddFileDialog}
+            addNewFile={handleFinishAddNewFile}
+          />
+        )}
+      </Container>
+    </>
   );
 };
 

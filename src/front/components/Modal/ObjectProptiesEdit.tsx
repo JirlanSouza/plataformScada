@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { ThemeContext } from 'styled-components';
 
 import { FiGrid } from 'react-icons/fi';
 import { useAppSelector, useAppDispatch } from '../../store';
@@ -19,8 +20,8 @@ import {
   PositionPropties,
   SizePropties,
 } from '../../core/object';
-import { theme } from '../../styles/theme';
 import { moveDialog } from '../../store/diologObjectProptiesEdit';
+import { AppTheme } from '../../styles/theme';
 
 const ModalProptiesObject: React.FC<{
   objectId: number;
@@ -31,6 +32,8 @@ const ModalProptiesObject: React.FC<{
   const [menuItemSelected, setMenuItemSelected] = useState('style');
   const [movingDialog, setMovingDialog] = useState(false);
   const [positionDiffDialog, setPositionDiffDialog] = useState({ x: 0, y: 0 });
+
+  const theme = useContext<AppTheme>(ThemeContext);
 
   const object = useAppSelector(
     (state) =>

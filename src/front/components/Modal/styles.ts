@@ -21,13 +21,19 @@ export const Container = styled.dialog<{ position: { x: number; y: number } }>`
 export const TopBar = styled.div`
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
   top: 0px;
   left: 0px;
   width: 100%;
   height: 40px;
   border-bottom: 1px solid ${(props) => props.theme.pallete.onPrimary};
   background: ${(props) => props.theme.pallete.surface};
+`;
+
+export const Title = styled.h2`
+  font-size: 1.2rem;
+  color: ${(props) => props.theme.pallete.onSurface};
+  margin: 10px;
 `;
 
 export const Menu = styled.nav`
@@ -75,7 +81,8 @@ export const Secssion = styled.div`
   border-bottom: 1px solid ${(props) => props.theme.pallete.onPrimary};
 `;
 
-export const Title = styled.h3`
+export const SecssionTitle = styled.h3`
+  font-size: 1rem;
   color: ${(props) => props.theme.pallete.onSurface};
   margin-bottom: 10px;
 `;
@@ -96,7 +103,7 @@ export const InputWrapper = styled.div`
   margin-bottom: 20px;
 
   label {
-    font-size: 14px;
+    font-size: 0.8rem;
     color: ${(props) => props.theme.pallete.onSurface};
     margin-bottom: 5px;
   }

@@ -1,5 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { theme } from '../../styles/theme';
+import React, { useContext, useEffect, useState } from 'react';
+import { ThemeContext } from 'styled-components';
+
+import { AppTheme } from '../../styles/theme';
 import {
   useProjectTreeContext,
   useAppContext,
@@ -11,7 +13,7 @@ import { ObjectsComponentsRender } from '../../projectObjects/index';
 
 import ManipulationBorder from '../ManipulationBorder';
 import InsertingObjectArea from '../InsertingObjectArea';
-import ModalProptiesObject from '../ModalProptiesObject';
+import ModalProptiesObject from '../Modal/ObjectProptiesEdit';
 
 import { useAppSelector, useAppDispatch } from '../../store';
 import { screenActions } from '../../store/screens';
@@ -24,8 +26,10 @@ const Screen: React.FC<{ screenId: number }> = (props) => {
   const editor = useAppSelector((state) => state.editor);
   const screen = useAppSelector((state) => state.screens.items[props.screenId]);
   const objects = useAppSelector(
-    (state) => state.screens.items[props.screenId].objects
+    (state) => state.screens.items[props.screenId]?.objects
   );
+
+  const theme = useContext<AppTheme>(ThemeContext);
 
   const [insertingtObjectAreaState, setInsertingtObjectAreaState] = useState({
     isInserting: false,
@@ -77,6 +81,41 @@ const Screen: React.FC<{ screenId: number }> = (props) => {
     const y = position.y + (position.y / 100) * (100 - editor.zoom);
 
     return { x, y };
+  }
+
+  function calcCursorPositionInScreenByEditorZoomToAddObject(position: {
+    x: number;
+    y: number;
+  }) {
+    let { x, y } = position;
+    const zoomEditorDiff = 100 - editor.zoom;
+    const factorCorrection = zoomEditorDiff / (editor.zoom / 100);
+    const zoomCorrectionFactor =
+      zoomEditorDiff + (zoomEditorDiff / 100) * factorCorrection;
+
+    console.log('DIF 1', x);
+    x += (position.x / 100) * zoomCorrectionFactor;
+    y += (position.y / 100) * zoomCorrectionFactor;
+
+    console.log('DIF 2', x, (zoomEditorDiff / 100) * factorCorrection);
+
+    return { x, y };
+  }
+
+  function calcSizeByEditorZoomToAddObject(size: {
+    width: number;
+    height: number;
+  }) {
+    let { width, height } = size;
+    const zoomEditorDiff = 100 - editor.zoom;
+    const factorCorrection = zoomEditorDiff / (editor.zoom / 100);
+    const zoomCorrectionFactor =
+      zoomEditorDiff + (zoomEditorDiff / 100) * factorCorrection;
+
+    width += (size.width / 100) * zoomCorrectionFactor;
+    height += (size.height / 100) * zoomCorrectionFactor;
+
+    return { width, height };
   }
 
   function calcSizeRenderByEditorZoom(size: { width: number; height: number }) {
@@ -143,10 +182,12 @@ const Screen: React.FC<{ screenId: number }> = (props) => {
       startManipulation({
         objectSelected: objectId,
         manipulation,
-        position: calcCursorPositionOnScreen({
-          x: cursorPosition.x,
-          y: cursorPosition.y,
-        }),
+        position: calcCursorPositionOnScreen(
+          calcCursorPositionInScreenByEditorZoom({
+            x: cursorPosition.x,
+            y: cursorPosition.y,
+          })
+        ),
       })
     );
   }
@@ -165,14 +206,7 @@ const Screen: React.FC<{ screenId: number }> = (props) => {
           })
         ),
       };
-      console.log(
-        'Teste',
-        calcPositionRenderByEditorZoom(manipulationPropties.cursorPosition).x,
-        calcCursorPositionOnScreen({
-          x: event.clientX,
-          y: event.clientY,
-        }).x
-      );
+
       dispatch(screenActions.manipulateObject(manipulationPropties));
     }
 
@@ -208,8 +242,11 @@ const Screen: React.FC<{ screenId: number }> = (props) => {
       dispatch(
         screenActions.addObject({
           type: toolSelected,
-          position: insertingtObjectAreaState.position,
-          size: insertingtObjectAreaState.size,
+          position: calcCursorPositionInScreenByEditorZoomToAddObject({
+            x: insertingtObjectAreaState.position.x,
+            y: insertingtObjectAreaState.position.y,
+          }),
+          size: calcSizeByEditorZoomToAddObject(insertingtObjectAreaState.size),
         })
       );
 

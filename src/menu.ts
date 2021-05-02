@@ -4,6 +4,7 @@ import {
   shell,
   BrowserWindow,
   MenuItemConstructorOptions,
+  ipcMain,
 } from 'electron';
 
 interface DarwinMenuItemConstructorOptions extends MenuItemConstructorOptions {
@@ -84,6 +85,7 @@ export default class MenuBuilder {
         },
       ],
     };
+
     const subMenuEdit: DarwinMenuItemConstructorOptions = {
       label: 'Edit',
       submenu: [
@@ -100,6 +102,7 @@ export default class MenuBuilder {
         },
       ],
     };
+
     const subMenuViewDev: MenuItemConstructorOptions = {
       label: 'View',
       submenu: [
@@ -126,6 +129,7 @@ export default class MenuBuilder {
         },
       ],
     };
+
     const subMenuViewProd: MenuItemConstructorOptions = {
       label: 'View',
       submenu: [
@@ -138,6 +142,7 @@ export default class MenuBuilder {
         },
       ],
     };
+
     const subMenuWindow: DarwinMenuItemConstructorOptions = {
       label: 'Window',
       submenu: [
@@ -151,6 +156,7 @@ export default class MenuBuilder {
         { label: 'Bring All to Front', selector: 'arrangeInFront:' },
       ],
     };
+
     const subMenuHelp: MenuItemConstructorOptions = {
       label: 'Help',
       submenu: [
@@ -297,6 +303,28 @@ export default class MenuBuilder {
             click: () => {
               this.mainWindow.close();
             },
+          },
+        ],
+      },
+      {
+        label: '&Options',
+        submenu: [
+          {
+            label: '&Theme',
+            submenu: [
+              {
+                label: '&Light',
+                click: () => {
+                  this.mainWindow.webContents.send('setTheme', 'lightTheme');
+                },
+              },
+              {
+                label: '&Dark',
+                click: () => {
+                  this.mainWindow.webContents.send('setTheme', 'darkTheme');
+                },
+              },
+            ],
           },
         ],
       },

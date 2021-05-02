@@ -49,11 +49,7 @@ const createWindow = async () => {
       { allowFileAccess: true }
     );
     // installExtension([REACT_DEVELOPER_TOOLS]);
-    console.log(
-      ' ================>>>> EXTENSION INSTALLED',
-      extenssionIntaled,
-      '<<<<=================='
-    );
+    console.log('======>>>> EXTENSIONS INSTALLED', extenssionIntaled.name);
   }
 
   const RESOURCES_PATH = app.isPackaged
@@ -66,8 +62,8 @@ const createWindow = async () => {
 
   mainWindow = new BrowserWindow({
     show: false,
-    width: 1024,
-    height: 728,
+    width: 1366,
+    height: 768,
     icon: getAssetPath('icon.png'),
     webPreferences: {
       nodeIntegration: true,
@@ -84,6 +80,7 @@ const createWindow = async () => {
     if (process.env.START_MINIMIZED) {
       mainWindow.minimize();
     } else {
+      mainWindow.maximize();
       mainWindow.show();
       mainWindow.focus();
     }

@@ -4,6 +4,7 @@ export const Container = styled.aside<{
   resizing: boolean;
   resize?: number;
 }>`
+  position: relative;
   display: flex;
   width: ${(props) => (props.resize ? `${props.resize}px` : '18rem')};
   height: 100%;
@@ -80,6 +81,7 @@ export const Folder = styled.li`
   list-style: none;
   padding: 0.1rem;
   cursor: pointer;
+  font-size: 0.9rem;
   color: ${(props) => props.theme.pallete.onSurface};
 
   svg {
@@ -109,7 +111,8 @@ export const FilesContainer = styled.div`
 export const File = styled.li`
   display: flex;
   height: 1.4rem;
-  align-items: baseline;
+  align-items: center;
+  font-size: 0.9rem;
   overflow: hidden;
 
   svg {

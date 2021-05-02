@@ -343,8 +343,31 @@ const omniColors = {
   },
 };
 
-export const theme = {
-  headerHeight: '60px',
+export type AppTheme = {
+  headerHeight: string;
+  headerBackgound: string;
+  pallete: {
+    primary: {
+      main: string;
+      variant: string;
+    };
+    secondary: {
+      main: string;
+      variant: string;
+    };
+    onPrimary: string;
+    onSecondary: string;
+    background: string;
+    surface: string;
+    error: string;
+    onBackground: string;
+    onSurface: string;
+    onError: string;
+  };
+};
+
+const darkTheme: AppTheme = {
+  headerHeight: '65px',
   headerBackgound: omniColors.other.BGDarker,
   pallete: {
     primary: {
@@ -364,4 +387,32 @@ export const theme = {
     onSurface: omniColors.base.FG,
     onError: omniColors.base.FG,
   },
+};
+
+const lightTheme: AppTheme = {
+  headerHeight: '65px',
+  headerBackgound: omniColors.ansi.COLOR7,
+  pallete: {
+    primary: {
+      main: omniColors.ansi.COLOR4,
+      variant: omniColors.ansi.COLOR6,
+    },
+    secondary: {
+      main: omniColors.base.PURPLE,
+      variant: omniColors.base.PURPLE,
+    },
+    onPrimary: omniColors.ansi.COLOR8,
+    onSecondary: omniColors.base.SELECTION,
+    background: colors.bluegrey[100],
+    surface: omniColors.ansi.COLOR7,
+    error: omniColors.base.RED,
+    onBackground: omniColors.base.SELECTION,
+    onSurface: omniColors.base.SELECTION,
+    onError: omniColors.base.SELECTION,
+  },
+};
+
+export const themes: { [key: string]: AppTheme } = {
+  darkTheme,
+  lightTheme,
 };

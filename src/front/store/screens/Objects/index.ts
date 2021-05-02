@@ -70,11 +70,16 @@ const editObject: CaseReducer<
 };
 
 const removeObject: CaseReducer<ScreenState> = (state: ScreenState) => {
+  if (state.items[state.screenOpening].objects.hasObjectsEditingsPropties)
+    return;
+
   state.items[state.screenOpening].objects.items.forEach((object, index) => {
     if (object.selected) {
       delete state.items[state.screenOpening].objects.items[index];
     }
   });
+
+  state.items[state.screenOpening].objects.hasObjectsSelecteds = false;
 };
 
 const selectObject: CaseReducer<ScreenState, PayloadAction<{ id: number }>> = (
