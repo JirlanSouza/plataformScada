@@ -1,0 +1,10 @@
+{
+  "id": 0,
+  "name": "home",
+  "isStartScreen": true,
+  "size": {
+    "width": 1366,
+    "height": 768
+  },
+  "objects": []
+}
