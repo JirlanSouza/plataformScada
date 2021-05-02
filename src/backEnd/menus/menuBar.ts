@@ -4,7 +4,6 @@ import {
   shell,
   BrowserWindow,
   MenuItemConstructorOptions,
-  ipcMain,
 } from 'electron';
 
 interface DarwinMenuItemConstructorOptions extends MenuItemConstructorOptions {
@@ -12,7 +11,7 @@ interface DarwinMenuItemConstructorOptions extends MenuItemConstructorOptions {
   submenu?: DarwinMenuItemConstructorOptions[] | Menu;
 }
 
-export default class MenuBuilder {
+export default class MenuBarBuilder {
   mainWindow: BrowserWindow;
 
   constructor(mainWindow: BrowserWindow) {

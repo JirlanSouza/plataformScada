@@ -14,7 +14,8 @@ import path from 'path';
 import { app, BrowserWindow, shell, session } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
-import MenuBuilder from './menu';
+import MenuBarBuilder from './backEnd/menus/menuBar';
+import { controllers } from './backEnd/gatways/controllers';
 
 export default class AppUpdater {
   constructor() {
@@ -73,7 +74,7 @@ const createWindow = async () => {
 
   mainWindow.loadFile(`${__dirname}/front/index.html`);
 
-  mainWindow.webContents.on('did-finish-load', () => {
+  mainWindow.webContents.on('did-finish-load', async () => {
     if (!mainWindow) {
       throw new Error('"mainWindow" is not defined');
     }
@@ -84,13 +85,14 @@ const createWindow = async () => {
       mainWindow.show();
       mainWindow.focus();
     }
+    controllers();
   });
 
   mainWindow.on('closed', () => {
     mainWindow = null;
   });
 
-  const menuBuilder = new MenuBuilder(mainWindow);
+  const menuBuilder = new MenuBarBuilder(mainWindow);
   menuBuilder.buildMenu();
 
   // Open urls in the user's browser
